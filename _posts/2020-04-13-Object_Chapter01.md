@@ -1,5 +1,4 @@
-# 오브젝트 - Chapter 01
----
+
 ## 의존성(dependency)
 - 클래스 간 의존성을 티켓 판매 애플리케이션을 통해 보여줌
   -  이처럼 다른 클래스가 Audience의 내부에 대해 더 많이 알면 알수록 Audience를 변경하기 어려워진다.
@@ -13,7 +12,7 @@
 
 ## 트레이드오프
 - TicketSeller에 있는 TicketOffice의 자율성을 위해
-sellTo 메서드의 내부 코드를 TicketOffice로 옮긴 상황에서 
+sellTo 메서드의 내부 코드를 TicketOffice로 옮긴 상황에서
 Audience에 대한 새로운 의존성이 생겨났다.
   - 의존성의 추가는 높은 결합도를 의미한다.
 - Audience에 대한 새로운 결합도 v.s. TicketOffice의 자율성
