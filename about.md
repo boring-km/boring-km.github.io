@@ -4,4 +4,4 @@ title: About
 permalink: /about/
 ---
 
-Another minimal style of Jekyll theme for writers.
+머릿속에 구멍이 나서 기억이 나기 전에 기록하는 블로그
