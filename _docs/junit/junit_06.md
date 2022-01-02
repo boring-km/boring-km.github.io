@@ -1,5 +1,5 @@
 ---
-title: 6. Right-BICEP: 무엇을 테스트할 것인가?
+title: 6. Right-BICEP 무엇을 테스트할 것인가?
 category: 자바와 JUnit을 활용한 실용주의 단위테스트
 order: 6
 ---

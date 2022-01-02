@@ -1,5 +1,5 @@
 ---
-title: 7. 경계 조건: CORRECT 기억법
+title: 7. 경계 조건 CORRECT 기억법
 category: 자바와 JUnit을 활용한 실용주의 단위테스트
 order: 7
 ---
