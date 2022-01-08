@@ -13,6 +13,7 @@ author:
 - 연습해 볼 코드는 simpletodo 라는 이름으로 개발 중인 단순한 앱에 넣어본다.
 
 > 먼저 안드로이드에서 flutter와 같은 CHANNEL 값으로 맞춰준다.
+
 > method 이름이 같지만 기능이 달라야 할 다른 채널을 위한 게 아닐까 싶다.
 
 ```kotlin
