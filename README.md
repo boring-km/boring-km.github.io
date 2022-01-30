@@ -1,3 +1,4 @@
 - 머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그
 - 링크: https://boring-km.github.io
 - Template: http://jekyllthemes.org/themes/hamilton/
+- command: bundle exec jekyll serve
