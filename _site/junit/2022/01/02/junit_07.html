@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>경계 조건: CORRECT 기억법 | Kangmin’s Blog</title>
+<meta name="generator" content="Jekyll v3.9.1" />
+<meta property="og:title" content="경계 조건: CORRECT 기억법" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="https://github.com/boring-km/JunitPractice" />
+<meta property="og:description" content="https://github.com/boring-km/JunitPractice" />
+<link rel="canonical" href="http://localhost:4000/junit/2022/01/02/junit_07.html" />
+<meta property="og:url" content="http://localhost:4000/junit/2022/01/02/junit_07.html" />
+<meta property="og:site_name" content="Kangmin’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-01-02T00:00:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="경계 조건: CORRECT 기억법" />
+<script type="application/ld+json">
+{"url":"http://localhost:4000/junit/2022/01/02/junit_07.html","headline":"경계 조건: CORRECT 기억법","dateModified":"2022-01-02T00:00:00+09:00","datePublished":"2022-01-02T00:00:00+09:00","description":"https://github.com/boring-km/JunitPractice","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/junit/2022/01/02/junit_07.html"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Kangmin's Blog" />
+
+
+
+
+
+<!-- Google Fonts -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open%20Sans|Roboto|Roboto%20Slab|Inconsolata|Dancing%20Script|Noto%20Sans%20SC|Noto%20Sans%20TC|Noto%20Serif%20SC|Noto%20Serif%20TC|Ma%20Shan%20Zheng">
+
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="/assets/css/skin.css">
+
+<!-- Begin selecting skin -->
+
+  <script>
+    // const hour = (new Date()).getHours();
+    const filename = "/assets/css/skin-sunrise.css";
+    // if (hour >= 5 && hour < 7) {
+    //   filename = "/assets/css/skin-sunrise.css";
+    // } else if (hour >= 7 && hour < 17) {
+    //   filename = "/assets/css/skin-daylight.css";
+    // } else if (hour >= 17 && hour < 19) {
+    //   filename = "/assets/css/skin-sunset.css";
+    // } else {
+    //   filename = "/assets/css/skin-midnight.css";
+    // }
+    const elem = document.createElement("link");
+    elem.setAttribute("rel", "stylesheet");
+    elem.setAttribute("type", "text/css");
+    elem.setAttribute("href", filename);
+    document.getElementsByTagName("head")[0].appendChild(elem);
+  </script>
+
+<!-- End selecting skin -->
+
+<script async src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script>
+
+
+
+
+  </head>
+
+  <body>
+    <div class="site-container">
+      <header class="site-header">
+        <div class="wrapper">
+  <script>
+    function clickSidebarButton() {
+      const elem = document.getElementById("site-sidebar")
+      if (elem.style.display == "none" || elem.style.display == "") {
+        elem.style.display = "block";
+      } else {
+        elem.style.display = "none";
+      }
+    }
+  </script>
+  <a class="site-sidebar-button" onclick="clickSidebarButton()"><i class="far fa-user"></i>
+  </a>
+
+  <a class="site-title" rel="author" href="/">Kangmin&#39;s Blog</a>
+
+  
+    <nav class="site-nav">
+      <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+      <label for="nav-trigger" title="nav-trigger">
+        <span class="menu-icon">
+          <svg viewBox="0 0 18 15" width="18px" height="15px">
+            <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+          </svg>
+        </span>
+      </label>
+
+      <ul class="trigger">
+              <li><a class="" href="/about/">About</a></li>
+            
+              <li><a class="" href="/years/">Years</a></li>
+            
+              <li><a class="" href="/categories/">Categories</a></li>
+            
+              <li><a class="" href="/tags/">Tags</a></li>
+            </ul>
+    </nav>
+  
+</div>
+
+      </header>
+      
+      <div class="site-body wrapper">
+        <aside class="site-sidebar" id="site-sidebar">
+          
+            <div class="sidebar-section"><img src="/logo.png" class="author-avatar u-photo align-center" alt="boring-km">
+  </div>
+
+<div class="sidebar-section">
+  <ul class="contact-list">
+    <li>
+        <i class="sidebar-icon fas fa-at"></i>
+        <span class="contact-info p-name">boring-km</span>
+      </li>
+    <li>
+        <i class="sidebar-icon fas fa-envelope"></i>
+        <a class="contact-info u-email" href="mailto:ts4840644804@gmail.com">ts4840644804@gmail.com</a>
+      </li>
+    
+  </ul>
+</div>
+
+<div class="sidebar-section feed-subscribe">
+  <a href="/feed.xml">
+    <i class="sidebar-icon fas fa-rss"></i><span>Subscribe</span>
+  </a>
+</div>
+
+<div class="sidebar-section">
+    <ul class="social-icons">
+      <li>
+          <a class="social-icon" href="https://github.com/boring-km"><i class="fab fa-github fa-2x" title="GitHub"></i></a>
+        </li><li>
+          <a class="social-icon" href="https://boring-km.github.io/TIL"><i class="fas fa-clock fa-2x" title="TIL"></i></a>
+        </li><li>
+          <a class="social-icon" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/"><i class="fab fa-linkedin fa-2x" title="LinkedIn"></i></a>
+        </li>
+    </ul>
+  </div>
+
+          
+        </aside>
+        <main class="site-main" id="site-main" aria-label="Content" tabindex="1">
+          <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+
+    <h1 class="post-title p-name" itemprop="name headline">7. 경계 조건: CORRECT 기억법</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2022-01-02T00:00:00+09:00" itemprop="datePublished">
+        Jan 2, 2022
+      </time>• 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">Kangmin</span></span></p>
+
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul>
+  <li>
+    <p>https://github.com/boring-km/JunitPractice</p>
+  </li>
+  <li>Conformance(준수)</li>
+  <li>Ordering(순서)</li>
+  <li>Range(범위)</li>
+  <li>Reference(참조)</li>
+  <li>Existence(존재)</li>
+  <li>Cardinality(기수)</li>
+  <li>Time(시간)</li>
+  <li>마무리</li>
+</ul>
+
+<h3 id="71-conformance-준수">7.1 [C]onformance 준수</h3>
+<ul>
+  <li><em>값이 기대한 양식을 준수하고 있는가?</em></li>
+  <li>예를 들어 이메일 같은 경우면 ‘@’ 기호에 따라 양식을 준수하는지 판단한다.</li>
+  <li>문자열 데이터를 검증할 때는 많은 규칙이 필요하다. 다행히 대부분 단순하다.</li>
+  <li>하지만 구조적 데이터의 경우 테스트 케이스가 엄청 많을 수 있다.
+    <ul>
+      <li>처음에 데이터가 입력될 때 테스트해서 다른 시스템으로 넘어갈 때 또 테스트하지 않도록 주의하면 되겠다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="72-ordering-순서">7.2 [O]rdering 순서</h3>
+<ul>
+  <li><em>값의 집합이 적절하게 정렬되거나 정렬되지 않았나?</em></li>
+  <li>교제 예시 코드 <a href="https://github.com/gilbutITbook/006814/tree/master/iloveyouboss_15">전체 코드 예시</a></li>
+</ul>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="k">fun</span> <span class="nf">answersResultsInScoredOrder</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">smeltInc</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="nc">Answer</span><span class="p">(</span><span class="n">doTheyReimburseTuition</span><span class="p">,</span> <span class="nc">Bool</span><span class="p">.</span><span class="nc">FALSE</span><span class="p">))</span>
+  <span class="n">pool</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">smeltInc</span><span class="p">)</span>
+  <span class="n">langrsoft</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="nc">Answer</span><span class="p">(</span><span class="n">doTheyReimburseTuition</span><span class="p">,</span> <span class="nc">Bool</span><span class="p">.</span><span class="nc">TRUE</span><span class="p">))</span>
+  <span class="n">pool</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">langrsoft</span><span class="p">)</span>
+  
+  <span class="n">pool</span><span class="p">.</span><span class="nf">score</span><span class="p">(</span><span class="nf">soleNeed</span><span class="p">(</span><span class="n">doTheyReimburseTuition</span><span class="p">,</span> <span class="nc">Bool</span><span class="p">.</span><span class="nc">TRUE</span><span class="p">,</span> <span class="nc">Weight</span><span class="p">.</span><span class="nc">Important</span><span class="p">))</span>
+  <span class="kd">val</span> <span class="py">ranked</span><span class="p">:</span> <span class="nc">List</span><span class="p">&lt;</span><span class="nc">Profile</span><span class="p">&gt;</span> <span class="p">=</span> <span class="n">pool</span><span class="p">.</span><span class="nf">ranked</span><span class="p">()</span> <span class="c1">// 여기서 정렬</span>
+  <span class="nf">assertThat</span><span class="p">(</span><span class="n">ranked</span><span class="p">.</span><span class="nf">toArray</span><span class="p">(),</span> <span class="nf">equalTo</span><span class="p">(</span><span class="n">arrayOf</span><span class="p">&lt;</span><span class="nc">Profile</span><span class="p">&gt;(</span><span class="n">langrsoft</span><span class="p">,</span> <span class="n">smeltInc</span><span class="p">)))</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<h3 id="73-range-범위">7.3 [R]ange 범위</h3>
+<ul>
+  <li><em>이성적인 최솟값과 최댓값 안에 있는가?</em></li>
+  <li>자바 기본형으로 변수를 만들 때 대부분은 필요한 것보다 훨씬 많은 용량을 가진다.</li>
+  <li>
+    <p>기본형의 과도한 사용에 대한 코드 냄새를 <strong>기본형 중독</strong>이라 한다.</p>
+  </li>
+  <li>360도인 원의 이동 방향을 자바 기본형으로 저장하기보다 Bearing 클래스로 범위를 제약하는 로직을 캡슐화할 수 있다.
+    <ul>
+      <li>chapter07 BearingTest.kt 확인</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="좀-더-복잡한-경우라면">좀 더 복잡한 경우라면?</h4>
+<ul>
+  <li>점 2개를 x, y라는 정수형 tuple로 유지하는 클래스가 있다.</li>
+  <li>두 점이 이루는 각 변은 100 이하여야 한다.
+    <ul>
+      <li>x, y 좌표 쌍으로 허용되는 범위는 상호 의존적이다.</li>
+    </ul>
+  </li>
+  <li>좌표에 영향을 줄 수 있는 어떤 동작에 관하여 범위를 assert 해보자
+    <ul>
+      <li>그래서 x, y 좌표 쌍의 범위를 타당하게 유지해보자</li>
+    </ul>
+  </li>
+  <li>@After를 추가해 테스트가 완료되었을 때마다 확인할 수 있다.</li>
+  <li><a href="https://github.com/gilbutITbook/006814/blob/master/iloveyouboss_16/test/scratch/RectangleTest.java">예시 코드</a>
+    <ul>
+      <li>각 변을 100으로 제약함</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="731-불변성을-검사하는-사용자-정의-matcher-생성">7.3.1 불변성을 검사하는 사용자 정의 Matcher 생성</h4>
+<ul>
+  <li>사용자 정의 hamcrest matcher를 구현하려면 TypeSafeMatcher 클래스를 상속해 매칭하고자 하는 타입을 지정해야 한다.</li>
+  <li>matchesSafely()를 오버라이드 해서 제약 사항을 재정의
+    <ul>
+      <li>각 변이 범위 안에 있으면 true</li>
+    </ul>
+  </li>
+  <li>사용자 정의 matcher 클래스는 단언이 실패할 때
+    <ul>
+      <li>의미 있는 메시지를 describeTo() 메서드에 기재해야 한다.</li>
+      <li>Matcher 인스턴스를 반환하는 정적 팩토리 메서드를 제공해야 한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="732-불변-메서드를-내장하여-범위-테스트">7.3.2 불변 메서드를 내장하여 범위 테스트</h4>
+<ul>
+  <li>테스트할 대부분 범위는 application-domain 제약이라기보다는 자료 구조에 관한 제약에 의존하게 될 것이다.</li>
+  <li>희소 배열(sparse array)에 관한 <a href="https://github.com/gilbutITbook/006814/blob/master/iloveyouboss_16/src/util/SparseArray.java">예시</a></li>
+  <li>(자세히 볼 필요까지야 있겠나…)</li>
+  <li>checkInvariants() 메서드로 null이 아닌 배열 내 값들의 갯수가 배열의 길이와 동일하지 않으면 예외 던지기
+    <ul>
+      <li>최소한 어디서 예외가 발생하는지 그나마 추적이 쉬워진다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.junit.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">scratch.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">hamcrest</span><span class="o">.</span><span class="na">CoreMatchers</span><span class="o">.*;</span>
+<span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">Assert</span><span class="o">.*;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SparseArrayTest</span> <span class="o">{</span>
+  <span class="kd">private</span> <span class="nc">SparseArray</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="n">array</span><span class="o">;</span>
+
+  <span class="nd">@Before</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">create</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SparseArray</span><span class="o">&lt;&gt;();</span>
+  <span class="o">}</span>
+  
+  <span class="nd">@ExpectToFail</span>
+  <span class="nd">@Ignore</span>
+  <span class="nd">@Test</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handlesInsertionInDescendingOrder</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">array</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">7</span><span class="o">,</span> <span class="s">"seven"</span><span class="o">);</span>
+    <span class="n">array</span><span class="o">.</span><span class="na">checkInvariants</span><span class="o">();</span>
+    <span class="n">array</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">6</span><span class="o">,</span> <span class="s">"six"</span><span class="o">);</span>
+    <span class="n">array</span><span class="o">.</span><span class="na">checkInvariants</span><span class="o">();</span>
+    <span class="n">assertThat</span><span class="o">(</span><span class="n">array</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">6</span><span class="o">),</span> <span class="n">equalTo</span><span class="o">(</span><span class="s">"six"</span><span class="o">));</span>
+    <span class="n">assertThat</span><span class="o">(</span><span class="n">array</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">7</span><span class="o">),</span> <span class="n">equalTo</span><span class="o">(</span><span class="s">"seven"</span><span class="o">));</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>인덱싱은 수많은 잠재적인 오류를 포함하고 있다.</p>
+</blockquote>
+
+<h3 id="74-reference-참조">7.4 [R]eference 참조</h3>
+<ul>
+  <li><em>코드 자체에서 통제할 수 없는 어떤 외부 참조를 포함하고 있는가?</em></li>
+  <li><strong>고려해야 할 점들</strong>
+    <ul>
+      <li>범위를 넘어서는 것을 참조하고 있지 않은지</li>
+      <li>외부 의존성은 무엇인지</li>
+      <li>특정 상태에 있는 객체를 의존하고 있는지 여부</li>
+      <li>반드시 존재해야 하는 그 외 다른 조건들</li>
+    </ul>
+  </li>
+  <li>어떤 상태에 대해 가정할 때 <strong>그 가정이 맞지 않으면 코드가 합리적으로 잘 동작하는지 검사</strong>
+    <ol>
+      <li>가속 이후에 변속기를 주행으로 유지하는가?</li>
+      <li>주행 중에 주차로 바꾸는 파괴적인 요청을 무시하는가?</li>
+      <li>차량이 움직이지 않으면 주차로 변속기 변경을 허용하는가?</li>
+    </ol>
+  </li>
+  <li><a href="https://github.com/gilbutITbook/006814/blob/master/iloveyouboss_16/test/transmission/TransmissionTest.java">예제</a></li>
+</ul>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">org.hamcrest.CoreMatchers</span>
+<span class="k">import</span> <span class="nn">org.hamcrest.MatcherAssert.assertThat</span>
+<span class="k">import</span> <span class="nn">org.junit.Before</span>
+<span class="k">import</span> <span class="nn">org.junit.Test</span>
+
+<span class="kd">class</span> <span class="nc">TransmissionTest</span> <span class="p">{</span>
+
+  <span class="k">private</span> <span class="k">lateinit</span> <span class="kd">var</span> <span class="py">transmission</span><span class="p">:</span> <span class="nc">Transmission</span>
+  <span class="k">private</span> <span class="k">lateinit</span> <span class="kd">var</span> <span class="py">car</span><span class="p">:</span> <span class="nc">Car</span>
+
+  <span class="nd">@Before</span>
+  <span class="k">fun</span> <span class="err">초기화()</span> <span class="err">{</span>
+    <span class="nf">car</span> <span class="p">=</span> <span class="nc">Car</span><span class="p">()</span>
+    <span class="n">transmission</span> <span class="p">=</span> <span class="nc">Transmission</span><span class="p">(</span><span class="n">car</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="nd">@Test</span>
+  <span class="k">fun</span> <span class="err">주행으로</span><span class="nf">_</span><span class="err">기어를</span><span class="n">_</span><span class="err">바꾸고</span><span class="n">_35mph</span><span class="err">로</span><span class="n">_</span><span class="err">가속해도</span><span class="n">_</span><span class="err">기어는</span><span class="n">_</span><span class="err">주행기어다</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">transmission</span><span class="p">.</span><span class="nf">shift</span><span class="p">(</span><span class="nc">Gear</span><span class="p">.</span><span class="nc">DRIVE</span><span class="p">)</span>
+    <span class="n">car</span><span class="p">.</span><span class="nf">accelerateTo</span><span class="p">(</span><span class="mi">35</span><span class="p">)</span>
+    <span class="nf">assertThat</span><span class="p">(</span><span class="n">transmission</span><span class="p">.</span><span class="n">gear</span><span class="p">,</span> <span class="nc">CoreMatchers</span><span class="p">.</span><span class="nf">equalTo</span><span class="p">(</span><span class="nc">Gear</span><span class="p">.</span><span class="nc">DRIVE</span><span class="p">))</span>
+  <span class="p">}</span>
+
+  <span class="nd">@Test</span>
+  <span class="k">fun</span> <span class="err">주행으로</span><span class="nf">_</span><span class="err">기어를</span><span class="n">_</span><span class="err">바꾸고</span><span class="n">_30mph</span><span class="err">로</span><span class="n">_</span><span class="err">가속하면</span><span class="n">_</span><span class="err">기어를</span><span class="n">_</span><span class="err">주차로</span><span class="n">_</span><span class="err">바꿔도</span><span class="n">_</span><span class="err">기어는</span><span class="n">_</span><span class="err">주행기어다</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">transmission</span><span class="p">.</span><span class="nf">shift</span><span class="p">(</span><span class="nc">Gear</span><span class="p">.</span><span class="nc">DRIVE</span><span class="p">)</span>
+    <span class="n">car</span><span class="p">.</span><span class="nf">accelerateTo</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">transmission</span><span class="p">.</span><span class="nf">shift</span><span class="p">(</span><span class="nc">Gear</span><span class="p">.</span><span class="nc">PARK</span><span class="p">)</span>
+    <span class="nf">assertThat</span><span class="p">(</span><span class="n">transmission</span><span class="p">.</span><span class="n">gear</span><span class="p">,</span> <span class="nc">CoreMatchers</span><span class="p">.</span><span class="nf">equalTo</span><span class="p">(</span><span class="nc">Gear</span><span class="p">.</span><span class="nc">DRIVE</span><span class="p">))</span>
+  <span class="p">}</span>
+
+  <span class="nd">@Test</span>
+  <span class="k">fun</span> <span class="err">기어를</span><span class="nf">_</span><span class="err">주행으로</span><span class="n">_</span><span class="err">바꾸고</span><span class="n">_30mph</span><span class="err">로</span><span class="n">_</span><span class="err">가속할</span><span class="n">_</span><span class="err">때</span><span class="n">_</span><span class="err">브레이크</span><span class="n">_</span><span class="err">정지</span><span class="n">_</span><span class="err">후</span><span class="n">_</span><span class="err">기어를</span><span class="n">_</span><span class="err">주차로</span><span class="n">_</span><span class="err">바꾸면</span><span class="n">_</span><span class="err">기어는</span><span class="n">_</span><span class="err">주차기어다</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">transmission</span><span class="p">.</span><span class="nf">shift</span><span class="p">(</span><span class="nc">Gear</span><span class="p">.</span><span class="nc">DRIVE</span><span class="p">)</span>
+    <span class="n">car</span><span class="p">.</span><span class="nf">accelerateTo</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">car</span><span class="p">.</span><span class="nf">brakeToStop</span><span class="p">()</span>
+    <span class="n">transmission</span><span class="p">.</span><span class="nf">shift</span><span class="p">(</span><span class="nc">Gear</span><span class="p">.</span><span class="nc">PARK</span><span class="p">)</span>
+    <span class="nf">assertThat</span><span class="p">(</span><span class="n">transmission</span><span class="p">.</span><span class="n">gear</span><span class="p">,</span> <span class="nc">CoreMatchers</span><span class="p">.</span><span class="nf">equalTo</span><span class="p">(</span><span class="nc">Gear</span><span class="p">.</span><span class="nc">PARK</span><span class="p">))</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="75-existence-존재">7.5 [E]xistence 존재</h3>
+<ul>
+  <li><em>주어진 값이 존재하는가?</em>
+    <ul>
+      <li>null, 0, 혹은 비어 있는 경우</li>
+    </ul>
+  </li>
+  <li><strong>우리는 프로그래머로서 보통 행복 경로를 만드는 데 무엇보다 주력한다</strong>
+    <ul>
+      <li>예상하는 데이터가 없을 때 발생하는 불행 경로는 그 다음에 생각하고는 한다.</li>
+    </ul>
+  </li>
+  <li><strong>호출된 메서드가 null을 반환하거나, 기대하는 파일이 없거나, 네트워크가 다운되었을 때 어떤 일이 일어나는지 확인하는 테스트를 작성해라!</strong></li>
+</ul>
+
+<blockquote>
+  <p>작성한 메서드가 홀로 설 수 있도록!</p>
+</blockquote>
+
+<h3 id="76-cardinality-기수">7.6 [C]ardinality 기수</h3>
+<ul>
+  <li><em>정확히 충분한 값들이 있는가?</em></li>
+  <li>울타리 기둥 오류는 한 끗 차이로 발생하는 수많은 경우 중 한 가지를 의미한다.
+    <ul>
+      <li>개수를 어떻게 잘 세어 테스트할지 고민해 보고, 얼마나 많은지 확인해 보라</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="팬케이크-가게의-작업-목록-도출">팬케이크 가게의 작업 목록 도출</h4>
+<ul>
+  <li>상위 열 개의 음식 목록을 유지해야 함</li>
+  <li>주문이 나올 때마다 이 상위 목록을 갱신하여 실시간으로 팬케이크 보스 아이폰 앱에 결과를 표시한다.</li>
+</ul>
+
+<blockquote>
+  <p>목록에 항목이 하나도 없을 때 보고서 출력</p>
+
+  <p>목록에 항목이 한 개만 있을 때 보고서 출력</p>
+
+  <p>목록에 항목이 없을 때 한 항목 추가</p>
+
+  <p>목록에 항목이 하나만 있을 때 한 항목 추가하기</p>
+
+  <p>목록에 항목이 아직 열 개 미만일 때 한 항목 추가하기</p>
+
+  <p>목록에 항목이 이미 열 개가 있을 때 한 항목 추가하기</p>
+</blockquote>
+
+<ul>
+  <li>만약 상위 20개의 목록으로 바뀐다면?
+    <ul>
+      <li>아니면 5개? -&gt; 같은 상수를 사용하고 있으므로 <strong>0, 1, n</strong>이라는 <strong>경계 조건에만 집중하고</strong> n은 비즈니스 요구 사항에 따라 바뀔 수 있다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="77-time-시간">7.7 [T]ime 시간</h3>
+<ul>
+  <li><em>모든 것이 순서대로 일어나는가? 정확한 시간에? 정시에?</em>
+    <ul>
+      <li>상대적 시간(시간 순서)</li>
+      <li>절대적 시간(측정된 시간)</li>
+      <li>동시성 문제들</li>
+    </ul>
+  </li>
+  <li>login()이 먼저 logout()이 나중</li>
+  <li>open() 이후에 read() 호출</li>
+  <li>수명이 짧은 자원에 대해 코드가 얼마나 기다릴 지 -&gt; 타임아웃도 상대적인 시간 문제
+    <ul>
+      <li>발생하지 않을 일을 기다리느라 코드가 무한 대기에 빠지지는 않았는지</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>True Or False? 한 해의 모든 날은 항상 24시간?(윤초는 세지 않음)</p>
+</blockquote>
+
+<ul>
+  <li>정답은 상황에 따라 <strong>다르다</strong>
+    <ul>
+      <li>UTC(국제표준시)에서는 긍정이다.</li>
+      <li>DST(일광시간절약제)가 관찰되는 지역에서는 <strong>False</strong>
+        <ul>
+          <li>3월 하루는 23시간이고 11월 하루는 25시간이다…</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>때가 되면 여기저기 깨진 코드가 많아진다.</li>
+  <li>시스템 시계에 의존하는 테스트를 작성하는 해결책도 있다.
+    <ul>
+      <li>대신 테스트 코드에 통제할 수 있는 곳에서 얻어 오는 시간을 사용하도록 애플리케이션을 변경한다. (<em>챕터 5.4 참고</em>)</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="동시성과-동기화된-접근-context문맥에-관하여">동시성과 동기화된 접근 Context(문맥?)에 관하여…</h4>
+<ul>
+  <li>동시에 같은 객체를 다수의 스레드가 접근한다면?</li>
+  <li>어떤 전역 혹은 인스턴스 수준의 데이터나 메서드에 동기화를 해야 할까?</li>
+  <li>파일 혹은 하드웨어에 외적인 접근은 어떻게 처리?</li>
+  <li><strong>클라이언트에 동시성 요구 사항이 있다면 다수의 클라이언트 스레드를 보여주는 테스트를 작성할 필요가 있다.</strong></li>
+</ul>
+
+<h3 id="78-마무리">7.8 마무리</h3>
+<ul>
+  <li>모든 경계를 알 필요가 있다. 테스트에서는 더욱…</li>
+  <li>경계 조건들은 자주 고약하고 작은 결함들을 만들어 내는 곳이다.</li>
+  <li><strong>CORRECT</strong> 약어를 통해 단위 테스트 작성 시 고려해야 하는 경계들을 기억하는데 도움을 받자.</li>
+</ul>
+
+  </div>
+
+  <footer class="post-footer">
+    
+      <div class="post-meta">
+        <i class="fas fa-folder"></i>
+        <ul class="post-taxonomies post-categories">
+          
+          
+            <li class="post-category">
+              
+              <a href="/categories/#junit">JUnit</a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="post-meta">
+        <i class="fas fa-tags"></i>
+        <ul class="post-taxonomies post-tags">
+          
+          
+            <li class="post-tag">
+              
+              <a href="/tags/#dev">dev</a>
+            </li>
+          
+            <li class="post-tag">
+              
+              <a href="/tags/#java">java</a>
+            </li>
+          
+            <li class="post-tag">
+              
+              <a href="/tags/#kotlin">kotlin</a>
+            </li>
+          
+            <li class="post-tag">
+              
+              <a href="/tags/#test">test</a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    <nav class="post-pagination" role="navigation">
+      
+        <a class="post-previous" href="/junit/2022/01/02/junit_06.html">
+          <h4 class="post-pagination-label">Prev</h4>
+          <span class="post-pagination-title">
+            <i class="fas fa-arrow-left"></i> 
+  Right-BICEP: 무엇을 테스트할 것인가?
+
+
+          </span>
+        </a>
+      
+
+      
+        <a class="post-next" href="/%EB%A7%A4%EC%9D%BC%EC%84%B1%EA%B2%BD/2022/01/03/qt.html">
+          <h4 class="post-pagination-label">Next</h4>
+          <span class="post-pagination-title">
+            2022년 1월 3일 QT
+ <i class="fas fa-arrow-right"></i>
+          </span>
+        </a>
+      
+    </nav>
+  </footer>
+
+  
+  
+</article>
+
+          <footer class="site-footer">
+            <div class="footer-col-wrapper">
+
+  <div class="footer-col">
+    <div class="copyright">
+      
+      
+      
+      
+      <p>Copyright © 2021&nbsp;-&nbsp;2022 boring-km; All rights reserved.</p>
+      
+    </div>
+    <p>
+      Powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://github.com/ngzhio/jekyll-theme-hamilton">Hamilton</a>
+    </p>
+  </div>
+
+  <div class="footer-col">
+    <p>개발과 QT 기록용 블로그</p>
+  </div>
+</div>
+
+          </footer>
+        </main>
+      </div>
+    </div>
+  </body>
+
+</html>
