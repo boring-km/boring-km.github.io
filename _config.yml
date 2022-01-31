@@ -3,6 +3,7 @@ description: 개발과 QT 기록용 블로그
 author: boring-km
 avatar: /logo.png
 email: ts4840644804@gmail.com
+future: true
 
 plugins:
   - jekyll-seo-tag
