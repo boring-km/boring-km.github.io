@@ -3,6 +3,7 @@ layout: post
 title: "PhotoSchool App"
 categories: flutter
 tags: [dev, flutter]
+toc: true
 author:
 - Kangmin
 ---
