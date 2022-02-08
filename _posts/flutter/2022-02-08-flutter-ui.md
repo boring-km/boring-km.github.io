@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Flutter의 다양한 Widget - 1"
+title: "Flutter의 다양한 Widget(1)"
 categories: flutter
 tags: [dev, flutter]
 toc: true
