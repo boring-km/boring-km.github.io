@@ -180,14 +180,7 @@
       <workItem from="1644436520086" duration="1590000" />
       <workItem from="1644523286619" duration="2475000" />
       <workItem from="1644528832757" duration="1505000" />
-      <workItem from="1644549202407" duration="12220000" />
-    </task>
-    <task id="LOCAL-00053" summary="2022년 1월 18일 QT">
-      <created>1642452612519</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1642452612519</updated>
+      <workItem from="1644549202407" duration="12533000" />
     </task>
     <task id="LOCAL-00054" summary="2022년 1월 19일 QT">
       <created>1642538108716</created>
@@ -525,7 +518,14 @@
       <option name="project" value="LOCAL" />
       <updated>1644563851592</updated>
     </task>
-    <option name="localTasksCounter" value="102" />
+    <task id="LOCAL-00102" summary="블로그 템플릿 확인">
+      <created>1644566093896</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1644566093896</updated>
+    </task>
+    <option name="localTasksCounter" value="103" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -555,7 +555,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="이펙티브 자바 아이템 1 업로드" />
     <MESSAGE value="이펙티브 자바 카테고리 변경" />
     <MESSAGE value="시간 바꿔서 올려보기" />
     <MESSAGE value="31일 날짜로 아이템 2 업로드" />
@@ -580,6 +579,7 @@
     <MESSAGE value="2022년 2월 10일 QT" />
     <MESSAGE value="2022년 2월 11일 QT" />
     <MESSAGE value="블로그 템플릿 변경" />
-    <option name="LAST_COMMIT_MESSAGE" value="블로그 템플릿 변경" />
+    <MESSAGE value="블로그 템플릿 확인" />
+    <option name="LAST_COMMIT_MESSAGE" value="블로그 템플릿 확인" />
   </component>
 </project>
