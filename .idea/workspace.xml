@@ -8,6 +8,12 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--tags" />
+        <option name="title" value="All" />
+      </GitPushTagMode>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitSEFilterConfiguration">
@@ -174,14 +180,7 @@
       <workItem from="1644436520086" duration="1590000" />
       <workItem from="1644523286619" duration="2475000" />
       <workItem from="1644528832757" duration="1505000" />
-      <workItem from="1644549202407" duration="9970000" />
-    </task>
-    <task id="LOCAL-00052" summary="2022년 1월 17일 QT">
-      <created>1642363163927</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1642363163928</updated>
+      <workItem from="1644549202407" duration="12220000" />
     </task>
     <task id="LOCAL-00053" summary="2022년 1월 18일 QT">
       <created>1642452612519</created>
@@ -519,7 +518,14 @@
       <option name="project" value="LOCAL" />
       <updated>1644525202848</updated>
     </task>
-    <option name="localTasksCounter" value="101" />
+    <task id="LOCAL-00101" summary="블로그 템플릿 변경">
+      <created>1644563851592</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1644563851592</updated>
+    </task>
+    <option name="localTasksCounter" value="102" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -549,7 +555,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="2월 1일로 바꿔서 올려보기" />
     <MESSAGE value="이펙티브 자바 아이템 1 업로드" />
     <MESSAGE value="이펙티브 자바 카테고리 변경" />
     <MESSAGE value="시간 바꿔서 올려보기" />
@@ -574,6 +579,7 @@
     <MESSAGE value="2022년 2월 9일 QT" />
     <MESSAGE value="2022년 2월 10일 QT" />
     <MESSAGE value="2022년 2월 11일 QT" />
-    <option name="LAST_COMMIT_MESSAGE" value="2022년 2월 11일 QT" />
+    <MESSAGE value="블로그 템플릿 변경" />
+    <option name="LAST_COMMIT_MESSAGE" value="블로그 템플릿 변경" />
   </component>
 </project>

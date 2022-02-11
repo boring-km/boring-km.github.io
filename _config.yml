@@ -8,7 +8,7 @@ subtitle: ''
 description: ''
 keywords:
 author: Kangmin
-language: en
+language: ko
 timezone: ''
 
 # URL
@@ -102,8 +102,74 @@ theme: oranges
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: ''
+  type: git
+  repo: https://github.com/boring-km/boring-km.github.io
+  branch: master
 
 search:
   enable: true
   placeholder: 내용 검색...
+
+# 主题页面导航栏
+navbar:
+  -
+    name: Home
+    enable: true
+    path: /
+    key: home
+  -
+    name: Archives
+    enable: true
+    path: /archives/
+    key: archives
+  -
+    name: Categories
+    enable: true
+    path: /categories/
+    key: categories
+  -
+    name: Tags
+    enable: true
+    path: /tags/
+    key: tags
+  -
+    name: Friends
+    enable: false
+    path: /friends/
+    key: friends
+  -
+    name: About
+    enable: true
+    path: /about/
+    key: about
+
+
+catalog:
+  enable: true
+
+footer:
+  social:
+    -
+      name: github
+      icon: github
+      path: https://github.com/boring-km
+    -
+      name: email
+      icon: envelope
+      path: kmjin@kakao.com
+    -
+      name: linkedin
+      icon: linkedin
+      path: https://www.linkedin.com/in/kangmin-j-b1276b20b/
+    -
+      name: TIL
+      icon: emoji-friendly
+      path: https://boring-km.github.io/TIL
+
+  more:
+    -
+      name: 머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그
+      path: https://github.com/boring-km
+    -
+      name: Theme by Oranges | Powered by Hexo
+      path: https://github.com/zchengsite/hexo-theme-oranges
