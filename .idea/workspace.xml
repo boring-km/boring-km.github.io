@@ -19,7 +19,9 @@
         <option name="title" value="All" />
       </GitPushTagMode>
     </option>
+    <option name="RECENT_COMMON_BRANCH" value="master" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="SYNC" />
   </component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
@@ -66,12 +68,32 @@
       <recent name="$PROJECT_DIR$/images" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.build">
+  <component name="RunManager" selected="npm.server">
     <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
       <scripts>
         <script value="build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="clean" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="clean" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="deploy" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="deploy" />
       </scripts>
       <node-interpreter value="project" />
       <envs />
@@ -89,8 +111,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.build" />
         <item itemvalue="npm.server" />
+        <item itemvalue="npm.deploy" />
+        <item itemvalue="npm.build" />
+        <item itemvalue="npm.clean" />
       </list>
     </recent_temporary>
   </component>
@@ -187,21 +211,7 @@
       <workItem from="1644528832757" duration="1505000" />
       <workItem from="1644549202407" duration="12533000" />
       <workItem from="1644567882880" duration="728000" />
-      <workItem from="1644663402404" duration="1814000" />
-    </task>
-    <task id="LOCAL-00054" summary="2022년 1월 19일 QT">
-      <created>1642538108716</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1642538108717</updated>
-    </task>
-    <task id="LOCAL-00055" summary="2022년 1월 20일 QT">
-      <created>1642628593202</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1642628593203</updated>
+      <workItem from="1644663402404" duration="2937000" />
     </task>
     <task id="LOCAL-00056" summary="2022년 1월 21일 QT">
       <created>1642711090379</created>
@@ -532,7 +542,21 @@
       <option name="project" value="LOCAL" />
       <updated>1644566093896</updated>
     </task>
-    <option name="localTasksCounter" value="103" />
+    <task id="LOCAL-00103" summary="2022년 2월 12일 QT">
+      <created>1644668101565</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1644668101565</updated>
+    </task>
+    <task id="LOCAL-00104" summary="theme configs">
+      <created>1644668166687</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1644668166687</updated>
+    </task>
+    <option name="localTasksCounter" value="105" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -549,7 +573,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="master" />
+                        <option value="origin/edit" />
                       </list>
                     </value>
                   </entry>
@@ -577,8 +601,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="이펙티브 자바 카테고리 변경" />
-    <MESSAGE value="시간 바꿔서 올려보기" />
     <MESSAGE value="31일 날짜로 아이템 2 업로드" />
     <MESSAGE value="2022년 2월 1일 QT" />
     <MESSAGE value="toc 추가" />
@@ -602,6 +624,8 @@
     <MESSAGE value="2022년 2월 11일 QT" />
     <MESSAGE value="블로그 템플릿 변경" />
     <MESSAGE value="블로그 템플릿 확인" />
-    <option name="LAST_COMMIT_MESSAGE" value="블로그 템플릿 확인" />
+    <MESSAGE value="2022년 2월 12일 QT" />
+    <MESSAGE value="theme configs" />
+    <option name="LAST_COMMIT_MESSAGE" value="theme configs" />
   </component>
 </project>
