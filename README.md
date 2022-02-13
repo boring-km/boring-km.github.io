@@ -1,6 +1,7 @@
-- 머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그
-- 링크: https://boring-km.github.io
-- Template: https://github.com/zchengsite/hexo-theme-oranges
+## Memory Recording Blog
+
+- Link: https://boring-km.github.io
+- Hexo Template: https://github.com/zchengsite/hexo-theme-oranges
 - command
   - hexo generate
   - hexo deploy
