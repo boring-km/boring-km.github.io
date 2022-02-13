@@ -5,8 +5,6 @@ date: 2021-08-20
 categories: JUnit
 tags: [dev, test, kotlin, java]
 toc: true
-author:
-- Kangmin
 ---
 
 - https://github.com/boring-km/JunitPractice

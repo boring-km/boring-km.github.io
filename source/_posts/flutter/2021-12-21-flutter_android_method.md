@@ -5,8 +5,6 @@ date: 2021-12-21
 categories: flutter
 tags: [dev, flutter]
 toc: true
-author:
-- Kangmin
 ---
 
 - android 폴더 안에 있는 MainActivity 클래스가 FlutterActivity라는 걸 상속하고 있는데 이걸 통해 구현을 할 것이다.

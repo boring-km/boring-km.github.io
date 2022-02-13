@@ -5,8 +5,6 @@ date: 2021-12-20
 categories: flutter
 tags: [dev, flutter]
 toc: true
-author:
-- Kangmin
 ---
 
 ### 포토스쿨 SNS App

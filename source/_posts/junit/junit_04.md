@@ -5,8 +5,6 @@ date: 2021-09-30
 categories: JUnit
 tags: [dev, test, kotlin, java]
 toc: true
-author:
-- Kangmin
 ---
 
 
