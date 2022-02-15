@@ -7,8 +7,8 @@ public/
 .deploy*/
 _multiconfig.yml
 .idea
-themes/oranges/_config.yml
 .sass-cache
 _site
 Gemfile.lock
 boring-km.github.io.iml
+themes/*/*
