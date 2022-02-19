@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Flutter 반응형 UI"
+date: 2022-02-18 16:35:05
 categories: flutter
 tags: [dev, flutter]
 toc: true
