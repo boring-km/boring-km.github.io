@@ -2,7 +2,7 @@
 layout: post
 title: "Flutter의 다양한 Widget(2)"
 date: 2022-02-09
-categories: flutter
+categories: flutter-ui
 tags: [dev, flutter]
 toc: true
 ---

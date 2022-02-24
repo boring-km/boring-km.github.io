@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Flutter Hot Reload, Hot Restart"
-categories: flutter
+categories: flutter-ui
 tags: [dev, flutter]
 toc: true
 ---

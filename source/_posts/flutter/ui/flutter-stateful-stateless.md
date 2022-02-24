@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "StatefulWidget vs StatelessWidget"
-categories: flutter
+categories: flutter-ui
 tags: [dev, flutter]
 toc: true
 ---
