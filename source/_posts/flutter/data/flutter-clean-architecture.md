@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Flutter 클린 아키텍처"
+title: "Flutter Clean Architecture"
 categories: flutter-data
 tags: [dev, flutter]
 toc: true
