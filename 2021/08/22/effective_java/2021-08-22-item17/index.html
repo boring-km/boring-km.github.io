@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      아이템17. 변경 가능성을 최소화하라 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">Oranges</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">Friends</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">아이템17. 변경 가능성을 최소화하라</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2021-08-22 00:00:00
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/java/" title="java">
+                    <b>#</b> java
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <ul>
+<li><strong>불변 클래스</strong>: 그 인스턴스의 내부 값을 수정할 수 없는 클래스다.</li>
+<li>가변 클래스보다 설계하고 구현하고 사용하기 쉬우며, 오류가 생길 여지도 적고 훨씬 안전하다.</li>
+</ul>
+<h3 id="클래스를-불변으로-만들기-위한-5가지-규칙"><a href="#클래스를-불변으로-만들기-위한-5가지-규칙" class="headerlink" title="클래스를 불변으로 만들기 위한 5가지 규칙"></a>클래스를 불변으로 만들기 위한 5가지 규칙</h3><ul>
+<li>객체의 상태를 변경하는 메서드(변경자)를 제공하지 않는다.</li>
+<li>클래스를 확장할 수 없도록 한다.</li>
+<li>모든 필드를 final로 선언한다.</li>
+<li>모든 필드를 private으로 선언한다.</li>
+<li>자신 외에는 내부의 가변 컴포넌트에 접근할 수 없도록 한다.</li>
+</ul>
+<h4 id="불변-클래스-예시"><a href="#불변-클래스-예시" class="headerlink" title="불변 클래스 예시"></a>불변 클래스 예시</h4><ul>
+<li>Complex.java</li>
+<li>사칙연산 메서드들이 인스턴스 자신을 수정하는 것이 아닌 새로운 Complex 인스턴스를 만들어내고 있음</li>
+<li><strong>함수형 프로그래밍</strong>: 피연산자에 함수를 적용해 그 결과를 반환하지만, 피연산자 자체는 그대로인 프로그래밍 패턴</li>
+</ul>
+<h3 id="불변-클래스의-특징"><a href="#불변-클래스의-특징" class="headerlink" title="불변 클래스의 특징"></a>불변 클래스의 특징</h3><ul>
+<li><strong>불변 객체는 단순하다.</strong></li>
+<li><strong>불변 객체는 근본적으로 thread-safe 하여 따로 동기화할 필요가 없다.</strong></li>
+<li><strong>불변 객체는 안심하고 공유할 수 있다.</strong></li>
+<li>아무리 복사해봐야 원본 객체이기에..!</li>
+<li>clone 메서드나 복사 생성자를 제공하지 않는 게 좋다. (String의 복사 생성자는 필요 없다.)</li>
+<li><strong>불변 객체끼리는 내부 데이터를 공유할 수 있다.</strong></li>
+<li>객체를 만들 때 다른 불변 객체들을 구성요소로 사용하면 이점이 많다!</li>
+<li>불변 객체 그 자체로 실패 원자성을 제공한다. (메서드에서 예외가 발생한 후에도 그 객체는 여전히 유효한 상태여야 한다.)</li>
+</ul>
+<h3 id="불변-클래스의-단점-및-대처-방법"><a href="#불변-클래스의-단점-및-대처-방법" class="headerlink" title="불변 클래스의 단점 및 대처 방법"></a>불변 클래스의 단점 및 대처 방법</h3><ul>
+<li><strong>값이 다르면 반드시 독립된 객체로 만들어야 한다.</strong></li>
+<li>흔히 쓰일 다단계 연산들을 예측하여 기본 기능으로 제공하는 방법</li>
+<li>String과 String의 가변 동반 클래스 StringBuilder(StringBuffer도 있지..)</li>
+</ul>
+<h3 id="클래스가-불변임을-보장하기-위한-여러-방법들"><a href="#클래스가-불변임을-보장하기-위한-여러-방법들" class="headerlink" title="클래스가 불변임을 보장하기 위한 여러 방법들"></a>클래스가 불변임을 보장하기 위한 여러 방법들</h3><ul>
+<li>final 클래스로 선언하는 가장 쉬운 방법도 있다.</li>
+<li>모든 생성자를 private 혹은 package-private으로 만들고 public 정적 팩터리를 제공하는 방법<ul>
+<li>다수의 구현 클래스를 활용한 유연성을 제공하고, 다음 release에서 객체 캐싱 기능을 추가해 성능을 끌어올릴 수도 있다.</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Complex 클래스를 생성자 대신 정적 팩터리를 사용해 불변 클래스로 만들어보기</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Complex</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">double</span> re;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">double</span> im;</span><br><span class="line">    <span class="comment">// private 생성자이기 때문에 다른 패키지에서 확장 불가</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Complex</span><span class="params">(<span class="type">double</span> re, <span class="type">double</span> im)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.re = re;</span><br><span class="line">        <span class="built_in">this</span>.im = im;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Complex <span class="title function_">valueOf</span><span class="params">(<span class="type">double</span> re, <span class="type">double</span> im)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Complex</span>(re, im);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="불변-클래스의-예외-조건"><a href="#불변-클래스의-예외-조건" class="headerlink" title="불변 클래스의 예외 조건?"></a>불변 클래스의 예외 조건?</h3><ul>
+<li>성능을 위해 완화: “어떤 메서드도 객체의 상태 중 외부에 비치는 값을 변경할 수 없다.”</li>
+<li>방식: final이 아닌 필드에 캐시해두기</li>
+<li>이유: 똑같은 값을 다시 요청하면 캐시해둔 값을 반환하여 계산 비용을 절감할 수 있다.</li>
+</ul>
+<h3 id="정리"><a href="#정리" class="headerlink" title="정리"></a>정리</h3><ul>
+<li>getter가 있다고 무조건 setter를 만들지 말라</li>
+<li><strong>클래스는 꼭 필요한 경우가 아니라면 불변이어야 한다.</strong></li>
+<li>모든 클래스를 불변으로 만들 수도 없다. <strong>불변으로 만들 수 없는 클래스라도 변경할 수 있는 부분을 최소한으로 줄이자</strong></li>
+<li><strong>다른 합당한 이유가 없다면 모든 필드는 private final이어야 한다.</strong></li>
+<li><strong>생성자는 불변식 설정이 모두 완료된, 초기화가 완벽히 끝난 상태의 객체를 생성해야 한다.</strong></li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2021/08/21/junit/junit_02/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2021-08-22 00:00:00
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/java/" title="java">
+                        <b>#</b> java
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2021/08/30/junit/junit_03/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%81%B4%EB%9E%98%EC%8A%A4%EB%A5%BC-%EB%B6%88%EB%B3%80%EC%9C%BC%EB%A1%9C-%EB%A7%8C%EB%93%A4%EA%B8%B0-%EC%9C%84%ED%95%9C-5%EA%B0%80%EC%A7%80-%EA%B7%9C%EC%B9%99"><span class="toc-text">클래스를 불변으로 만들기 위한 5가지 규칙</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EB%B6%88%EB%B3%80-%ED%81%B4%EB%9E%98%EC%8A%A4-%EC%98%88%EC%8B%9C"><span class="toc-text">불변 클래스 예시</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%B6%88%EB%B3%80-%ED%81%B4%EB%9E%98%EC%8A%A4%EC%9D%98-%ED%8A%B9%EC%A7%95"><span class="toc-text">불변 클래스의 특징</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%B6%88%EB%B3%80-%ED%81%B4%EB%9E%98%EC%8A%A4%EC%9D%98-%EB%8B%A8%EC%A0%90-%EB%B0%8F-%EB%8C%80%EC%B2%98-%EB%B0%A9%EB%B2%95"><span class="toc-text">불변 클래스의 단점 및 대처 방법</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%81%B4%EB%9E%98%EC%8A%A4%EA%B0%80-%EB%B6%88%EB%B3%80%EC%9E%84%EC%9D%84-%EB%B3%B4%EC%9E%A5%ED%95%98%EA%B8%B0-%EC%9C%84%ED%95%9C-%EC%97%AC%EB%9F%AC-%EB%B0%A9%EB%B2%95%EB%93%A4"><span class="toc-text">클래스가 불변임을 보장하기 위한 여러 방법들</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%B6%88%EB%B3%80-%ED%81%B4%EB%9E%98%EC%8A%A4%EC%9D%98-%EC%98%88%EC%99%B8-%EC%A1%B0%EA%B1%B4"><span class="toc-text">불변 클래스의 예외 조건?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%A0%95%EB%A6%AC"><span class="toc-text">정리</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="facebook" href="">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="twitter" href="">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="wechat" href="">
+            <i class="iconfont icon-wechat"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="weibo" href="">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="rss" href="/atom.xml">
+            <i class="iconfont icon-rss"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © Oranges 2021</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %EC%95%84%EC%9D%B4%ED%85%9C17.%20%EB%B3%80%EA%B2%BD%20%EA%B0%80%EB%8A%A5%EC%84%B1%EC%9D%84%20%EC%B5%9C%EC%86%8C%ED%99%94%ED%95%98%EB%9D%BC + '&url=' + http%3A%2F%2Fexample.com%2F2021%2F08%2F22%2Feffective_java%2F2021-08-22-item17%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2021/08/22/effective_java/2021-08-22-item17/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

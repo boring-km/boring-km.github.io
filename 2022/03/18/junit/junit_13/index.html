@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      13. 까다로운 테스트 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">Oranges</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">Friends</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">13. 까다로운 테스트</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2022-03-18 00:33:00
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/java/" title="java">
+                    <b>#</b> java
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/test/" title="test">
+                    <b>#</b> test
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/kotlin/" title="kotlin">
+                    <b>#</b> kotlin
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <ul>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/boring-km/JunitPractice">https://github.com/boring-km/JunitPractice</a></p>
+</li>
+<li><p>멀티스레드 코드 테스트</p>
+</li>
+<li><p>데이터베이스 코드 테스트</p>
+</li>
+<li><p>마치며</p>
+</li>
+</ul>
+<blockquote>
+<p>여기서 스레드와 영속성을 테스트하는 접근 방법은 2가지 주제에 기반을 둔다.</p>
+<p>더 좋은 테스트 지원을 위한 ‘설계 다시 하기’, ‘stub과 mock을 사용해 의존성 끊기’</p>
+</blockquote>
+<h2 id="13-1-멀티스레드-코드-테스트"><a href="#13-1-멀티스레드-코드-테스트" class="headerlink" title="13.1 멀티스레드 코드 테스트"></a>13.1 멀티스레드 코드 테스트</h2><ul>
+<li>동시성 처리가 필요한 애플리케이션 코드를 테스트하는 것은 기술적으로 단위 테스트가 아닌 통합 테스트 영역이다.</li>
+<li>멀티스레드 코드를 테스트하는 예제를 통해 방법을 익혀보자</li>
+</ul>
+<h3 id="13-1-1-단순하고-똑똑하게-유지"><a href="#13-1-1-단순하고-똑똑하게-유지" class="headerlink" title="13.1.1 단순하고 똑똑하게 유지"></a>13.1.1 단순하고 똑똑하게 유지</h3><ul>
+<li><strong>스레드 통제와 애플리케이션 코드 사이의 중첩을 최소화해라</strong><ul>
+<li>스레드 없이 다량의 애플리케이션 코드를 단위 테스트할 수 있도록 설계를 변경해라</li>
+<li>남은 작은 코드에 대해 스레드에 집중적인 테스트를 해라</li>
+</ul>
+</li>
+<li><strong>다른 사람의 작업을 믿어라</strong><ul>
+<li>너무 자바의 내용이라 패스</li>
+<li>(다른 사람들이 잘 만들어놓은 util 클래스 사용하라는 얘기, BlockingQueue)</li>
+</ul>
+</li>
+</ul>
+<h3 id="13-1-2-모든-매칭-찾기"><a href="#13-1-2-모든-매칭-찾기" class="headerlink" title="13.1.2 모든 매칭 찾기"></a>13.1.2 모든 매칭 찾기</h3><ul>
+<li>관련 있는 모든 프로파일을 수집하는 ProfileMatcher 클래스 예시</li>
+<li>(12장의 코드에서 많은 변화가 있는 것 같음)</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.Executors</span><br><span class="line"><span class="keyword">import</span> java.util.stream.Collectors</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProfileMatcher</span> </span>&#123;</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">val</span> profiles: MutableMap&lt;String, Profile&gt; = HashMap()</span><br><span class="line">   <span class="function"><span class="keyword">fun</span> <span class="title">add</span><span class="params">(profile: <span class="type">Profile</span>)</span></span> &#123;</span><br><span class="line">      profiles[profile.getId()] = profile</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">fun</span> <span class="title">findMatchingProfiles</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">      criteria: <span class="type">Criteria</span>?, listener: <span class="type">MatchListener</span></span></span></span><br><span class="line"><span class="params"><span class="function">   )</span></span> &#123;</span><br><span class="line">      <span class="keyword">val</span> executor = Executors.newFixedThreadPool(DEFAULT_POOL_SIZE)</span><br><span class="line">      <span class="keyword">val</span> matchSets = profiles.values.stream()</span><br><span class="line">         .map &#123; profile: Profile -&gt;</span><br><span class="line">            profile.getMatchSet(criteria)</span><br><span class="line">         &#125;</span><br><span class="line">         .collect(Collectors.toList())</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">set</span> <span class="keyword">in</span> matchSets) &#123;</span><br><span class="line">         <span class="keyword">val</span> runnable = Runnable &#123;</span><br><span class="line">           <span class="keyword">if</span> (<span class="keyword">set</span>.matches())</span><br><span class="line">               listener.foundMatch(profiles[<span class="keyword">set</span>.profileId], <span class="keyword">set</span>)</span><br><span class="line">         &#125;</span><br><span class="line">         executor.execute(runnable)</span><br><span class="line">      &#125;</span><br><span class="line">      executor.shutdown()</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">      <span class="keyword">private</span> <span class="keyword">const</span> <span class="keyword">val</span> DEFAULT_POOL_SIZE = <span class="number">4</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>각 프로파일에 대해 MatchSet 인스턴스를 모으는 findMatchingProfiles()</li>
+<li>각 MatchSet에 대해 메서드는 별도의 스레드를 생성해 MatchSet 객체의 matches() return 값이 true이면 프로파일과 그에 맞는 MatchSet 객체를 listener로 보낸다.</li>
+</ul>
+<h3 id="13-1-3-애플리케이션-로직-추출"><a href="#13-1-3-애플리케이션-로직-추출" class="headerlink" title="13.1.3 애플리케이션 로직 추출"></a>13.1.3 애플리케이션 로직 추출</h3><ul>
+<li>findMatchingProfiles() 분리</li>
+<li>분리한 collectMatchSets() 테스트 작성</li>
+<li>매칭된 프로파일 정보를 listener로 넘기는 로직도 추출한다.</li>
+<li>분리한 process() 테스트 작성<ul>
+<li>모키토의 정적 mock() 메서드를 사용해 MatchListener 목 인스턴스를 생성한다.</li>
+<li>매칭되는 프로파일(주어진 조건에 매칭될 것으로 기대되는 프로파일)을 matcher 변수에 추가한다.</li>
+<li>주어진 조건 집합에 매칭되는 프로파일에 대한 MatchSet 객체를 요청한다.</li>
+<li>mock listener와 MatchSet 객체를 넘겨 matcher 변수에 매칭 처리를 지시한다.</li>
+<li>mockito를 활용해 mock으로 만든 listener 객체에 foundMatch() 메서드가 호출되었는지 확인한다.<br>이때 매칭 프로파일과 MatchSet 객체를 인수로 넘긴다. 기대 사항이 맞지 않으면 mockito에 의해 테스트는 실패한다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="13-1-4-스레드-로직의-테스트-지원을-위해-재설계"><a href="#13-1-4-스레드-로직의-테스트-지원을-위해-재설계" class="headerlink" title="13.1.4 스레드 로직의 테스트 지원을 위해 재설계"></a>13.1.4 스레드 로직의 테스트 지원을 위해 재설계</h3><ul>
+<li>남아있는 findMatchingProfiles() 메서드의 코드 대부분은 스레드 로직이다.</li>
+<li>테스트를 위해 재설계를 해본다.</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.Executors</span><br><span class="line"><span class="keyword">import</span> java.util.function.BiConsumer</span><br><span class="line"><span class="keyword">import</span> java.util.stream.Collectors</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProfileMatcher</span> </span>&#123;</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">val</span> profiles: MutableMap&lt;String, Profile&gt; = HashMap()</span><br><span class="line">   <span class="function"><span class="keyword">fun</span> <span class="title">add</span><span class="params">(profile: <span class="type">Profile</span>)</span></span> &#123;</span><br><span class="line">      profiles[profile.getId()] = profile</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">val</span> executor = Executors.newFixedThreadPool(DEFAULT_POOL_SIZE)</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">fun</span> <span class="title">findMatchingProfiles</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">      listener: <span class="type">MatchListener</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">      matchSets: <span class="type">MutableList</span>&lt;<span class="type">MatchSet</span>&gt;,</span></span></span><br><span class="line"><span class="params"><span class="function">      processFunction: <span class="type">BiConsumer</span>&lt;<span class="type">MatchListener</span>, MatchSet&gt;</span></span></span><br><span class="line"><span class="params"><span class="function">   )</span></span> &#123;</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">set</span> <span class="keyword">in</span> matchSets) &#123;</span><br><span class="line">         <span class="keyword">val</span> runnable = Runnable &#123; processFunction.accept(listener, <span class="keyword">set</span>) &#125;</span><br><span class="line">         executor.execute(runnable)</span><br><span class="line">      &#125;</span><br><span class="line">      executor.shutdown()</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">fun</span> <span class="title">findMatchingProfiles</span><span class="params">(criteria: <span class="type">Criteria</span>, listener: <span class="type">MatchListener</span>)</span></span> &#123;</span><br><span class="line">      findMatchingProfiles(</span><br><span class="line">         listener, collectMatchSets(criteria), ::process</span><br><span class="line">      )</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 비동기로 실행할 코드</span></span><br><span class="line">   <span class="function"><span class="keyword">fun</span> <span class="title">process</span><span class="params">(listener: <span class="type">MatchListener</span>, <span class="keyword">set</span>: <span class="type">MatchSet</span>)</span></span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">set</span>.matches()) listener.foundMatch(profiles[<span class="keyword">set</span>.profileId], <span class="keyword">set</span>)</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">fun</span> <span class="title">collectMatchSets</span><span class="params">(criteria: <span class="type">Criteria</span>?)</span></span>: MutableList&lt;MatchSet&gt; = profiles.values.stream()</span><br><span class="line">      .map &#123; profile: Profile -&gt;</span><br><span class="line">         profile.getMatchSet(</span><br><span class="line">            criteria</span><br><span class="line">         )</span><br><span class="line">      &#125;</span><br><span class="line">      .collect(Collectors.toList())</span><br><span class="line"></span><br><span class="line">   <span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">      <span class="keyword">private</span> <span class="keyword">const</span> <span class="keyword">val</span> DEFAULT_POOL_SIZE = <span class="number">4</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="13-1-5-스레드-로직을-위한-테스트-작성"><a href="#13-1-5-스레드-로직을-위한-테스트-작성" class="headerlink" title="13.1.5 스레드 로직을 위한 테스트 작성"></a>13.1.5 스레드 로직을 위한 테스트 작성</h3><ul>
+<li>테스트 코드 수정</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.hamcrest.CoreMatchers</span><br><span class="line"><span class="keyword">import</span> org.hamcrest.CoreMatchers.equalTo</span><br><span class="line"><span class="keyword">import</span> org.hamcrest.MatcherAssert.assertThat</span><br><span class="line"><span class="keyword">import</span> org.junit.Before</span><br><span class="line"><span class="keyword">import</span> org.junit.Test</span><br><span class="line"><span class="keyword">import</span> org.mockito.Mockito.mock</span><br><span class="line"><span class="keyword">import</span> org.mockito.Mockito.verify</span><br><span class="line"><span class="keyword">import</span> java.util.*</span><br><span class="line"><span class="keyword">import</span> java.util.function.BiConsumer</span><br><span class="line"><span class="keyword">import</span> java.util.stream.Collectors</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProfileMatcherTest</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">lateinit</span> <span class="keyword">var</span> question: BooleanQuestion</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">lateinit</span> <span class="keyword">var</span> criteria: Criteria</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">lateinit</span> <span class="keyword">var</span> matcher: ProfileMatcher</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">lateinit</span> <span class="keyword">var</span> matchingProfile: Profile</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">lateinit</span> <span class="keyword">var</span> nonMatchingProfile: Profile</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">lateinit</span> <span class="keyword">var</span> listener: MatchListener</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Before</span></span><br><span class="line">  <span class="function"><span class="keyword">fun</span> <span class="title">create</span><span class="params">()</span></span> &#123;</span><br><span class="line">    question = BooleanQuestion(<span class="number">1</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line">    criteria = Criteria()</span><br><span class="line">    criteria.add(Criterion(matchingAnswer(), Weight.MustMatch))</span><br><span class="line">    matchingProfile = createMatchingProfile(<span class="string">&quot;matching&quot;</span>)</span><br><span class="line">    nonMatchingProfile = createNonMatchingProfile(<span class="string">&quot;nonMatching&quot;</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">createMatchingProfile</span><span class="params">(name: <span class="type">String</span>)</span></span>: Profile &#123;</span><br><span class="line">    <span class="keyword">val</span> profile = Profile(name)</span><br><span class="line">    profile.add(matchingAnswer())</span><br><span class="line">    <span class="keyword">return</span> profile</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">createNonMatchingProfile</span><span class="params">(name: <span class="type">String</span>)</span></span>: Profile &#123;</span><br><span class="line">    <span class="keyword">val</span> profile = Profile(name)</span><br><span class="line">    profile.add(nonMatchingAnswer())</span><br><span class="line">    <span class="keyword">return</span> profile</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Before</span></span><br><span class="line">  <span class="function"><span class="keyword">fun</span> <span class="title">createMatcher</span><span class="params">()</span></span> &#123;</span><br><span class="line">    matcher = ProfileMatcher()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Before</span></span><br><span class="line">  <span class="function"><span class="keyword">fun</span> <span class="title">createMatchListener</span><span class="params">()</span></span> &#123;</span><br><span class="line">    listener = mock(MatchListener::<span class="keyword">class</span>.java)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="function"><span class="keyword">fun</span> <span class="title">processNotifiesListenerOnMatch</span><span class="params">()</span></span> &#123;</span><br><span class="line">    matcher.add(matchingProfile)</span><br><span class="line">    <span class="keyword">val</span> <span class="keyword">set</span> = matchingProfile.getMatchSet(criteria)</span><br><span class="line"></span><br><span class="line">    matcher.process(listener, <span class="keyword">set</span>)</span><br><span class="line"></span><br><span class="line">    verify(listener).foundMatch(matchingProfile, <span class="keyword">set</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="function"><span class="keyword">fun</span> <span class="title">collectsMatchSets</span><span class="params">()</span></span> &#123;</span><br><span class="line">    matcher.add(matchingProfile)</span><br><span class="line">    matcher.add(nonMatchingProfile)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> sets = matcher.collectMatchSets(criteria)</span><br><span class="line"></span><br><span class="line">    assertThat(</span><br><span class="line">      sets.stream()</span><br><span class="line">        .map &#123; <span class="keyword">set</span>: MatchSet -&gt; <span class="keyword">set</span>.profileId &#125;.collect(Collectors.toSet()),</span><br><span class="line">      CoreMatchers.equalTo(</span><br><span class="line">        HashSet(</span><br><span class="line">          listOf(</span><br><span class="line">            matchingProfile.getId(), nonMatchingProfile.getId()</span><br><span class="line">          )</span><br><span class="line">        )</span><br><span class="line">      )</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">matchingAnswer</span><span class="params">()</span></span>: Answer &#123;</span><br><span class="line">    <span class="keyword">return</span> Answer(question, Bool.TRUE)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">nonMatchingAnswer</span><span class="params">()</span></span>: Answer &#123;</span><br><span class="line">    <span class="keyword">return</span> Answer(question, Bool.FALSE)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="function"><span class="keyword">fun</span> <span class="title">gathersMatchingProfiles</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 리스너가 수신하는 MatchSet 객체들의 프로파일 ID 목록을 저장할 문자열 Set 객체를 생성한다.</span></span><br><span class="line">    <span class="keyword">val</span> processedSets = Collections.synchronizedSet(HashSet&lt;String&gt;())</span><br><span class="line"></span><br><span class="line">    <span class="comment">// process() 메서드의 프로덕션 버전을 대신하는 함수</span></span><br><span class="line">    <span class="keyword">val</span> processFunction = BiConsumer &#123; _: MatchListener, <span class="keyword">set</span>: MatchSet -&gt;</span><br><span class="line">      <span class="comment">// 각 콜백에서 MatchSet 객체의 프로파일 ID를 processedSets 변수에 추가</span></span><br><span class="line">      processedSets.add(<span class="keyword">set</span>.profileId)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 테스트용 MatchSet 객체 생성</span></span><br><span class="line">    <span class="keyword">val</span> matchSets = createMatchSets(<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// processFunction() 구현을 넘긴다.</span></span><br><span class="line">    <span class="comment">// 실제로는 criteria로 테스트를 해야하지만, 내부의 로직은 matchSets의 내용을 그대로 MutableList&lt;MatchSet&gt;에 담아서 리턴한다.</span></span><br><span class="line">    matcher.findMatchingProfiles(criteria, listener, matchSets, processFunction)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ExecutorService 객체를 가져와 모든 스레드의 실행이 완료될 때까지 기다림</span></span><br><span class="line">    <span class="keyword">while</span> (!matcher.executor.isTerminated);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// processedSets 컬렉션이 테스트에서 생성된 모든 MatchSet 객체의 ID와 매칭되는지 검증한다.</span></span><br><span class="line">    assertThat(processedSets, equalTo(matchSets.stream().map(MatchSet::profileId).collect(Collectors.toSet())))</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">createMatchSets</span><span class="params">(count: <span class="type">Int</span>)</span></span>: MutableList&lt;MatchSet&gt; &#123;</span><br><span class="line">    <span class="keyword">val</span> sets = arrayListOf&lt;MatchSet&gt;()</span><br><span class="line">    <span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">0</span> until count) &#123;</span><br><span class="line">      sets.add(MatchSet(i.toString(), <span class="literal">null</span>, <span class="literal">null</span>))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sets</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="13-2-데이터베이스-테스트"><a href="#13-2-데이터베이스-테스트" class="headerlink" title="13.2 데이터베이스 테스트"></a>13.2 데이터베이스 테스트</h2><ul>
+<li>챕터 5에서 잠깐 소개된 StatCompiler 코드에서 QuestionController와 상호 작용하는 questionText() 메서드에 관한 테스트를 작성해보기</li>
+<li>(5장 공부할 때도 따로 기록을 안해놔서 일단 아래에 적음)</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/gilbutITbook/006814/blob/master/iloveyouboss_16-branch-persistence-redesign/src/iloveyouboss/domain/StatCompiler.java">StatCompiler.java</a></li>
+</ul>
+<h3 id="13-2-1-고마워-Controller"><a href="#13-2-1-고마워-Controller" class="headerlink" title="13.2.1 고마워, Controller"></a>13.2.1 고마워, Controller</h3><ul>
+<li>questionText() 메서드에서 DB와 통신하는 <strong>controller</strong> 변수 때문에 테스트하기가 어려울 수 있다.</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/gilbutITbook/006814/blob/03260ef4099f6e4efa0779a598c3b7fcd2565fcd/iloveyouboss_16-branch-persistence-redesign/src/iloveyouboss/controller/QuestionController.java#L17">QuestionController.java</a></li>
+<li>해당 클래스에 대한 단위 테스트를 일일이 작성하는 것보다 진짜 DB와 성공적으로 상호 작용하는 QuestionController 클래스에 대한 테스트를 작성하는 것이 좋다.</li>
+</ul>
+<h3 id="13-2-2-데이터-문제"><a href="#13-2-2-데이터-문제" class="headerlink" title="13.2.2 데이터 문제"></a>13.2.2 데이터 문제</h3><ul>
+<li>JUnit의 테스트 대다수는 속도가 빠르길 원하는데 DB 테스트가 느려지지 않도록, 영속적인 모든 상호 작용을 시스템의 한곳으로 고립시켜 통합 테스트의 대상을 줄이도록 하자</li>
+</ul>
+<blockquote>
+<p>테스트 안에서 데이터를 생성하고 관리해라</p>
+<p>매 테스트는 그다음 자기가 쓸 데이터를 추가하거나 그것으로 작업해라(테스트 간 의존성 문제가 생기지 않도록 하기 위함)</p>
+<p>테스트마다 트랜잭션을 초기화하고, 테스트가 끝나면 롤백하는 방법을 선택하자</p>
+</blockquote>
+<ul>
+<li>통합 테스트는 작성과 유지 보수가 어렵다. 자주 망가지고, 그들이 깨졌을 때 문제를 디버깅하는 것도 상당히 오래걸리지만 여전히 <strong>테스트 전략의 필수적인 부분이다.</strong></li>
+</ul>
+<h3 id="13-2-3-클린-룸-데이터베이스-테스트"><a href="#13-2-3-클린-룸-데이터베이스-테스트" class="headerlink" title="13.2.3 클린 룸 데이터베이스 테스트"></a>13.2.3 클린 룸 데이터베이스 테스트</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/gilbutITbook/006814/blob/master/iloveyouboss_16-branch-persistence-redesign/test/iloveyouboss/controller/QuestionControllerTest.java">예제의 코드</a>를 그대로 가져왔다.</li>
+<li>@Before, @After 메서드 모두에서 deleteAll() 메서드를 통해 매번 데이터를 초기화하고 있다.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.junit.Assert.*;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.hamcrest.CoreMatchers.*;</span><br><span class="line"><span class="keyword">import</span> java.time.*;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">import</span> java.util.stream.*;</span><br><span class="line"><span class="keyword">import</span> iloveyouboss.domain.*;</span><br><span class="line"><span class="keyword">import</span> org.junit.*;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuestionControllerTest</span> &#123;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> QuestionController controller;</span><br><span class="line">   </span><br><span class="line">   <span class="meta">@Before</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">create</span><span class="params">()</span> &#123;</span><br><span class="line">      controller = <span class="keyword">new</span> <span class="title class_">QuestionController</span>();</span><br><span class="line">      controller.deleteAll();</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   <span class="meta">@After</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">cleanup</span><span class="params">()</span> &#123;</span><br><span class="line">      controller.deleteAll();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">findsPersistedQuestionById</span><span class="params">()</span> &#123;</span><br><span class="line">      <span class="type">int</span> <span class="variable">id</span> <span class="operator">=</span> controller.addBooleanQuestion(<span class="string">&quot;question text&quot;</span>);</span><br><span class="line">      </span><br><span class="line">      <span class="type">Question</span> <span class="variable">question</span> <span class="operator">=</span> controller.find(id);</span><br><span class="line">      </span><br><span class="line">      assertThat(question.getText(), equalTo(<span class="string">&quot;question text&quot;</span>));</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">questionAnswersDateAdded</span><span class="params">()</span> &#123;</span><br><span class="line">      <span class="type">Instant</span> <span class="variable">now</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>().toInstant();</span><br><span class="line">      controller.setClock(Clock.fixed(now, ZoneId.of(<span class="string">&quot;America/Denver&quot;</span>)));</span><br><span class="line">      <span class="type">int</span> <span class="variable">id</span> <span class="operator">=</span> controller.addBooleanQuestion(<span class="string">&quot;text&quot;</span>);</span><br><span class="line">      </span><br><span class="line">      <span class="type">Question</span> <span class="variable">question</span> <span class="operator">=</span> controller.find(id);</span><br><span class="line">      </span><br><span class="line">      assertThat(question.getCreateTimestamp(), equalTo(now));</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">answersMultiplePersistedQuestions</span><span class="params">()</span> &#123;</span><br><span class="line">      controller.addBooleanQuestion(<span class="string">&quot;q1&quot;</span>);</span><br><span class="line">      controller.addBooleanQuestion(<span class="string">&quot;q2&quot;</span>);</span><br><span class="line">      controller.addPercentileQuestion(<span class="string">&quot;q3&quot;</span>, <span class="keyword">new</span> <span class="title class_">String</span>[] &#123; <span class="string">&quot;a1&quot;</span>, <span class="string">&quot;a2&quot;</span>&#125;);</span><br><span class="line">      </span><br><span class="line">      List&lt;Question&gt; questions = controller.getAll();</span><br><span class="line">      </span><br><span class="line">      assertThat(questions.stream()</span><br><span class="line">            .map(Question::getText)</span><br><span class="line">            .collect(Collectors.toList()), </span><br><span class="line">         equalTo(Arrays.asList(<span class="string">&quot;q1&quot;</span>, <span class="string">&quot;q2&quot;</span>, <span class="string">&quot;q3&quot;</span>)));</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">findsMatchingEntries</span><span class="params">()</span> &#123;</span><br><span class="line">      controller.addBooleanQuestion(<span class="string">&quot;alpha 1&quot;</span>);</span><br><span class="line">      controller.addBooleanQuestion(<span class="string">&quot;alpha 2&quot;</span>);</span><br><span class="line">      controller.addBooleanQuestion(<span class="string">&quot;beta 1&quot;</span>);</span><br><span class="line"></span><br><span class="line">      List&lt;Question&gt; questions = controller.findWithMatchingText(<span class="string">&quot;alpha&quot;</span>);</span><br><span class="line">      </span><br><span class="line">      assertThat(questions.stream()</span><br><span class="line">            .map(Question::getText)</span><br><span class="line">            .collect(Collectors.toList()),</span><br><span class="line">         equalTo(Arrays.asList(<span class="string">&quot;alpha 1&quot;</span>, <span class="string">&quot;alpha 2&quot;</span>)));</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="13-2-4-controller를-목-처리"><a href="#13-2-4-controller를-목-처리" class="headerlink" title="13.2.4 controller를 목 처리"></a>13.2.4 controller를 목 처리</h3><ul>
+<li>다시 questionText() 메서드의 테스트로 돌아가 QuestionController를 Mocking 해보는 것으로 마무리한다.</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/gilbutITbook/006814/blob/master/iloveyouboss_16-branch-persistence-redesign/test/iloveyouboss/domain/StatCompilerTest.java">링크</a></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.junit.Assert.*;</span><br><span class="line"><span class="keyword">import</span> iloveyouboss.controller.*;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.atomic.*;</span><br><span class="line"><span class="keyword">import</span> org.junit.*;</span><br><span class="line"><span class="keyword">import</span> org.mockito.*;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.hamcrest.CoreMatchers.*;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.mockito.Mockito.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StatCompilerTest</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Mock</span> <span class="keyword">private</span> QuestionController controller;  <span class="comment">// Mocking할 객체 선언</span></span><br><span class="line">  <span class="meta">@InjectMocks</span> <span class="keyword">private</span> StatCompiler stats;  <span class="comment">// Mock 객체를 주입할 객체 선언</span></span><br><span class="line"></span><br><span class="line">  <span class="meta">@Before</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">initialize</span><span class="params">()</span> &#123;</span><br><span class="line">    stats = <span class="keyword">new</span> <span class="title class_">StatCompiler</span>();</span><br><span class="line">    MockitoAnnotations.initMocks(<span class="built_in">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">questionTextDoesStuff</span><span class="params">()</span> &#123;</span><br><span class="line">    when(controller.find(<span class="number">1</span>)).thenReturn(<span class="keyword">new</span> <span class="title class_">BooleanQuestion</span>(<span class="string">&quot;text1&quot;</span>));</span><br><span class="line">    when(controller.find(<span class="number">2</span>)).thenReturn(<span class="keyword">new</span> <span class="title class_">BooleanQuestion</span>(<span class="string">&quot;text2&quot;</span>));</span><br><span class="line">    List&lt;BooleanAnswer&gt; answers = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    answers.add(<span class="keyword">new</span> <span class="title class_">BooleanAnswer</span>(<span class="number">1</span>, <span class="literal">true</span>));</span><br><span class="line">    answers.add(<span class="keyword">new</span> <span class="title class_">BooleanAnswer</span>(<span class="number">2</span>, <span class="literal">true</span>));</span><br><span class="line"></span><br><span class="line">    Map&lt;Integer, String&gt; questionText = stats.questionText(answers);</span><br><span class="line"></span><br><span class="line">    Map&lt;Integer, String&gt; expected = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">    expected.put(<span class="number">1</span>, <span class="string">&quot;text1&quot;</span>);</span><br><span class="line">    expected.put(<span class="number">2</span>, <span class="string">&quot;text2&quot;</span>);</span><br><span class="line">    assertThat(questionText, equalTo(expected));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>StatCompiler 내부에 있는 QuestionController 인스턴스를 mockito를 이용해 생성해주었다.</li>
+<li>그리고 테스트 코드 내 ‘when().thenReturn()’을 통해 QuestionController 인스턴스가 가상으로 동작할 코드와 그 결과를 정의한다.</li>
+<li>questionText()가 정상적으로 동작한다면 DB 의존성 없이 간단하게 테스트를 해볼 수 있게 된다.</li>
+</ul>
+<h2 id="13-3-마치며"><a href="#13-3-마치며" class="headerlink" title="13.3 마치며"></a>13.3 마치며</h2><ul>
+<li>멀티스레드와 데이터베이스 상호 작용은 그 자체로 험난하며, 많은 결함이 이 영역에서 출몰한다.</li>
+</ul>
+<blockquote>
+<p>관심사를 분리해라. 애플리케이션 로직은 ‘스레드, 데이터베이스 혹은 문제를 일으킬 수 있는 다른 의존성’과 분리해라.</p>
+<p>느리거나 휘발적인 코드를 mock으로 대체해 단위 테스트의 의존성을 끊어라</p>
+<p>필요한 경우에는 통합 테스트를 작성하되, 단순하고 집중적으로 만들어라.</p>
+</blockquote>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2022/03/18/junit/junit_14/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2022-03-18 00:33:00
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/java/" title="java">
+                        <b>#</b> java
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/test/" title="test">
+                        <b>#</b> test
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/kotlin/" title="kotlin">
+                        <b>#</b> kotlin
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2022/03/18/security/app-executor/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#13-1-%EB%A9%80%ED%8B%B0%EC%8A%A4%EB%A0%88%EB%93%9C-%EC%BD%94%EB%93%9C-%ED%85%8C%EC%8A%A4%ED%8A%B8"><span class="toc-text">13.1 멀티스레드 코드 테스트</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#13-1-1-%EB%8B%A8%EC%88%9C%ED%95%98%EA%B3%A0-%EB%98%91%EB%98%91%ED%95%98%EA%B2%8C-%EC%9C%A0%EC%A7%80"><span class="toc-text">13.1.1 단순하고 똑똑하게 유지</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-1-2-%EB%AA%A8%EB%93%A0-%EB%A7%A4%EC%B9%AD-%EC%B0%BE%EA%B8%B0"><span class="toc-text">13.1.2 모든 매칭 찾기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-1-3-%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98-%EB%A1%9C%EC%A7%81-%EC%B6%94%EC%B6%9C"><span class="toc-text">13.1.3 애플리케이션 로직 추출</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-1-4-%EC%8A%A4%EB%A0%88%EB%93%9C-%EB%A1%9C%EC%A7%81%EC%9D%98-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%A7%80%EC%9B%90%EC%9D%84-%EC%9C%84%ED%95%B4-%EC%9E%AC%EC%84%A4%EA%B3%84"><span class="toc-text">13.1.4 스레드 로직의 테스트 지원을 위해 재설계</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-1-5-%EC%8A%A4%EB%A0%88%EB%93%9C-%EB%A1%9C%EC%A7%81%EC%9D%84-%EC%9C%84%ED%95%9C-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%9E%91%EC%84%B1"><span class="toc-text">13.1.5 스레드 로직을 위한 테스트 작성</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-2-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4-%ED%85%8C%EC%8A%A4%ED%8A%B8"><span class="toc-text">13.2 데이터베이스 테스트</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#13-2-1-%EA%B3%A0%EB%A7%88%EC%9B%8C-Controller"><span class="toc-text">13.2.1 고마워, Controller</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-2-2-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%AC%B8%EC%A0%9C"><span class="toc-text">13.2.2 데이터 문제</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-2-3-%ED%81%B4%EB%A6%B0-%EB%A3%B8-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4-%ED%85%8C%EC%8A%A4%ED%8A%B8"><span class="toc-text">13.2.3 클린 룸 데이터베이스 테스트</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-2-4-controller%EB%A5%BC-%EB%AA%A9-%EC%B2%98%EB%A6%AC"><span class="toc-text">13.2.4 controller를 목 처리</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-3-%EB%A7%88%EC%B9%98%EB%A9%B0"><span class="toc-text">13.3 마치며</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="facebook" href="">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="twitter" href="">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="wechat" href="">
+            <i class="iconfont icon-wechat"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="weibo" href="">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="rss" href="/atom.xml">
+            <i class="iconfont icon-rss"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © Oranges 2021</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + 13.%20%EA%B9%8C%EB%8B%A4%EB%A1%9C%EC%9A%B4%20%ED%85%8C%EC%8A%A4%ED%8A%B8 + '&url=' + http%3A%2F%2Fexample.com%2F2022%2F03%2F18%2Fjunit%2Fjunit_13%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2022/03/18/junit/junit_13/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

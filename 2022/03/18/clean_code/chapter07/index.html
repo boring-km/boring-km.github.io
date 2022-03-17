@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      Clean Code 7장 - 오류 처리 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">Oranges</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">Friends</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Clean Code 7장 - 오류 처리</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2022-03-18 00:33:00
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/java/" title="java">
+                    <b>#</b> java
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <ul>
+<li>오류 코드보다 예외를 사용하라</li>
+<li>Try-Catch-Finally 문부터 작성하기</li>
+<li>미확인 예외를 사용하기</li>
+<li>예외에 의미를 제공하라</li>
+<li>호출자를 고려해 예외 클래스를 정의하기</li>
+<li>정상 흐름을 정의하기</li>
+<li>null을 반환&#x2F;전달하지 말라</li>
+<li>결론</li>
+</ul>
+<h3 id="오류-코드보다-예외를-사용하라"><a href="#오류-코드보다-예외를-사용하라" class="headerlink" title="오류 코드보다 예외를 사용하라"></a>오류 코드보다 예외를 사용하라</h3><ul>
+<li>논리와 오류 처리 코드가 뒤섞이지 않게 만든다. (오류 코드에 따라 if&#x2F;else로 분기처리 &#x3D;&gt; try&#x2F;catch)</li>
+</ul>
+<h3 id="Try-Catch-Finally-문부터-작성하라"><a href="#Try-Catch-Finally-문부터-작성하라" class="headerlink" title="Try-Catch-Finally 문부터 작성하라"></a>Try-Catch-Finally 문부터 작성하라</h3><ul>
+<li>예외가 발생할 코드를 짤 때는 try-catch-finally로 시작하자</li>
+<li>무슨 일이 생기든지 호출자가 기대하는 상태를 정의하기 쉬워진다.</li>
+</ul>
+<h4 id="파일이-없으면-예외를-던지는-단위-테스트"><a href="#파일이-없으면-예외를-던지는-단위-테스트" class="headerlink" title="파일이 없으면 예외를 던지는 단위 테스트"></a>파일이 없으면 예외를 던지는 단위 테스트</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test(expected = StorageException.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">retrieveSectionShouldThrowOnInvalidFileName</span><span class="params">()</span> &#123;</span><br><span class="line">    sectionStore.retrieveSection(<span class="string">&quot;invalid - file&quot;</span>);    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>위의 테스트를 <strong>먼저</strong> 작성하고 테스트에 맞춰 코드를 구현한다.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> List&lt;RecordedGrip&gt; <span class="title function_">retrieveSection</span><span class="params">(String sectionName)</span> &#123;</span><br><span class="line">    <span class="comment">// 실제로 구현할 때까지 비어 있는 더미를 반환한다.</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;RecordedGrip&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>지금으로서는 테스트를 정상적으로 진행하기 어렵다.</li>
+<li>테스트가 빨리 정상적으로 녹색이 들어오도록 수정하자. (TDD에서 봤던 순서)</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> List&lt;RecordedGrip&gt; <span class="title function_">retrieveSection</span><span class="params">(String sectionName)</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="type">FileInputStream</span> <span class="variable">stream</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileInputStream</span>(sectionName);</span><br><span class="line">        stream.close();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">StorageException</span>(<span class="string">&quot;retrieval error&quot;</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;RecordedGrip&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>코드가 예외를 던지기 때문에 테스트가 성공할 수 있다.</li>
+<li>나머지 세부 로직을 TDD를 사용해 추가한다.</li>
+<li>나머지 로직은 FileInputStream을 생성하는 코드와 close 호출문 사이에 넣으며 오류나 예외가 전혀 발생하지 않는다고 가정한다.</li>
+<li>먼저 강제로 예외를 일으키는 테스트 케이스를 작성한 후 테스트를 통과하게 코드를 작성하는 방법으로 시작하자</li>
+</ul>
+<h3 id="미확인-예외를-사용하라"><a href="#미확인-예외를-사용하라" class="headerlink" title="미확인 예외를 사용하라"></a>미확인 예외를 사용하라</h3><ul>
+<li>확인된 예외는 OCP를 위반한다.</li>
+<li>메서드에서 확인된 예외를 던졌는데 catch 블록이 3단계 위에 있다면 그 사이 메서드 모두가 선언부에 해당 예외를 정의해야 한다. (자바에서 throws 예외클래스명)</li>
+<li>모듈과 관련된 코드가 전혀 바뀌지 않았더라도 (선언부가 바뀌었기 때문에) 모듈을 다시 빌드한 다음 배포해야 한다.</li>
+<li><strong>연쇄적인 수정으로 인해 캡슐화가 깨진다.</strong></li>
+<li>때로는 정확한 예외를 위해 확인된 예외가 쓰일 수도 있지만, 일반적인 애플리케이션은 의존성이라는 비용이 그에 따른 이익보다 더 크다.</li>
+</ul>
+<h3 id="예외에-의미를-제공하라"><a href="#예외에-의미를-제공하라" class="headerlink" title="예외에 의미를 제공하라"></a>예외에 의미를 제공하라</h3><ul>
+<li>예외를 던질 때는 전후 상황을 충분히 덧붙인다.</li>
+<li>자바는 모든 예외에 호출 스택을 제공하지만, 실패한 코드의 의도를 파악하려면 호출 스택만으로는 부족하다.</li>
+<li>오류 메시지에 정보를 담아 예외와 함께 던진다.</li>
+<li>실패한 연산 이름과 실패 유형도 언급한다.</li>
+<li>애플리케이션이 로깅 기능을 사용한다면 catch 블록에서 오류를 기록하도록 충분한 정보를 넘겨준다.</li>
+</ul>
+<h3 id="호출자를-고려해-예외-클래스를-정의하라"><a href="#호출자를-고려해-예외-클래스를-정의하라" class="headerlink" title="호출자를 고려해 예외 클래스를 정의하라"></a>호출자를 고려해 예외 클래스를 정의하라</h3><ul>
+<li>애플리케이션에서 오류를 정의할 때 가장 중요한 관심사는 <strong>오류를 잡아내는 방법</strong>이 되어야 한다.</li>
+<li>감싸는(wrapper) 클래스를 사용해서 예외를 잡아내자</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LocalPort</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> ACMEPort innerPort;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">LocalPort</span><span class="params">(<span class="type">int</span> portNumber)</span> &#123;</span><br><span class="line">        innerPort = <span class="keyword">new</span> <span class="title class_">ACMEPort</span>(portNumber);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">open</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            innerPort.open();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (DeviceResponseException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">PortDeviceFailure</span>(e);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ATM1212UInlockedException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">PortDeviceFailure</span>(e);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (GMXError e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">PortDeviceFailure</span>(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">- wrapper 클래스는 외부 API를 감싸면서 외부 라이브러리와 프로그램 사이에서 의존성이 크게 줄어든다.</span><br><span class="line">- 나중에 다른 라이브러리로 갈아타도 비용이 적다.</span><br><span class="line">- 테스트 하기도 쉬워진다.</span><br><span class="line">- 특정 업체가 API를 설계한 방식에 발목 잡히지 않는다.</span><br><span class="line"></span><br><span class="line">### 정상 흐름을 정의하라</span><br><span class="line">- 비즈니스 논리와 오류 처리를 잘 분리한 코드가 되어가다가도, 오류 감지가 프로그램 언저리로 밀려나게 된다.</span><br><span class="line"></span><br><span class="line">***특수 사례 패턴(Special Case Pattern)***</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line"><span class="comment">// 식비를 비용으로 청구하지 않았다면 일일 기본 식비를 더한다.</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="type">MealExpenses</span> <span class="variable">expenses</span> <span class="operator">=</span> expenseReportDAO.getMeals(employee.getID());</span><br><span class="line">    m_total += expenses.getTotal();</span><br><span class="line">&#125; <span class="keyword">catch</span> (MealExpensesNotFound e) &#123;</span><br><span class="line">    m_total += getMealPerDiem();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 특수 상황을 처리할 필요가 없도록 바꾼다.</span></span><br><span class="line"><span class="type">MealExpenses</span> <span class="variable">expenses</span> <span class="operator">=</span> expenseReportDAO.getMeals(employee.getID());</span><br><span class="line">m_total += expenses.getTotal();</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PerDiemMealExpenses</span> <span class="keyword">implements</span> <span class="title class_">MealExpenses</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getTotal</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 기본값으로 일일 기본 식비를 반환한다.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<h3 id="null을-반환하지-마라"><a href="#null을-반환하지-마라" class="headerlink" title="null을 반환하지 마라"></a>null을 반환하지 마라</h3><ul>
+<li>null을 확인하는 수많은 코드들은 여전히 있다.</li>
+<li>null을 반환하는 코드는 일거리를 늘릴 뿐만 아니라 호출자에게 문제를 떠넘긴다.</li>
+<li>누구 하나라도 null 확인을 빼먹으면 애플리케이션이 통제 불능에 빠질지도 모른다.</li>
+<li>위에서도 사용했던 <strong>특수 사례 패턴</strong>을 통해서 null이 나오지 않도록 빈 값, 빈 리스트 등을 반환하도록 해서 null 체크를 없애자</li>
+</ul>
+<h3 id="null을-전달하지-마라"><a href="#null을-전달하지-마라" class="headerlink" title="null을 전달하지 마라"></a>null을 전달하지 마라</h3><ul>
+<li>정상적인 인수로 null을 기대하는 API가 아니라면 메서드로 null을 전달하는 코드는 최대한 피한다.</li>
+<li>대다수 프로그래밍 언어는 호출자가 실수로 넘기는 null을 적절히 처리하는 방법이 없다.</li>
+<li>그렇다면 애초에 <strong>null을 넘기지 못하도록 금지하는 정책</strong>이 합리적이다.</li>
+<li>인수에 null이 넘어오지 않도록 하여 부주의한 실수를 줄이자.</li>
+</ul>
+<h3 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h3><ul>
+<li>깨끗한 코드는 읽기도 좋아야 하지만 안정성도 높아야 한다.</li>
+<li>오류 처리를 프로그램 논리와 분리해 독자적인 사안으로 고려하면 튼튼하고 깨끗한 코드를 작성할 수 있다.</li>
+<li>오류 처리를 프로그램 논리와 분리하면 독립적인 추론이 가능해지며 코드 유지보수성도 크게 높아진다.</li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2022/03/18/clean_code/chapter08/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2022-03-18 00:33:00
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/java/" title="java">
+                        <b>#</b> java
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2022/03/18/clean_code/chapter15/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%98%A4%EB%A5%98-%EC%BD%94%EB%93%9C%EB%B3%B4%EB%8B%A4-%EC%98%88%EC%99%B8%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC"><span class="toc-text">오류 코드보다 예외를 사용하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Try-Catch-Finally-%EB%AC%B8%EB%B6%80%ED%84%B0-%EC%9E%91%EC%84%B1%ED%95%98%EB%9D%BC"><span class="toc-text">Try-Catch-Finally 문부터 작성하라</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%ED%8C%8C%EC%9D%BC%EC%9D%B4-%EC%97%86%EC%9C%BC%EB%A9%B4-%EC%98%88%EC%99%B8%EB%A5%BC-%EB%8D%98%EC%A7%80%EB%8A%94-%EB%8B%A8%EC%9C%84-%ED%85%8C%EC%8A%A4%ED%8A%B8"><span class="toc-text">파일이 없으면 예외를 던지는 단위 테스트</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%AF%B8%ED%99%95%EC%9D%B8-%EC%98%88%EC%99%B8%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC"><span class="toc-text">미확인 예외를 사용하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%98%88%EC%99%B8%EC%97%90-%EC%9D%98%EB%AF%B8%EB%A5%BC-%EC%A0%9C%EA%B3%B5%ED%95%98%EB%9D%BC"><span class="toc-text">예외에 의미를 제공하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%98%B8%EC%B6%9C%EC%9E%90%EB%A5%BC-%EA%B3%A0%EB%A0%A4%ED%95%B4-%EC%98%88%EC%99%B8-%ED%81%B4%EB%9E%98%EC%8A%A4%EB%A5%BC-%EC%A0%95%EC%9D%98%ED%95%98%EB%9D%BC"><span class="toc-text">호출자를 고려해 예외 클래스를 정의하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#null%EC%9D%84-%EB%B0%98%ED%99%98%ED%95%98%EC%A7%80-%EB%A7%88%EB%9D%BC"><span class="toc-text">null을 반환하지 마라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#null%EC%9D%84-%EC%A0%84%EB%8B%AC%ED%95%98%EC%A7%80-%EB%A7%88%EB%9D%BC"><span class="toc-text">null을 전달하지 마라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EA%B2%B0%EB%A1%A0"><span class="toc-text">결론</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="facebook" href="">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="twitter" href="">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="wechat" href="">
+            <i class="iconfont icon-wechat"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="weibo" href="">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="rss" href="/atom.xml">
+            <i class="iconfont icon-rss"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © Oranges 2021</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Clean%20Code%207%EC%9E%A5%20-%20%EC%98%A4%EB%A5%98%20%EC%B2%98%EB%A6%AC + '&url=' + http%3A%2F%2Fexample.com%2F2022%2F03%2F18%2Fclean_code%2Fchapter07%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2022/03/18/clean_code/chapter07/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

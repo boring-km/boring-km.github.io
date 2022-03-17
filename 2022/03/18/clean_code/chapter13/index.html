@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      Clean Code 13장 - 동시성 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">Oranges</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">Friends</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Clean Code 13장 - 동시성</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2022-03-18 00:33:00
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/java/" title="java">
+                    <b>#</b> java
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <ul>
+<li>동시성이 필요한 이유?</li>
+<li>난관</li>
+<li>동시성 방어 원칙<ul>
+<li>단일 책임 원칙</li>
+<li>따름 정리: 자료 범위를 제한하라</li>
+<li>따름 정리: 자료 사본을 사용하라</li>
+<li>따름 정리: 스레드는 가능한 독립적으로 구현하라</li>
+</ul>
+</li>
+<li>라이브러리를 이해하라<ul>
+<li>스레드 환경에 안전한 컬렉션</li>
+</ul>
+</li>
+<li>실행 모델을 이해하라<ul>
+<li>생산자-소비자</li>
+<li>읽기-쓰기</li>
+<li>식사하는 철학자들</li>
+</ul>
+</li>
+<li>동기화하는 메서드 사이에 존재하는 의존성을 이해하라</li>
+<li>동기화하는 부분을 작게 만들어라</li>
+<li>올바른 종료 코드는 구현하기 어렵다</li>
+<li>스레드 코드 테스트하기<ul>
+<li>말이 안되는 실패는 잠정적인 스레드 문제로 취급하라</li>
+<li>다중 스레드를 고려하지 않은 순차 코드부터 제대로 돌게 만들자</li>
+<li>다중 스레드를 쓰는 코드 부분을 다양한 환경에 쉽게 끼워 넣을 수 있게 스레드 코드를 구현하라</li>
+<li>다중 스레드를 쓰는 코드 부분을 상황에 맞게 조율할 수 있게 작성하라</li>
+<li>프로세서 수보다 많은 스레드를 돌려보라</li>
+<li>다른 플랫폼에서 돌려보라</li>
+<li>코드에 보조 코드를 넣어 돌려라. 강제로 실패를 일으키게 해보라</li>
+<li>직접 구현하기</li>
+<li>자동화</li>
+</ul>
+</li>
+<li>결론</li>
+</ul>
+<h2 id="동시성이-필요한-이유"><a href="#동시성이-필요한-이유" class="headerlink" title="동시성이 필요한 이유?"></a>동시성이 필요한 이유?</h2><ul>
+<li>동시성은 결합을 없애는 전략이다.</li>
+<li><strong>무엇</strong>(<strong>what</strong>)과 <strong>언제</strong>(<strong>when</strong>)를 분리하는 전략이다.</li>
+<li>스레드가 하나인 프로그램은 무엇과 언제가 서로 밀접하다. 그래서 호출 스택을 살펴보면 프로그램 상태가 곧바로 드러난다.</li>
+<li><strong>무엇과 언제를 분리하면 애플리케이션 구조와 효율이 극적으로 나아진다.</strong></li>
+<li>구조적인 관점에서 프로그램이 작은 협력 프로그램 여럿으로 보인다.<ul>
+<li>따라서 시스템을 이해하기가 쉽고 문제를 분리하기도 쉽다.</li>
+</ul>
+</li>
+<li>서블릿 모델에서 웹 서버는 비동기적으로 서블릿을 실행한다.<ul>
+<li>하지만 웹 컨테이너가 제공하는 이 결합분리 전략은 완벽과 거리가 멀어서 개발자는 동시성을 정확히 구현하도록 각별한 주의와 노력이 필요하다.</li>
+</ul>
+</li>
+<li>응답 시간과 작업 처리량 개선을 요구사항으로 불가피한 경우<ul>
+<li>웹 사이트 정보 수집기</li>
+<li>많은 사용자 동시 처리 시스템</li>
+<li>대량의 정보를 분석하는 시스템</li>
+</ul>
+</li>
+</ul>
+<h3 id="미신과-오해"><a href="#미신과-오해" class="headerlink" title="미신과 오해"></a>미신과 오해</h3><ul>
+<li>동시성은 항상 성능을 높여준다?<ul>
+<li>때로 성능을 높여준다. 대기 시간이 아주 길어 여러 스레드가 프로세서를 공유할 수 있거나, 여러 프로세서가 동시에 처리할 독립적인 계산이 충분히 많은 경우에만 성능이 높아진다.<br>어느 쪽도 일상적으로 발생하는 상황은 아니다.</li>
+</ul>
+</li>
+<li>동시성을 구현해도 설계는 변하지 않는다?<ul>
+<li>단일 스레드 시스템과 다중 스레드 시스템은 설계가 판이하게 다르다.</li>
+<li><strong>무엇과 언제를 분리!</strong></li>
+</ul>
+</li>
+<li>웹 또는 EJB 컨테이너를 사용하면 동시성을 이해할 필요가 없다?<ul>
+<li>실제로 컨테이너가 어떻게 동작하는지, 어떻게 동시 수정, 데드락 등과 같은 문제를 피할 수 있는지를 알아야 한다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="타당한-생각들"><a href="#타당한-생각들" class="headerlink" title="타당한 생각들"></a>타당한 생각들</h3><ul>
+<li><strong>동시성은 다소 부하를 유발한다.</strong> 성능 측면에서 부하가 걸리며, 코드도 더 짜야 한다.</li>
+<li><strong>동시성은 복잡하다.</strong> 간단한 문제라도 동시성은 복잡하다.</li>
+<li><strong>일반적으로 동시성 버그는 재현하기 어렵다.</strong> 그래서 진짜 결함으로 간주되지 않고 일회성 문제로 여겨 무시하기 쉽다.</li>
+<li><strong>동시성을 구현하려면 흔히 근본적인 설계 전략을 재고해야 한다.</strong></li>
+</ul>
+<h2 id="난관"><a href="#난관" class="headerlink" title="난관"></a>난관</h2><ul>
+<li>왜 동시성을 구현하기가 어려울까?</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">X</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> lastIdUsed;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getNextId</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> ++lastIdUsed;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>인스턴스 X를 생성하고, lastIdUsed 필드를 42로 설정한 다음, 두 스레드가 해당 인스턴스를 공유한다.</li>
+<li>이제 두 스레드가 getNextId();를 호출한다면??</li>
+</ul>
+<blockquote>
+<p>한 스레드는 43을 받는다. 다른 스레드는 44를 받는다. lastIdUsed는 44가 된다.</p>
+</blockquote>
+<blockquote>
+<p>한 스레드는 44을 받는다. 다른 스레드는 43를 받는다. lastIdUsed는 44가 된다.</p>
+</blockquote>
+<blockquote>
+<p>한 스레드는 43을 받는다. 다른 스레드는 44를 받는다. lastIdUsed는 43가 된다. <strong>(문제의 상황!)</strong></p>
+</blockquote>
+<ul>
+<li>두 스레드가 자바 코드 한 줄을 거쳐가는 경로는 수없이 많은데, 그 중에서 일부 경로가 잘못된 결과를 내놓기 때문이다.</li>
+</ul>
+<h2 id="동시성-방어-원칙"><a href="#동시성-방어-원칙" class="headerlink" title="동시성 방어 원칙"></a>동시성 방어 원칙</h2><ul>
+<li>동시성 코드가 일으키는 문제로부터 시스템을 방어하는 원칙과 기술들…</li>
+</ul>
+<h3 id="단일-책임-원칙"><a href="#단일-책임-원칙" class="headerlink" title="단일 책임 원칙"></a>단일 책임 원칙</h3><ul>
+<li>SRP는 주어진 메서드&#x2F;클래스&#x2F;컴포넌트를 변경할 이유가 하나여야 한다는 원칙이다.</li>
+<li><strong>동시성 관련 코드는 다른 코드와 분리해야 한다는 뜻이다.</strong><ul>
+<li>근데 동시성과 관련 없는 코드에 동시성을 곧바로 구현하는 사례가 너무 흔하다.</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>동시성 코드는 독자적인 개발, 변경, 조율 주기가 있다.</p>
+<p>동시성 코드에는 독자적인 난관이 있다. 다른 코드에서 겪는 난관과 다르며 훨씬 어렵다.</p>
+<p>잘못 구현한 동시성 코드는 별의별 방식으로 실패한다. 주변에 있는 다른 코드가 발목을 잡지 않더라도 동시성 하나만으로도 충분히 어렵다.</p>
+</blockquote>
+<ul>
+<li><strong>권장사항: 동시성 코드는 다른 코드와 분리하라.</strong></li>
+</ul>
+<h3 id="자료-범위를-제한하라"><a href="#자료-범위를-제한하라" class="headerlink" title="자료 범위를 제한하라"></a>자료 범위를 제한하라</h3><ul>
+<li>공유 객체를 사용하는 코드 내 **임계 영역 (critical section)**을 <strong>synchronized</strong> 키워드로 보호하라고 권장한다.</li>
+<li>이런 임계영역의 수를 줄이는 기술이 중요하다. 공유 자료를 수정하는 위치가 많아지지 않도록 주의하자.</li>
+<li><strong>권장사항: 자료를 캡슐화하라, 공유 자료를 최대한 줄여라.</strong></li>
+</ul>
+<h3 id="자료-사본을-사용하라"><a href="#자료-사본을-사용하라" class="headerlink" title="자료 사본을 사용하라"></a>자료 사본을 사용하라</h3><ul>
+<li>공유 자료를 처음부터 공유하지 않으면 제일 좋다.</li>
+<li>정 필요하면 객체를 읽기 전용으로 복사해 사용하는 것이다.</li>
+<li>객체를 복사하는 시간과 부하가 걱정스럽다면, 사본으로 동기화를 피해서 내부 잠금을 없애 절약한 수행 시간이 사본 생성과 가비지 컬렉션에 드는 부하를 상쇄할 가능성이 크다.</li>
+</ul>
+<h3 id="스레드는-가능한-독립적으로-구현하라"><a href="#스레드는-가능한-독립적으로-구현하라" class="headerlink" title="스레드는 가능한 독립적으로 구현하라"></a>스레드는 가능한 독립적으로 구현하라</h3><ul>
+<li>자신만의 세상에 존재하는 스레드를 구현한다.<ul>
+<li>다른 스레드와 자료를 공유하지 않는다.</li>
+</ul>
+</li>
+<li>어떻게?: 각 스레드는 클라이언트 요청 하나를 처리한다. 모든 정보는 비공유 출처에서 가져오며 로컬 변수에 저장한다.<ul>
+<li>그러면 각 스레드는 세상에 자신만 있는 듯이 돌아갈 수 있다. <strong>다른 스레드와 동기화할 필요가 없으니까!</strong></li>
+</ul>
+</li>
+<li><strong>권장사항: 독자적인 스레드로, 가능하면 다른 프로세서에서, 돌려도 괜찮도록 자료를 독립적인 단위로 분할하라.</strong></li>
+</ul>
+<h2 id="라이브러리를-이해하라"><a href="#라이브러리를-이해하라" class="headerlink" title="라이브러리를 이해하라"></a>라이브러리를 이해하라</h2><ul>
+<li>책에서는 자바 5를 의식해서 쓴 내용들이 많다.</li>
+<li>스레드 환경에서 안전한 컬렉션을 소개해주었다.<ul>
+<li>java.util.concurrent</li>
+<li>java.util.concurrent.atomic</li>
+<li>java.util.concurrent.locks</li>
+</ul>
+</li>
+<li><strong>권장사항: 언어가 제공하는 클래스를 검토하라.</strong></li>
+</ul>
+<h2 id="실행-모델을-이해하라"><a href="#실행-모델을-이해하라" class="headerlink" title="실행 모델을 이해하라"></a>실행 모델을 이해하라</h2><ul>
+<li>다중 스레드 애플리케이션을 분류하는 방식은 여러 가지다.</li>
+<li><strong>기본 용어</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">용어</th>
+<th align="left">설명</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">한정된 자원(Bound Resource)</td>
+<td align="left">다중 스레드 환경에서 사용하는 자원으로, 크기나 숫자가 제한적이다. 데이터베이스 연결, 길이가 일정한 읽기&#x2F;쓰기 버퍼 등이 예다.</td>
+</tr>
+<tr>
+<td align="left">상호 배제(Mutual Exclusion)</td>
+<td align="left">한 번에 한 스레드만 공유 자료나 공유 자원을 사용할 수 있는 경우를 가리킨다.</td>
+</tr>
+<tr>
+<td align="left">기아(Starvation)</td>
+<td align="left">한 스레드나 여러 스레드가 굉장히 오랫동안 혹은 영원히 자원을 기다린다. 예를 들어, 항상 짧은 스레드에게 우선순위를 준다면, 짧은 스레드가 지속적으로 이어질 경우, 긴 스레드가 기아 상태에 빠진다.</td>
+</tr>
+<tr>
+<td align="left">데드락(Deadlock)</td>
+<td align="left">여러 스레드가 서로가 끝나기를 기다린다. 모든 스레드가 각기 필요한 자원을 다른 스레드가 점유하는 바람에 어느 쪽도 더 이상 진행하지 못한다.</td>
+</tr>
+<tr>
+<td align="left">라이브락(Livelock)</td>
+<td align="left">락을 거는 단계에서 각 스레드가 서로를 방해한다. 스레드는 계속해서 진행하려 하지만, 공명(resonance)으로 인해, 굉장히 오랫동안 혹은 영원히 진행하지 못한다.</td>
+</tr>
+</tbody></table>
+<h3 id="실행-모델-생산자-소비자"><a href="#실행-모델-생산자-소비자" class="headerlink" title="실행 모델: 생산자-소비자"></a>실행 모델: 생산자-소비자</h3><ul>
+<li>하나 이상의 생산자 스레드가 정보를 생성해 buffer or queue에 넣는다.</li>
+<li>하나 이상의 소비자 스레드가 대기열에서 정보를 가져와 사용한다.</li>
+<li>생산자, 소비자 스레드가 사용하는 대기열은 <strong>한정된 자원이다.</strong></li>
+<li>잘못 구현하면 생산자 스레드와 소비자 스레드가 둘 다 진행 가능함에도 불구하고 동시에게 서로에게서 시그널을 기다릴 가능성이 존재한다.</li>
+</ul>
+<h3 id="실행-모델-읽기-쓰기"><a href="#실행-모델-읽기-쓰기" class="headerlink" title="실행 모델: 읽기-쓰기"></a>실행 모델: 읽기-쓰기</h3><ul>
+<li>읽기 스레드를 위한 주된 정보원으로 공유 자원을 사용하지만, 쓰기 스레드가 이 공유 자원을 가끔씩 갱신하는 상황이라고 가정.<ul>
+<li><em>처리율</em>이 문제의 핵심</li>
+<li>처리율을 강조하면 기아 현상이 오거나 오래된 정보가 쌓인다.</li>
+<li>갱신을 허용하면 처리율에 영향을 미친다.</li>
+</ul>
+</li>
+<li><em>읽기 스레드의 요구와 쓰기 스레드의 요구를 적절히 만족시켜 처리율도 적당히 높이고 기아도 방지하는 해법이 필요하다.</em></li>
+<li>어떻게?: 읽기 스레드가 없을 때까지 갱신을 원하는 쓰기 스레드가 버퍼를 기다리는 방법이다.<ul>
+<li>근데 읽기 스레드가 지속되면 쓰기 스레드는 계속 버퍼를 기다려 기아 상태에 빠진다.</li>
+<li>쓰기 스레드에게 우선권을 준 상태에서 쓰기 스레드가 계속 이어진다면 처리율이 떨어진다.</li>
+<li>그래서 양쪽 균형을 잡으면서 동시 갱신 문제를 피하는 해법이 필요하다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="실행-모델-식사하는-철학자들"><a href="#실행-모델-식사하는-철학자들" class="headerlink" title="실행 모델: 식사하는 철학자들"></a>실행 모델: 식사하는 철학자들</h3><img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/An_illustration_of_the_dining_philosophers_problem.png" alt="Dining philosophers problem" width="400"/>
+
+<ul>
+<li>각 철학자 왼쪽에 포크, 가운데에는 스파게티</li>
+<li>배가 고프면 양손에 포크를 집어들고 스파게티를 먹는다.<ul>
+<li><strong>양손에 포크를 쥐지 않으면 먹지 못한다.</strong></li>
+<li>왼쪽이나 오른쪽 철학자가 포크를 사용 중이라면 그쪽 철학자가 먹고 나서 포크를 내려놓을 때까지 기다려야 한다.</li>
+</ul>
+</li>
+<li><strong>철학자 &#x3D;&gt; 스레드</strong></li>
+<li><strong>포크 &#x3D;&gt; 자원</strong></li>
+<li>여러 프로세스가 자원을 얻으려 경쟁한다. 주의해서 설계하지 않으면 데드락, 라이브락, 처리율 저하, 효율성 저하 등을 겪는다.</li>
+</ul>
+<h2 id="동기화하는-메서드-사이에-존재하는-의존성을-이해하라"><a href="#동기화하는-메서드-사이에-존재하는-의존성을-이해하라" class="headerlink" title="동기화하는 메서드 사이에 존재하는 의존성을 이해하라"></a>동기화하는 메서드 사이에 존재하는 의존성을 이해하라</h2><ul>
+<li>동기화하는 메서드 사이에 의존성이 존재하면 동시성 코드에 찾아내기 어려운 버그가 생긴다.</li>
+<li>공유 클래스 하나에 동기화된 메서드가 여럿이라면 구현이 올바른지 다시 한 번 확인하자</li>
+<li><strong>권장사항: 공유 객체 하나에는 메서드 하나만 사용하라.</strong></li>
+<li>물론 여러 메서드가 필요한 상황도 생길 수 있다.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">방법</th>
+<th align="left">내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">클라이언트에서 잠금</td>
+<td align="left">클라이언트에서 첫 번째 메서드를 호출하기 전에 서버를 잠근다. 마지막 메서드를 호출할 때까지 잠금을 유지한다.</td>
+</tr>
+<tr>
+<td align="left">서버에서 잠금</td>
+<td align="left">서버에다 서버를 잠그고 모든 메서드를 호출한 후 잠금을 해제하는 메서드를 구현한다. 클라이언트는 이 메서드를 호출한다.</td>
+</tr>
+<tr>
+<td align="left">연결 서버</td>
+<td align="left">잠금을 수행하는 중간 단계를 생성한다. ‘서버에서 잠금’ 방식과 유사하지만 원래 서버는 변경하지 않는다.</td>
+</tr>
+</tbody></table>
+<h2 id="동기화하는-부분을-작게-만들어라"><a href="#동기화하는-부분을-작게-만들어라" class="headerlink" title="동기화하는 부분을 작게 만들어라"></a>동기화하는 부분을 작게 만들어라</h2><ul>
+<li>자바에서는 synchronized 키워드를 사용하면 락을 설정한다.</li>
+<li>같은 락으로 감싼 모든 코드 영역은 한 번에 한 스레드만 실행이 가능하다.</li>
+<li>락은 스레드를 지연시키고 부하를 가중시킨다. (남발 X)</li>
+<li>하지만 임계영역은 반드시 보호해야 한다. 그래서 임계영역 수를 최대한 줄여야 한다.</li>
+<li>그렇다고 거대한 임계영역 하나로 구현하는 상황은 스레드 간에 경쟁이 늘어나고 프로그램 성능이 떨어지게 된다.</li>
+<li><strong>권장사항: 동기화하는 부분을 최대한 작게 만들어라</strong></li>
+</ul>
+<h2 id="올바른-종료-코드는-구현하기-어렵다"><a href="#올바른-종료-코드는-구현하기-어렵다" class="headerlink" title="올바른 종료 코드는 구현하기 어렵다"></a>올바른 종료 코드는 구현하기 어렵다</h2><ul>
+<li>가장 흔히 발생하는 문제는 <strong>데드락</strong></li>
+<li>절대 오지 않을 signal(신호)을 스레드가 기다린다.<ul>
+<li>부모 스레드가 자식 스레드 여러 개 만든 후 모두가 끝나기를 기다렸다 자원을 해제하고 종료하는 시스템이 있다</li>
+<li>그 중 하나가 데드락에 걸리면 부모 스레드는 영원히 기다림</li>
+<li>자식 스레드 중 두 개가 생산자&#x2F;소비자 관계라면?<ul>
+<li>생산자 스레드는 빨리 종료했는데 소비자 스레드가 생산자 스레드에서 오는 메시지를 기다린다면?</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>깔끔하게 종료하는 다중 스레드 코드를 짜야 한다면 시간을 투자해 올바로 구현하자~</li>
+<li><strong>권장사항: 종료 코드를 개발 초기부터 고민하고 동작하게 초기부터 구현하라. 생각보다 오래 걸린다. 생각보다 어려우므로 이미 나온 알고리즘을 검토하라.</strong></li>
+</ul>
+<h2 id="스레드-코드-테스트하기"><a href="#스레드-코드-테스트하기" class="headerlink" title="스레드 코드 테스트하기"></a>스레드 코드 테스트하기</h2><ul>
+<li>같은 코드와 같은 자원을 사용하는 스레드가 둘 이상으로 늘어나면 상황은 급격하게 복잡해진다.</li>
+<li><strong>권장사항:</strong> 문제를 노출하는 테스트 케이스를 작성하라. 프로그램 설정과 시스템 설정과 부하를 바꿔가며 자주 돌려라. 테스트가 실패하면 원인을 추적하라. 다시 돌렸더니 통과하더라는 이유로 그냥 넘어가면 절대로 안 된다.</li>
+<li>말이 안 되는 실패는 잠정적인 스레드 문제로 취급하라.</li>
+<li>다중 스레드를 고려하지 않은 순차 코드부터 제대로 돌게 만들자.</li>
+<li>다중 스레드를 쓰는 코드 부분을 다양한 환경에 쉽게 끼워 넣을 수 있도록 스레드 코드를 구현하라.</li>
+<li>다중 스레드를 쓰는 코드 부분을 상황에 맞춰 조정할 수 있게 작성하라.</li>
+<li>프로세서 수보다 많은 스레드를 돌려보라.</li>
+<li>다른 플랫폼에서 돌려보라.</li>
+<li>코드에 보조 코드를 넣어 돌려라. 강제로 실패를 일으키게 해보라.</li>
+</ul>
+<h3 id="말이-안-되는-실패는-잠정적인-스레드-문제로-취급하라"><a href="#말이-안-되는-실패는-잠정적인-스레드-문제로-취급하라" class="headerlink" title="말이 안 되는 실패는 잠정적인 스레드 문제로 취급하라"></a>말이 안 되는 실패는 잠정적인 스레드 문제로 취급하라</h3><ul>
+<li>스레드 코드에 잠입한 버그는 재현하기가 아주 어렵다.</li>
+<li>‘일회성 문제’는 존재하지 않는다고 가정하는 편이 안전하다.</li>
+<li>‘일회성 문제’를 계속 무시한다면 잘못된 코드 위에 코드가 계속 쌓인다.</li>
+</ul>
+<h3 id="다중-스레드를-고려하지-않은-순차-코드부터-제대로-돌게-만들자"><a href="#다중-스레드를-고려하지-않은-순차-코드부터-제대로-돌게-만들자" class="headerlink" title="다중 스레드를 고려하지 않은 순차 코드부터 제대로 돌게 만들자"></a>다중 스레드를 고려하지 않은 순차 코드부터 제대로 돌게 만들자</h3><ul>
+<li>스레드 환경 밖에서 코드가 제대로 도는지 반드시 확인한다.<ul>
+<li>스레드가 호출하는 POJO를 만든다.</li>
+</ul>
+</li>
+<li><strong>권장사항</strong>: 스레드 환경 밖에서 생기는 버그와 스레드 환경에서 생기는 버그를 동시에 디버깅하지 마라. 먼저 스레드 환경 밖에서 코드를 올바로 돌려라.</li>
+</ul>
+<h3 id="다중-스레드를-쓰는-코드-부분을-다양한-환경에-쉽게-끼워-넣을-수-있게-스레드-코드를-구현하라"><a href="#다중-스레드를-쓰는-코드-부분을-다양한-환경에-쉽게-끼워-넣을-수-있게-스레드-코드를-구현하라" class="headerlink" title="다중 스레드를 쓰는 코드 부분을 다양한 환경에 쉽게 끼워 넣을 수 있게 스레드 코드를 구현하라"></a>다중 스레드를 쓰는 코드 부분을 다양한 환경에 쉽게 끼워 넣을 수 있게 스레드 코드를 구현하라</h3><ul>
+<li>한 스레드로 실행하거나, 여러 스레드로 실행하거나, 실행 중 스레드 수를 바꿔본다.</li>
+<li>스레드 코드를 실제 환경이나 테스트 환경에서 돌려본다.</li>
+<li>테스트 코드를 빨리, 천천히, 다양한 속도로 돌려본다.</li>
+<li>반복 테스트가 가능하도록 테스트 케이스를 작성한다.</li>
+<li><strong>권장사항:</strong> 다양한 설정에서 실행할 목적으로 다른 환경에 쉽게 끼워 넣을 수 있게 코드를 구현하라.</li>
+</ul>
+<h3 id="다중-스레드를-쓰는-코드-부분을-상황에-맞게-조율할-수-있게-작성하라"><a href="#다중-스레드를-쓰는-코드-부분을-상황에-맞게-조율할-수-있게-작성하라" class="headerlink" title="다중 스레드를 쓰는 코드 부분을 상황에 맞게 조율할 수 있게 작성하라"></a>다중 스레드를 쓰는 코드 부분을 상황에 맞게 조율할 수 있게 작성하라</h3><ul>
+<li>적절한 스레드 개수를 파악하려면 상당한 시행착오가 필요하다.</li>
+<li>스레드 개수를 조율하기 쉽게 코드를 구현한다.</li>
+<li>프로그램이 돌아가는 도중에 스레드 개수를 변경하는 방법도 고려한다.</li>
+<li>프로그램 처리율과 효율에 따라 스스로 스레드 개수를 조율하는 코드도 고민한다.</li>
+</ul>
+<h3 id="프로세서-수보다-많은-스레드를-돌려보라"><a href="#프로세서-수보다-많은-스레드를-돌려보라" class="headerlink" title="프로세서 수보다 많은 스레드를 돌려보라"></a>프로세서 수보다 많은 스레드를 돌려보라</h3><ul>
+<li>시스템이 스레드를 swapping할 때도 문제가 발생한다.</li>
+<li>swapping이 잦을수록 임계영역을 빼먹은 코드나 데드락을 일으키는 코드를 찾기 쉬워진다.</li>
+</ul>
+<h3 id="다른-플랫폼에서-돌려보라"><a href="#다른-플랫폼에서-돌려보라" class="headerlink" title="다른 플랫폼에서 돌려보라"></a>다른 플랫폼에서 돌려보라</h3><ul>
+<li>os 변경하면서 테스트~</li>
+<li><strong>권장사항:</strong> 처음부터 그리고 자주 모든 목표 플랫폼에서 코드를 돌려라.</li>
+</ul>
+<h3 id="코드에-보조-코드를-넣어-돌려라-강제로-실패를-일으키게-해보라"><a href="#코드에-보조-코드를-넣어-돌려라-강제로-실패를-일으키게-해보라" class="headerlink" title="코드에 보조 코드를 넣어 돌려라. 강제로 실패를 일으키게 해보라."></a>코드에 보조 코드를 넣어 돌려라. 강제로 실패를 일으키게 해보라.</h3><ul>
+<li>흔히 스레드 코드는 오류를 찾기가 쉽지 않다.</li>
+<li>왜냐하면 코드가 실행되는 수천 가지 경로 중에 아주 소수만 실패하기 때문이다.</li>
+<li>코드에 보조 코드를 추가해 실행되는 순서를 바꿔보며 확인을 해본다.</li>
+</ul>
+<ol>
+<li>직접 구현하기</li>
+<li>자동화</li>
+</ol>
+<h3 id="직접-구현하기"><a href="#직접-구현하기" class="headerlink" title="직접 구현하기"></a>직접 구현하기</h3><ul>
+<li>코드에다 직접 wait(), sleep(), yield(), priority() 함수를 추가한다.</li>
+<li>yield()를 삽입하면 코드가 실행되는 경로가 바뀐다. 그래서 이전에 실패하지 않았던 코드가 실패할 가능성을 열어준다.</li>
+<li>코드가 실패했다면 yield()를 추가했기 때문이 아니라 <strong>원래 잘못된 코드인데 증거가 드러났을 뿐이다.</strong></li>
+<li>이 방법의 문제점?<ul>
+<li>보조 코드 삽입 위치</li>
+<li>어떤 함수를 어디서 호출해야 적당한가?</li>
+<li>배포 환경에 보조 코드를 남겨두면 성능 감소한다</li>
+<li>무작위적이다. 오류가 나올지도 안나올지도 모른다.</li>
+</ul>
+</li>
+<li>배포 환경이 아닌 테스트 환경에서 보조 코드를 실행할 방법이 필요하다.</li>
+<li>실행할 때마다 설정을 바꿔줄 방법도 필요하다.</li>
+<li>확실히 스레드를 전혀 모르는 POJO와 스레드를 제어하는 클래스로 프로그램을 분할하면 보조 코드를 추가할 위치를 찾기가 쉬워진다.</li>
+</ul>
+<h3 id="자동화"><a href="#자동화" class="headerlink" title="자동화"></a>자동화</h3><ul>
+<li>보조 코드를 자동으로 추가하려면 AOF, CGLIB(코드 생성 라이브러리, 자바 클래스의 프록시 생성), ASM 등과 같은 도구를 사용한다. (이게 뭐지?)</li>
+<li>흔들기(jiggle) 기법을 사용해 배포 환경에서는 사용 안하고 테스트 환경에서 무작위로 nop, sleep, yield 등이 실행되는 코드를 작성해본다.</li>
+<li><strong>권장사항:</strong> 흔들기 기법을 사용해 오류를 찾아내라.</li>
+</ul>
+<h2 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h2><ul>
+<li>다중 스레드 코드는 올바로 구현하기 어렵다.</li>
+<li>간단했던 코드가 여러 스레드와 공유 자료를 추가하면서 악몽으로 변한다.</li>
+<li>다중 스레드 코드를 작성한다면 각별히 깨끗하게 코드를 짜야 한다.</li>
+<li>주의하지 않으면 희귀하고 오묘한 오류에 직면하게 된다.</li>
+<li><strong>SRP 준수!</strong></li>
+<li><strong>동시성 오류를 일으키는 잠정적인 원인을 철저히 이해한다.</strong></li>
+<li>사용하는 라이브러리와 기본 알고리즘을 이해한다.</li>
+<li>보호할 코드 영역을 찾아내는 방법과 특정 코드 영역을 잠그는 방법을 이해한다.</li>
+<li>스레드 코드는 많은 플랫폼에서 많은 설정으로 반복해서 계속 테스트해야 한다.<ul>
+<li>TDD 3대 규칙을 따르면 자연히 얻어진다.</li>
+</ul>
+</li>
+<li>시간을 들여 보조 코드를 추가하면 오류가 드러날 가능성이 크게 높아진다.<ul>
+<li>직접 구현해도 괜찮고 몇 가지 자동화 기술을 사용해도 괜찮다.</li>
+</ul>
+</li>
+<li>초반부터 보조 코드를 고려한다. 스레드 코드는 출시하기 전까지 최대한 오랫동안 돌려봐야 한다.</li>
+<li><strong>깔끔한 접근 방식을 취한다면 코드가 올바로 돌아갈 가능성이 극적으로 높아진다.</strong></li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2022/03/18/clean_code/chapter14/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2022-03-18 00:33:00
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/java/" title="java">
+                        <b>#</b> java
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2022/03/18/clean_code/chapter17/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%EB%8F%99%EC%8B%9C%EC%84%B1%EC%9D%B4-%ED%95%84%EC%9A%94%ED%95%9C-%EC%9D%B4%EC%9C%A0"><span class="toc-text">동시성이 필요한 이유?</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%AF%B8%EC%8B%A0%EA%B3%BC-%EC%98%A4%ED%95%B4"><span class="toc-text">미신과 오해</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%83%80%EB%8B%B9%ED%95%9C-%EC%83%9D%EA%B0%81%EB%93%A4"><span class="toc-text">타당한 생각들</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EB%82%9C%EA%B4%80"><span class="toc-text">난관</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EB%8F%99%EC%8B%9C%EC%84%B1-%EB%B0%A9%EC%96%B4-%EC%9B%90%EC%B9%99"><span class="toc-text">동시성 방어 원칙</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%8B%A8%EC%9D%BC-%EC%B1%85%EC%9E%84-%EC%9B%90%EC%B9%99"><span class="toc-text">단일 책임 원칙</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%9E%90%EB%A3%8C-%EB%B2%94%EC%9C%84%EB%A5%BC-%EC%A0%9C%ED%95%9C%ED%95%98%EB%9D%BC"><span class="toc-text">자료 범위를 제한하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%9E%90%EB%A3%8C-%EC%82%AC%EB%B3%B8%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC"><span class="toc-text">자료 사본을 사용하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%8A%A4%EB%A0%88%EB%93%9C%EB%8A%94-%EA%B0%80%EB%8A%A5%ED%95%9C-%EB%8F%85%EB%A6%BD%EC%A0%81%EC%9C%BC%EB%A1%9C-%EA%B5%AC%ED%98%84%ED%95%98%EB%9D%BC"><span class="toc-text">스레드는 가능한 독립적으로 구현하라</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC%EB%A5%BC-%EC%9D%B4%ED%95%B4%ED%95%98%EB%9D%BC"><span class="toc-text">라이브러리를 이해하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%8B%A4%ED%96%89-%EB%AA%A8%EB%8D%B8%EC%9D%84-%EC%9D%B4%ED%95%B4%ED%95%98%EB%9D%BC"><span class="toc-text">실행 모델을 이해하라</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%8B%A4%ED%96%89-%EB%AA%A8%EB%8D%B8-%EC%83%9D%EC%82%B0%EC%9E%90-%EC%86%8C%EB%B9%84%EC%9E%90"><span class="toc-text">실행 모델: 생산자-소비자</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%8B%A4%ED%96%89-%EB%AA%A8%EB%8D%B8-%EC%9D%BD%EA%B8%B0-%EC%93%B0%EA%B8%B0"><span class="toc-text">실행 모델: 읽기-쓰기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%8B%A4%ED%96%89-%EB%AA%A8%EB%8D%B8-%EC%8B%9D%EC%82%AC%ED%95%98%EB%8A%94-%EC%B2%A0%ED%95%99%EC%9E%90%EB%93%A4"><span class="toc-text">실행 모델: 식사하는 철학자들</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EB%8F%99%EA%B8%B0%ED%99%94%ED%95%98%EB%8A%94-%EB%A9%94%EC%84%9C%EB%93%9C-%EC%82%AC%EC%9D%B4%EC%97%90-%EC%A1%B4%EC%9E%AC%ED%95%98%EB%8A%94-%EC%9D%98%EC%A1%B4%EC%84%B1%EC%9D%84-%EC%9D%B4%ED%95%B4%ED%95%98%EB%9D%BC"><span class="toc-text">동기화하는 메서드 사이에 존재하는 의존성을 이해하라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EB%8F%99%EA%B8%B0%ED%99%94%ED%95%98%EB%8A%94-%EB%B6%80%EB%B6%84%EC%9D%84-%EC%9E%91%EA%B2%8C-%EB%A7%8C%EB%93%A4%EC%96%B4%EB%9D%BC"><span class="toc-text">동기화하는 부분을 작게 만들어라</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%98%AC%EB%B0%94%EB%A5%B8-%EC%A2%85%EB%A3%8C-%EC%BD%94%EB%93%9C%EB%8A%94-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-%EC%96%B4%EB%A0%B5%EB%8B%A4"><span class="toc-text">올바른 종료 코드는 구현하기 어렵다</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%8A%A4%EB%A0%88%EB%93%9C-%EC%BD%94%EB%93%9C-%ED%85%8C%EC%8A%A4%ED%8A%B8%ED%95%98%EA%B8%B0"><span class="toc-text">스레드 코드 테스트하기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%A7%90%EC%9D%B4-%EC%95%88-%EB%90%98%EB%8A%94-%EC%8B%A4%ED%8C%A8%EB%8A%94-%EC%9E%A0%EC%A0%95%EC%A0%81%EC%9D%B8-%EC%8A%A4%EB%A0%88%EB%93%9C-%EB%AC%B8%EC%A0%9C%EB%A1%9C-%EC%B7%A8%EA%B8%89%ED%95%98%EB%9D%BC"><span class="toc-text">말이 안 되는 실패는 잠정적인 스레드 문제로 취급하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%8B%A4%EC%A4%91-%EC%8A%A4%EB%A0%88%EB%93%9C%EB%A5%BC-%EA%B3%A0%EB%A0%A4%ED%95%98%EC%A7%80-%EC%95%8A%EC%9D%80-%EC%88%9C%EC%B0%A8-%EC%BD%94%EB%93%9C%EB%B6%80%ED%84%B0-%EC%A0%9C%EB%8C%80%EB%A1%9C-%EB%8F%8C%EA%B2%8C-%EB%A7%8C%EB%93%A4%EC%9E%90"><span class="toc-text">다중 스레드를 고려하지 않은 순차 코드부터 제대로 돌게 만들자</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%8B%A4%EC%A4%91-%EC%8A%A4%EB%A0%88%EB%93%9C%EB%A5%BC-%EC%93%B0%EB%8A%94-%EC%BD%94%EB%93%9C-%EB%B6%80%EB%B6%84%EC%9D%84-%EB%8B%A4%EC%96%91%ED%95%9C-%ED%99%98%EA%B2%BD%EC%97%90-%EC%89%BD%EA%B2%8C-%EB%81%BC%EC%9B%8C-%EB%84%A3%EC%9D%84-%EC%88%98-%EC%9E%88%EA%B2%8C-%EC%8A%A4%EB%A0%88%EB%93%9C-%EC%BD%94%EB%93%9C%EB%A5%BC-%EA%B5%AC%ED%98%84%ED%95%98%EB%9D%BC"><span class="toc-text">다중 스레드를 쓰는 코드 부분을 다양한 환경에 쉽게 끼워 넣을 수 있게 스레드 코드를 구현하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%8B%A4%EC%A4%91-%EC%8A%A4%EB%A0%88%EB%93%9C%EB%A5%BC-%EC%93%B0%EB%8A%94-%EC%BD%94%EB%93%9C-%EB%B6%80%EB%B6%84%EC%9D%84-%EC%83%81%ED%99%A9%EC%97%90-%EB%A7%9E%EA%B2%8C-%EC%A1%B0%EC%9C%A8%ED%95%A0-%EC%88%98-%EC%9E%88%EA%B2%8C-%EC%9E%91%EC%84%B1%ED%95%98%EB%9D%BC"><span class="toc-text">다중 스레드를 쓰는 코드 부분을 상황에 맞게 조율할 수 있게 작성하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%94%84%EB%A1%9C%EC%84%B8%EC%84%9C-%EC%88%98%EB%B3%B4%EB%8B%A4-%EB%A7%8E%EC%9D%80-%EC%8A%A4%EB%A0%88%EB%93%9C%EB%A5%BC-%EB%8F%8C%EB%A0%A4%EB%B3%B4%EB%9D%BC"><span class="toc-text">프로세서 수보다 많은 스레드를 돌려보라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%8B%A4%EB%A5%B8-%ED%94%8C%EB%9E%AB%ED%8F%BC%EC%97%90%EC%84%9C-%EB%8F%8C%EB%A0%A4%EB%B3%B4%EB%9D%BC"><span class="toc-text">다른 플랫폼에서 돌려보라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%BD%94%EB%93%9C%EC%97%90-%EB%B3%B4%EC%A1%B0-%EC%BD%94%EB%93%9C%EB%A5%BC-%EB%84%A3%EC%96%B4-%EB%8F%8C%EB%A0%A4%EB%9D%BC-%EA%B0%95%EC%A0%9C%EB%A1%9C-%EC%8B%A4%ED%8C%A8%EB%A5%BC-%EC%9D%BC%EC%9C%BC%ED%82%A4%EA%B2%8C-%ED%95%B4%EB%B3%B4%EB%9D%BC"><span class="toc-text">코드에 보조 코드를 넣어 돌려라. 강제로 실패를 일으키게 해보라.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%A7%81%EC%A0%91-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0"><span class="toc-text">직접 구현하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%9E%90%EB%8F%99%ED%99%94"><span class="toc-text">자동화</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EA%B2%B0%EB%A1%A0"><span class="toc-text">결론</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="facebook" href="">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="twitter" href="">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="wechat" href="">
+            <i class="iconfont icon-wechat"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="weibo" href="">
+            <i class="iconfont icon-weibo"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="rss" href="/atom.xml">
+            <i class="iconfont icon-rss"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © Oranges 2021</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Clean%20Code%2013%EC%9E%A5%20-%20%EB%8F%99%EC%8B%9C%EC%84%B1 + '&url=' + http%3A%2F%2Fexample.com%2F2022%2F03%2F18%2Fclean_code%2Fchapter13%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2022/03/18/clean_code/chapter13/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
