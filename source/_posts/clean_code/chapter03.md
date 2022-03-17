@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Clean Code 장 - 함수"
+title: "Clean Code 3장 - 함수"
 categories: Clean_Code
 tags: [java, dev]
 toc: true
