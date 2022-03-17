@@ -103,7 +103,7 @@ theme: oranges
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: https://github.com/boring-km/boring-km.github.io.git
+  repo: git@github.com:boring-km/boring-km.github.io.git
   branch: master
 
 search:
