@@ -104,7 +104,7 @@ theme: oranges
 deploy:
   type: git
   repo: git@github.com:boring-km/boring-km.github.io.git
-  branch: master
+  branch: edit2
 
 search:
   enable: true
