@@ -2,6 +2,7 @@
 layout: post
 title: "11. 테스트 리팩토링"
 categories: JUnit
+date: 2022-02-20
 tags: [dev, test, kotlin, java]
 toc: true
 ---

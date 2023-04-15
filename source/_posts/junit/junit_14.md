@@ -2,6 +2,7 @@
 layout: post
 title: "14. 프로젝트에서 테스트"
 categories: JUnit
+date: 2022-02-27
 tags: [dev, test, kotlin, java]
 toc: true
 ---

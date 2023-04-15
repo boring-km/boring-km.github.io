@@ -2,6 +2,7 @@
 layout: post
 title: "13. 까다로운 테스트"
 categories: JUnit
+date: 2022-02-26
 tags: [dev, test, kotlin, java]
 toc: true
 ---

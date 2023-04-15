@@ -2,6 +2,7 @@
 layout: post
 title: "Clean Code 11장 - 시스템"
 categories: Clean_Code
+date: 2021-03-26
 tags: [java, dev]
 toc: true
 ---

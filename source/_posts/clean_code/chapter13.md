@@ -2,6 +2,7 @@
 layout: post
 title: "Clean Code 13장 - 동시성"
 categories: Clean_Code
+date: 2022-01-18
 tags: [java, dev]
 toc: true
 ---

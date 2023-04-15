@@ -2,6 +2,7 @@
 layout: post
 title: "Clean Code 16장 - SerialDate 리팩토링"
 categories: Clean_Code
+date: 2022-02-08
 tags: [java, dev]
 toc: true
 ---

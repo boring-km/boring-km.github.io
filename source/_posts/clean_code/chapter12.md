@@ -2,6 +2,7 @@
 layout: post
 title: "Clean Code 12장 - 창발성"
 categories: Clean_Code
+date: 2021-11-19
 tags: [java, dev]
 toc: true
 ---

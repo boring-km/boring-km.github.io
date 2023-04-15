@@ -2,6 +2,7 @@
 layout: post
 title: "12. 테스트 주도 개발"
 categories: JUnit
+date: 2022-02-22
 tags: [dev, test, kotlin, java]
 toc: true
 ---

@@ -2,6 +2,7 @@
 layout: post
 title: "Clean Code 8장 - 경계"
 categories: Clean_Code
+date: 2021-02-24
 tags: [java, dev]
 toc: true
 ---

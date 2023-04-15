@@ -2,6 +2,7 @@
 layout: post
 title: "Clean Code 2장 - 의미 있는 이름"
 categories: Clean_Code
+date: 2021-02-08 12:00:02
 tags: [java, dev]
 toc: true
 ---

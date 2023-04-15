@@ -2,6 +2,7 @@
 layout: post
 title: "Clean Code 14장 - 점진적인 개선"
 categories: Clean_Code
+date: 2022-01-26
 tags: [java, dev]
 toc: true
 ---

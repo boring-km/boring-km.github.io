@@ -2,6 +2,7 @@
 layout: post
 title: "Clean Code 10장 - 클래스"
 categories: Clean_Code
+date: 2021-02-28
 tags: [java, dev]
 toc: true
 ---

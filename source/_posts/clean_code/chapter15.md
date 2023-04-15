@@ -2,6 +2,7 @@
 layout: post
 title: "Clean Code 15장 - JUnit 들여다보기"
 categories: Clean_Code
+date: 2022-02-07
 tags: [java, dev]
 toc: true
 ---

@@ -2,6 +2,7 @@
 layout: post
 title: "Clean Code 17장 - 냄새와 휴리스틱"
 categories: Clean_Code
+date: 2022-03-17
 tags: [java, dev]
 toc: true
 ---

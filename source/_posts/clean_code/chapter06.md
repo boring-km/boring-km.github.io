@@ -2,6 +2,7 @@
 layout: post
 title: "Clean Code 6장 - 객체와 자료 구조"
 categories: Clean_Code
+date: 2021-02-15
 tags: [java, dev]
 toc: true
 ---

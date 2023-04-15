@@ -2,6 +2,7 @@
 layout: post
 title: "Clean Code 4장 - 주석"
 categories: Clean_Code
+date: 2021-02-08 12:00:04
 tags: [java, dev]
 toc: true
 ---
