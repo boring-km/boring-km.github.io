@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      Clean Code 3장 - 함수 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">boring-km</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Clean Code 3장 - 함수</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2021-02-08 12:00:03
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/Clean-Code/" title="Clean_Code">
+                    <b>#</b> Clean_Code
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/java/" title="java">
+                    <b>#</b> java
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <ul>
+<li>함수를 만드는 규칙</li>
+<li>한 가지만 해라!</li>
+<li>함수 당 추상화 수준은 하나로</li>
+<li>Switch 문</li>
+<li>서술적인 이름을 사용하라</li>
+<li>함수 인수</li>
+<li>부수 효과를 일으키지 마라</li>
+<li>명령과 조회를 분리하라</li>
+<li>오류 코드보다 예외를 사용하라</li>
+<li>반복하지 마라</li>
+<li>구조적 프로그래밍</li>
+<li>그래서 함수는 어떻게 작성하는지</li>
+<li>결론</li>
+</ul>
+<h3 id="작게-만들어라"><a href="#작게-만들어라" class="headerlink" title="작게 만들어라!"></a>작게 만들어라!</h3><ul>
+<li>함수를 만드는 첫째 규칙은 ‘작게!’다</li>
+<li>둘째 규칙은 ‘더 작게!’다.</li>
+<li>If&#x2F;else&#x2F;while 문 등에 들어가는 블록은 한 줄이어야 한다.</li>
+</ul>
+<h3 id="한-가지만-해라"><a href="#한-가지만-해라" class="headerlink" title="한 가지만 해라!"></a>한 가지만 해라!</h3><ul>
+<li><strong>함수는 한 가지를 해야 한다. 그 한가지를 잘 해야 한다. 그 한 가지만을 해야 한다.</strong></li>
+<li>지정된 함수 이름 아래에서 추상화 수준이 하나인 단계만 수행한다면 그 함수는 한 가지 작업만 한다.</li>
+<li>단순히 다른 표현이 아니라 의미 있는 이름으로 다른 함수를 추출할 수 있다면 그 함수는 여러 작업을 하는 셈이다.</li>
+</ul>
+<h3 id="함수-당-추상화-수준은-하나로"><a href="#함수-당-추상화-수준은-하나로" class="headerlink" title="함수 당 추상화 수준은 하나로!"></a>함수 당 추상화 수준은 하나로!</h3><ul>
+<li>함수가 확실히 ‘한 가지’ 작업만 하려면 함수 내 모든 문장의 추상화 수준이 동일해야 한다. (이게 어려운 것 아닌가..?)</li>
+<li>위에서 아래로 코드 읽기: <em><strong>내려가기</strong></em> 규칙<ul>
+<li>코드는 위에서 아래로 이야기처럼 읽혀야 좋다.</li>
+<li>위에서 아래로 TO 문단을 읽어내려 가듯이 코드를 구현하면 추상화 수준을 일관되게 유지하기가 쉬워진다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="Switch-문"><a href="#Switch-문" class="headerlink" title="Switch 문"></a>Switch 문</h3><ul>
+<li>작게 만들기가 어렵다. (If&#x2F;else가 여러번 이어지는 구문도 포함)</li>
+<li>본질적으로 switch 문은 N가지를 처리한다.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Money <span class="title function_">calculatePay</span><span class="params">(Employee e)</span></span><br><span class="line">  <span class="keyword">throws</span> InvalidEmployeeType &#123;</span><br><span class="line">  <span class="keyword">switch</span> (e.type) &#123;</span><br><span class="line">    <span class="keyword">case</span> COMMISSIONED:</span><br><span class="line">      <span class="keyword">return</span> calculateCommissionedPay(e);</span><br><span class="line">    <span class="keyword">case</span> HOURLY:</span><br><span class="line">      <span class="keyword">return</span> calculateHourlyPay(e);</span><br><span class="line">    <span class="keyword">case</span> SALARIED:</span><br><span class="line">      <span class="keyword">return</span> calculateSalariedPay(e);</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">InvalidEmployeeType</span>(e.type);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>위 함수의 문제<ol>
+<li>함수가 길다. 새 직원 유형을 추가하면 더 길어진다.</li>
+<li>‘한 가지’ 작업만 수행하지 않는다.</li>
+<li>SRP(Single Responsibility Principle)를 위반한다. 코드를 변경할 이유가 여럿이기 때문이다.</li>
+<li>OCP를 위반한다. 새 직원 유형을 추가할 때마다 코드를 변경하기 때문이다.</li>
+</ol>
+</li>
+</ul>
+<h3 id="서술적인-이름을-사용하라"><a href="#서술적인-이름을-사용하라" class="headerlink" title="서술적인 이름을 사용하라!"></a>서술적인 이름을 사용하라!</h3><ul>
+<li>길고 서술적인 이름이 짧고 어려운 이름보다 좋다.</li>
+<li>길고 서술적인 이름이 길고 서술적인 주석보다 좋다.</li>
+<li>함수 이름을 정할 때는 여러 단어가 쉽게 읽히는 명명법을 사용한다. 그리고 여러 단어를 사용해 함수 기능을 잘 표현하는 이름을 선택한다.</li>
+<li>서술적인 이름을 사용하면 개발자 머릿속에서도 설계가 뚜렷해지므로 코드를 개선하기 쉬워진다.</li>
+<li>이름을 붙일 때는 일관성이 있어야 한다.</li>
+<li>모듈 내에서 함수 이름은 같은 문구, 명사, 동사를 사용한다.</li>
+</ul>
+<h3 id="함수-인수"><a href="#함수-인수" class="headerlink" title="함수 인수"></a>함수 인수</h3><ul>
+<li><p>이상적인 인수 개수는 0개 (적을수록 좋다. 1개까지는 양호함)</p>
+</li>
+<li><p>인수는 개념을 이해하기 어렵게 만든다.</p>
+</li>
+<li><p>함수에 인수 1개를 넘기는 이유 (<em>많이 쓰는 단항 형식</em>)</p>
+<ul>
+<li><p>인수에 질문을 던지는 경우</p>
+</li>
+<li><p>인수를 뭔가로 변환해 결과를 반환하는 경우 (변환 함수)</p>
+<ul>
+<li>인수에 출력 인수를 사용하면 혼란을 일으킨다.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">boolean</span> <span class="title function_">fileExists</span><span class="params">(String fileName)</span> &#123;&#125;	<span class="comment">// 변환 함수</span></span><br><span class="line">passwordAttemptFailedNtimes(<span class="type">int</span> attempts);	<span class="comment">// 이벤트 함수, 입력 인수만 있다.</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>플래그 인수</p>
+<ul>
+<li>추하다.</li>
+<li>함수로 부울 값을 넘기는 관례는 함수가 한꺼번에 여러 가지를 처리한다고 대놓고 공표하는 셈이다.</li>
+</ul>
+</li>
+<li><p>이항 함수&#x2F;삼항 함수</p>
+<ul>
+<li>이해하기가 어렵다.</li>
+<li>프로그램을 짜다보면 불가피한 경우가 생기기도 하지만 그만큼 위험이 따른다는 사실을 이해하고 가능하면 단항함수로 바꾸도록 애써야 한다.</li>
+</ul>
+</li>
+<li><p>인수 객체</p>
+<ul>
+<li>인수가 2~3개 필요하다면 일부를 독자적인 클래스 변수로 선언할 가능성을 짚어본다.</li>
+</ul>
+</li>
+<li><p>인수 목록</p>
+<ul>
+<li>인수 개수가 가변적인 함수도 필요하다.</li>
+</ul>
+</li>
+<li><p>동사와 키워드</p>
+<ul>
+<li>함수의 의도나 인수의 순서와 의도를 제대로 표현하려면 결국 좋은 함수 이름이 필수다.</li>
+<li>단항 함수는 함수와 인수가 동사&#x2F;명사 쌍을 이뤄야 한다.</li>
+<li>함수 이름에 키워드를 추가하는 형식<ul>
+<li>assertEquals보다 assertExpectedEqualsActual(expected, actual)이 더 좋다. 인수 순서를 기억할 필요가 없어지니까</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="부수-효과를-일으키지-마라"><a href="#부수-효과를-일으키지-마라" class="headerlink" title="부수 효과를 일으키지 마라!"></a>부수 효과를 일으키지 마라!</h3><ul>
+<li><p>부수 효과는 거짓말이다.</p>
+<ul>
+<li><p>함수에서 한 가지를 하겠다고 해놓고선 남몰래 다른 짓을 하니까</p>
+</li>
+<li><p>때로는 예상치 못하게 클래스 변수를 수정한다. (교활하고 해롭다)</p>
+</li>
+<li><p>때로는 함수로 넘어온 인수나 시스템 전역 변수를 수정한다. (교활하고 해롭다)</p>
+</li>
+<li><p>출력 인수</p>
+<ul>
+<li>일반적으로 인수는 함수 입력으로 해석한다.</li>
+<li>함수 선언부를 찾아보는 행위는 코드를 보다가 주춤하는 행위와 동급이다. 인지적으로 거슬린다는 뜻이므로 피해야 한다.</li>
+<li>객체 지향 언어에서는 출력 인수를 사용할 필요가 거의 없다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 3-6 UserValidator.java 부수 효과 예시</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserValidator</span> &#123;</span><br><span class="line">  <span class="keyword">private</span> Cryptographer cryptographer;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">checkPassword</span><span class="params">(String userName, String password)</span> &#123;</span><br><span class="line">    <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> UserGateway.findByName(userName);</span><br><span class="line">    <span class="keyword">if</span> (user != User.NULL) &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">codedPhrase</span> <span class="operator">=</span> user.getPhraseEncodedByPassword();</span><br><span class="line">        <span class="type">String</span> <span class="variable">phrase</span> <span class="operator">=</span> cryptographer.decrypt(codedPhrase, password);</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">&quot;Valid Password&quot;</span>.equals(phrase)) &#123;</span><br><span class="line">            Session.initialize();</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="명령과-조회를-분리하라"><a href="#명령과-조회를-분리하라" class="headerlink" title="명령과 조회를 분리하라!"></a>명령과 조회를 분리하라!</h3><ul>
+<li>함수는 뭔가를 수행하거나 뭔가에 답하거나 둘 중 하나만 해야 한다.</li>
+</ul>
+<h3 id="오류-코드보다-예외를-사용하라"><a href="#오류-코드보다-예외를-사용하라" class="headerlink" title="오류 코드보다 예외를 사용하라!"></a>오류 코드보다 예외를 사용하라!</h3><ul>
+<li><p>명령 함수에서 오류 코드를 반환하는 방식은 명령&#x2F;조회 분리 규칙을 미묘하게 위반한다.</p>
+</li>
+<li><p>오류 코드를 반환하면 호출자는 오류 코드를 곧바로 처리해야 한다는 문제에 부딪힌다.</p>
+</li>
+<li><p>반면 오류 코드 대신 예외를 사용하면 오류 처리 코드가 원래 코드에서 분리되므로 코드가 깔끔해진다.</p>
+</li>
+<li><p>Try&#x2F;Catch 블록 뽑아내기</p>
+<ul>
+<li>원래 추하다.</li>
+<li>코드 구조에 혼란을 일으킨다.</li>
+<li>정상 동작과 오류 처리 동작을 뒤섞는다.</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 오류 코드 대신 예외를 사용한 코드</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  deletePage(page);</span><br><span class="line">  registry.deleteReference(page.name);</span><br><span class="line">  configKeys.deleteKey(page.name.makeKey());</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">  logger.log(e.getMessage());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// try/catch 블록을 별도 함수로 뽑아내는 편이 좋다.</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">delete</span><span class="params">(Page page)</span> &#123;	<span class="comment">// 오류를 처리하는 함수는 오류만 처리해야 마땅하다.</span></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    deletePageAndAllReferences(page);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    logError(e);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">deletePageAndAllReferences</span><span class="params">(Page page)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">  deletePage(page);</span><br><span class="line">  registry.deleteReference(page.name);</span><br><span class="line">  configKeys.deleteKey(page.name.makeKey());</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">logError</span><span class="params">(Exception e)</span> &#123;</span><br><span class="line">  logger.log(e.getMessage());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Error.java 의존성 자석<ul>
+<li>오류 코드를 반환한다는 이야기는, 클래스든 열거형 변수는, 어디선가 오류 코드를 정의한다는 뜻이다.</li>
+<li>Error 클래스 변경은 어렵고 번거로워 새 오류 코드를 정의하고 싶지 않기 때문에 기존 오류 코드를 재사용한다.</li>
+<li>오류 코드 대신 예외를 사용하면 새 예외는 Exception 클래스에서 파생된다.</li>
+<li>따라서 재컴파일&#x2F;재배치 없이도 새 예외 클래스를 추가할 수 있다. (OCP)</li>
+</ul>
+</li>
+</ul>
+<h3 id="반복하지-마라-DRY"><a href="#반복하지-마라-DRY" class="headerlink" title="반복하지 마라! (DRY)"></a>반복하지 마라! (DRY)</h3><ul>
+<li>중복은 소프트웨어에서 만악의 근원</li>
+<li>많은 원칙과 기법이 중복을 없애거나 제어할 목적으로 나왔다.</li>
+<li>객체 지향 프로그래밍은 코드를 부모 클래스로 몰아 중복을 없앴다.</li>
+<li>구조적 프로그래밍, AOP(Aspect Oriented Programming), COP(Component Oriented Programming)</li>
+</ul>
+<h3 id="구조적-프로그래밍"><a href="#구조적-프로그래밍" class="headerlink" title="구조적 프로그래밍"></a>구조적 프로그래밍</h3><ul>
+<li><p>모든 함수와 함수 내 모든 블록에 입구와 출구가 하나만 존재해야 한다고 말했다. (Return 하나)</p>
+</li>
+<li><p>loop 안에서 break나 continue, goto 안된다.</p>
+</li>
+<li><p>함수가 아주 클 때만 상당한 이익을 제공한다.</p>
+</li>
+<li><p>그래서 함수를 작게 만든다면 return, break, continue를 여러 차례 사용해도 괜찮다. (오히려 의도를 표현하기 쉬워짐)</p>
+</li>
+<li><p>goto는 큰 함수에서만 의미가 있다고 하지만 그냥 안 쓰는게..?</p>
+</li>
+</ul>
+<h3 id="함수를-어떻게-짜죠"><a href="#함수를-어떻게-짜죠" class="headerlink" title="함수를 어떻게 짜죠?"></a>함수를 어떻게 짜죠?</h3><ul>
+<li>글짓기와 비슷하다.</li>
+<li>처음에는 길고 복잡하다.<ul>
+<li>들여쓰기 단계도 많고 중복된 루프도 많다. 인수 목록도 아주 길다.</li>
+<li>이름은 즉흥적이고 코드는 중복된다.</li>
+<li>하지만 그 서투른 코드를 빠짐없이 테스트하는 Unit Test를 만들자</li>
+</ul>
+</li>
+<li>코드를 다듬고, 함수를 만들고, 이름을 바꾸고, 중복을 제거한다.</li>
+<li>메서드를 줄이고 순서를 바꾼다. 때로는 전체 클래스를 쪼개기도 한다.</li>
+<li>이와중에 코드는 항상 단위 테스트를 통과한다.</li>
+</ul>
+<h3 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h3><ul>
+<li>모든 시스템은 특정 응용 분야 시스템을 기술할 목적으로 프로그래머가 설계한 도메인 특화 언어(Domain Specific Language, DSL)로 만들어진다.</li>
+<li>함수는 그 언어에서 동사며, 클래스는 명사다.</li>
+<li>대가 프로그래머는 시스템을 (구현할) 프로그램이 아니라 (풀어갈) 이야기로 여긴다.</li>
+<li>프로그래밍 언어라는 수단을 통해 이야기를 풀어간다.</li>
+<li>작성하는 함수가 분명하고 정확한 언어로 깔끔하게 같이 맞아떨어져야 이야기를 풀어가기가 쉬워진다는 사실을 기억하자</li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2021/02/08/clean_code/chapter02/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2021-02-08 12:00:03
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/Clean-Code/" title="Clean_Code">
+                        <b>#</b> Clean_Code
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/java/" title="java">
+                        <b>#</b> java
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2021/02/08/clean_code/chapter04/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%9E%91%EA%B2%8C-%EB%A7%8C%EB%93%A4%EC%96%B4%EB%9D%BC"><span class="toc-text">작게 만들어라!</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%95%9C-%EA%B0%80%EC%A7%80%EB%A7%8C-%ED%95%B4%EB%9D%BC"><span class="toc-text">한 가지만 해라!</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%95%A8%EC%88%98-%EB%8B%B9-%EC%B6%94%EC%83%81%ED%99%94-%EC%88%98%EC%A4%80%EC%9D%80-%ED%95%98%EB%82%98%EB%A1%9C"><span class="toc-text">함수 당 추상화 수준은 하나로!</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Switch-%EB%AC%B8"><span class="toc-text">Switch 문</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%84%9C%EC%88%A0%EC%A0%81%EC%9D%B8-%EC%9D%B4%EB%A6%84%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC"><span class="toc-text">서술적인 이름을 사용하라!</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%95%A8%EC%88%98-%EC%9D%B8%EC%88%98"><span class="toc-text">함수 인수</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%B6%80%EC%88%98-%ED%9A%A8%EA%B3%BC%EB%A5%BC-%EC%9D%BC%EC%9C%BC%ED%82%A4%EC%A7%80-%EB%A7%88%EB%9D%BC"><span class="toc-text">부수 효과를 일으키지 마라!</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%AA%85%EB%A0%B9%EA%B3%BC-%EC%A1%B0%ED%9A%8C%EB%A5%BC-%EB%B6%84%EB%A6%AC%ED%95%98%EB%9D%BC"><span class="toc-text">명령과 조회를 분리하라!</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%98%A4%EB%A5%98-%EC%BD%94%EB%93%9C%EB%B3%B4%EB%8B%A4-%EC%98%88%EC%99%B8%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC"><span class="toc-text">오류 코드보다 예외를 사용하라!</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%B0%98%EB%B3%B5%ED%95%98%EC%A7%80-%EB%A7%88%EB%9D%BC-DRY"><span class="toc-text">반복하지 마라! (DRY)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EA%B5%AC%EC%A1%B0%EC%A0%81-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D"><span class="toc-text">구조적 프로그래밍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%95%A8%EC%88%98%EB%A5%BC-%EC%96%B4%EB%96%BB%EA%B2%8C-%EC%A7%9C%EC%A3%A0"><span class="toc-text">함수를 어떻게 짜죠?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EA%B2%B0%EB%A1%A0"><span class="toc-text">결론</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/boring-km">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="kmjin@kakao.com">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="linkedin" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/">
+            <i class="iconfont icon-linkedin"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="TIL" target="_blank" rel="noopener" href="https://boring-km.github.io/TIL">
+            <i class="iconfont icon-emoji-friendly"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/boring-km">머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="내용 검색...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Clean%20Code%203%EC%9E%A5%20-%20%ED%95%A8%EC%88%98 + '&url=' + http%3A%2F%2Fexample.com%2F2021%2F02%2F08%2Fclean_code%2Fchapter03%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2021/02/08/clean_code/chapter03/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

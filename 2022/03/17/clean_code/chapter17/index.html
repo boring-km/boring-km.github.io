@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      Clean Code 17장 - 냄새와 휴리스틱 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">boring-km</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Clean Code 17장 - 냄새와 휴리스틱</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2022-03-17 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/Clean-Code/" title="Clean_Code">
+                    <b>#</b> Clean_Code
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/java/" title="java">
+                    <b>#</b> java
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <ul>
+<li>주석</li>
+<li>환경</li>
+<li>함수</li>
+<li>일반</li>
+<li>자바</li>
+<li>이름</li>
+<li>테스트</li>
+<li>결론</li>
+</ul>
+<hr>
+<ul>
+<li>코드를 읽으면서 기록한 나쁜 냄새들의 목록</li>
+</ul>
+<h2 id="주석"><a href="#주석" class="headerlink" title="주석"></a>주석</h2><h3 id="C1-부적절한-정보"><a href="#C1-부적절한-정보" class="headerlink" title="C1: 부적절한 정보"></a>C1: 부적절한 정보</h3><ul>
+<li>다른 시스템에 (소스 코드 관리 시스템, 버그 추적 시스템, 이슈 추적 시스템, 기타 기록 관리 시스템) 저장할 정보는 주석으로 적절하지 못하다.</li>
+<li>변경 이력은 장황한 날짜와 따분한 내용으로 소스 코드만 번잡하게 만든다.</li>
+<li><strong>주석은 코드와 설계에 기술적인 설명을 부연하는 수단이다.</strong></li>
+</ul>
+<h3 id="C2-쓸모-없는-주석"><a href="#C2-쓸모-없는-주석" class="headerlink" title="C2: 쓸모 없는 주석"></a>C2: 쓸모 없는 주석</h3><ul>
+<li>오래된 주석, 엉뚱한 주석, 잘못된 주석은 더 이상 쓸모가 없다.</li>
+<li>코드와 무관하게 혼자서 따로 놀며 코드를 그릇된 방향으로 이끈다.</li>
+</ul>
+<h3 id="C3-중복된-주석"><a href="#C3-중복된-주석" class="headerlink" title="C3: 중복된 주석"></a>C3: 중복된 주석</h3><ul>
+<li>코드만으로 충분한데 구구절절 설명하는 주석이 중복된 주석이다.</li>
+<li>함수 서명(signature)만 달랑 기술하는 javadoc 예시를 보자.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> sellRequest</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> ManagedComponentException</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> SellResponse <span class="title function_">beginSellItem</span><span class="params">(SellRequest sellRequest)</span> <span class="keyword">throws</span> ManagedComponentException</span><br></pre></td></tr></table></figure>
+
+<h3 id="C4-성의-없는-주석"><a href="#C4-성의-없는-주석" class="headerlink" title="C4: 성의 없는 주석"></a>C4: 성의 없는 주석</h3><ul>
+<li>작성할 가치가 있는 주석은 잘 작성할 가치도 있다.</li>
+<li>단어를 신중하게 선택하고 주절대지 않으며 당연한 소리를 반복하지 않고 간결&#x2F;명료하게 작성하자</li>
+</ul>
+<h3 id="C5-주석-처리된-코드"><a href="#C5-주석-처리된-코드" class="headerlink" title="C5: 주석 처리된 코드"></a>C5: 주석 처리된 코드</h3><ul>
+<li>얼마나 오래된 코드인지, 중요한 코드인지 아닌지, 알 길이 없다.</li>
+<li>누군가에게 필요한 코드라 생각하기에 아무도 삭제하지 않는다.</li>
+<li>주석으로 처리된 코드를 발견하면 즉각 지워버리자!</li>
+<li>소스 코드 관리 시스템이 기억할 것이다.</li>
+</ul>
+<h2 id="환경"><a href="#환경" class="headerlink" title="환경"></a>환경</h2><h3 id="E1-여러-단계로-빌드해야-한다"><a href="#E1-여러-단계로-빌드해야-한다" class="headerlink" title="E1: 여러 단계로 빌드해야 한다"></a>E1: 여러 단계로 빌드해야 한다</h3><ul>
+<li>빌드는 간단히 한 단계로 끝나야 한다.</li>
+<li>한 명령으로 전체를 체크아웃해서 빌드할 수 있어야 한다.</li>
+</ul>
+<h3 id="E2-여러-단계로-테스트해야-한다"><a href="#E2-여러-단계로-테스트해야-한다" class="headerlink" title="E2: 여러 단계로 테스트해야 한다"></a>E2: 여러 단계로 테스트해야 한다</h3><ul>
+<li>모든 단위 테스트는 한 명령으로 돌려야 한다.</li>
+<li>모든 테스트를 한 번에 실행하는 능력은 아주 근본적이고 아주 중요하다.</li>
+</ul>
+<h2 id="함수"><a href="#함수" class="headerlink" title="함수"></a>함수</h2><h3 id="F1-너무-많은-인수"><a href="#F1-너무-많은-인수" class="headerlink" title="F1: 너무 많은 인수"></a>F1: 너무 많은 인수</h3><ul>
+<li>함수에서 인수 갯수는 작을수록 좋다.</li>
+<li>아예 없으면 가장 좋다.</li>
+</ul>
+<h3 id="F2-출력-인수"><a href="#F2-출력-인수" class="headerlink" title="F2: 출력 인수"></a>F2: 출력 인수</h3><ul>
+<li>출력 인수는 직관성을 정면으로 위배한다.</li>
+<li>독자는 인수를 입력으로 간주하기 때문에 함수에서 뭔가의 상태를 변경해야 한다면 함수가 속한 객체의 상태를 변경하라</li>
+</ul>
+<h3 id="F3-플래그-인수"><a href="#F3-플래그-인수" class="headerlink" title="F3: 플래그 인수"></a>F3: 플래그 인수</h3><ul>
+<li>boolean 인수는 함수가 여러 기능을 수행한다는 명백한 증거다. 플래그 인수는 혼란을 초래하므로 피해야 마땅하다.</li>
+</ul>
+<h3 id="F4-죽은-함수"><a href="#F4-죽은-함수" class="headerlink" title="F4: 죽은 함수"></a>F4: 죽은 함수</h3><ul>
+<li>아무도 호출하지 않는 함수는 삭제한다.</li>
+<li>죽은 코드는 낭비다.</li>
+</ul>
+<h2 id="일반"><a href="#일반" class="headerlink" title="일반"></a>일반</h2><h3 id="G1-한-소스-파일에-여러-언어를-사용한다"><a href="#G1-한-소스-파일에-여러-언어를-사용한다" class="headerlink" title="G1: 한 소스 파일에 여러 언어를 사용한다"></a>G1: 한 소스 파일에 여러 언어를 사용한다</h3><ul>
+<li>오늘날 프로그래밍 환경은 한 소스 파일 내에서 다양한 언어를 지원한다.</li>
+<li>이상적으로는 소스 파일 하나에 언어 하나만 사용하는 방식이 가장 좋다.</li>
+</ul>
+<h3 id="G2-당연한-동작을-구현하지-않는다"><a href="#G2-당연한-동작을-구현하지-않는다" class="headerlink" title="G2: 당연한 동작을 구현하지 않는다"></a>G2: 당연한 동작을 구현하지 않는다</h3><ul>
+<li>함수나 클래스는 다른 프로그래머가 당연하게 여길 만한 동작과 기능을 제공해야 한다.</li>
+<li>당연한 동작을 구현하지 않으면 코드를 읽거나 사용하는 사람이 더 이상 함수 이름만으로 함수 기능을 직관적으로 예상하기 어렵다.</li>
+<li>저자를 신뢰하지 못하므로 코드를 일일이 살피게 된다.</li>
+</ul>
+<h3 id="G3-경계를-올바로-처리하지-않는다"><a href="#G3-경계를-올바로-처리하지-않는다" class="headerlink" title="G3: 경계를 올바로 처리하지 않는다"></a>G3: 경계를 올바로 처리하지 않는다</h3><ul>
+<li>스스로의 직관에 의존하지 말라.</li>
+<li>모든 경계 조건을 찾아내고, 모든 경계 조건을 테스트하는 테스트 케이스를 작성하라.</li>
+</ul>
+<h3 id="G4-안전-절차-무시"><a href="#G4-안전-절차-무시" class="headerlink" title="G4: 안전 절차 무시"></a>G4: 안전 절차 무시</h3><ul>
+<li>실패하는 테스트 케이스를 일단 제껴두고 나중으로 미루는 태도는 신용카드가 공짜 돈이라는 생각만큼 위험하다.</li>
+</ul>
+<h3 id="G5-중복"><a href="#G5-중복" class="headerlink" title="G5: 중복"></a>G5: 중복</h3><ul>
+<li>코드에서 중복을 발견할 때마다 추상화할 기회로 간주하라.</li>
+<li>중복된 코드를 하위 루틴이나 다른 클래스로 분리하라.</li>
+<li>switch&#x2F;case 문이나, if&#x2F;else 문으로 똑같은 조건을 거듭 확인하는 중복에 대해서는 <strong>다형성</strong>으로 대체하라</li>
+<li>알고리즘이 유사하나 코드가 서로 다른 중복에 대해서는 <strong>템플릿 메서드 패턴이나 전략 패턴</strong>으로 대체하라</li>
+</ul>
+<h3 id="G6-추상화-수준이-올바르지-못하다"><a href="#G6-추상화-수준이-올바르지-못하다" class="headerlink" title="G6: 추상화 수준이 올바르지 못하다"></a>G6: 추상화 수준이 올바르지 못하다</h3><ul>
+<li>추상화는 소프트웨어 개발자에게 가장 어려운 작업 중 하나다.</li>
+<li>추상화로 개념을 분리할 때는 철저해야 한다.</li>
+<li>모든 저차원 개념은 파생 클래스에 넣고, 모든 고차원 개념은 기초 클래스에 넣는다.</li>
+<li>세부 구현과 관련한 상수, 변수, 유틸리티 함수는 기초 클래스에 넣으면 안 된다. 소스 파일, 컴포넌트, 모듈도 마찬가지다.</li>
+<li>개념을 다양한 차원으로 분리해 다른 컨테이너에 넣자.</li>
+<li>고차원 개념과 저차원 개념을 섞어서는 안 된다.</li>
+</ul>
+<h3 id="G7-기초-클래스가-파생-클래스에-의존한다"><a href="#G7-기초-클래스가-파생-클래스에-의존한다" class="headerlink" title="G7: 기초 클래스가 파생 클래스에 의존한다"></a>G7: 기초 클래스가 파생 클래스에 의존한다</h3><ul>
+<li>일반적으로 기초 클래스는 파생 클래스를 아예 몰라야 마땅하다.</li>
+<li>파생 클래스 개념으로부터 분리해 독립성을 보장해야 한다.</li>
+</ul>
+<h3 id="G8-과도한-정보"><a href="#G8-과도한-정보" class="headerlink" title="G8: 과도한 정보"></a>G8: 과도한 정보</h3><ul>
+<li>잘 정의된 모듈은 인터페이스가 아주 작다.</li>
+<li>클래스나 모듈 인터페이스에 노출할 함수를 제한할 줄 알아야 한다.</li>
+<li>클래스가 제공하는 메서드 수는 작을수록 좋다.</li>
+<li>함수가 아는 변수 수도 작을수록 좋다.</li>
+<li>클래스에 들어있던 인스턴스 변수 수도 작을수록 좋다.</li>
+<li>인터페이스를 매우 작게 그리고 매우 깐깐하게 만들어라.</li>
+<li><strong>정보를 제한해 결합도를 낮춰라</strong></li>
+</ul>
+<h3 id="G9-죽은-코드"><a href="#G9-죽은-코드" class="headerlink" title="G9: 죽은 코드"></a>G9: 죽은 코드</h3><ul>
+<li>죽은 코드란 실행 되지 않는 코드를 가리킨다.</li>
+<li>옛날옛적 시스템의 모양새가 다른 시절에 짜놓은 코드다.</li>
+<li>시스템에서 제거하라.</li>
+</ul>
+<h3 id="G10-수직-분리"><a href="#G10-수직-분리" class="headerlink" title="G10: 수직 분리"></a>G10: 수직 분리</h3><ul>
+<li>변수와 함수는 사용되는 위치에 가깝게 정의한다.</li>
+<li>지역 변수는 처음으로 사용하기 직전에 선언하며, 수직으로 가까운 곳에 위치해야 한다.</li>
+<li>비공개 함수는 처음으로 호출한 직후에 정의한다. 그래야 쉽게 눈에 띈다.</li>
+</ul>
+<h3 id="G11-일관성-부족"><a href="#G11-일관성-부족" class="headerlink" title="G11: 일관성 부족"></a>G11: 일관성 부족</h3><ul>
+<li>최소 놀람의 원칙(The Principle of Least Surprise)</li>
+<li>어떤 개념을 특정 방식으로 구현했다면, 유사한 개념도 같은 방식으로 구현한다.</li>
+<li>명명법을 통일한다던가…</li>
+</ul>
+<h3 id="G12-잡동사니"><a href="#G12-잡동사니" class="headerlink" title="G12: 잡동사니"></a>G12: 잡동사니</h3><ul>
+<li>아무도 사용하지 않는 변수, 아무도 호출하지 않는 함수, 정보를 제공하지 못하는 주석 등이 좋은 예다.</li>
+<li>모두가 코드만 복잡하게 만들 뿐이니 제거해야 마땅하다.</li>
+</ul>
+<h3 id="G13-인위적-결합"><a href="#G13-인위적-결합" class="headerlink" title="G13: 인위적 결합"></a>G13: 인위적 결합</h3><ul>
+<li>서로 무관한 개념을 인위적으로 결합하지 안흔다.</li>
+<li>함수, 상수, 변수를 선언할 때는 시간을 들여 올바른 위치를 고민한다.</li>
+<li>그저 당장 편한 곳에 선언하고 내버려두면 안 된다.</li>
+</ul>
+<h3 id="G14-기능-욕심"><a href="#G14-기능-욕심" class="headerlink" title="G14: 기능 욕심"></a>G14: 기능 욕심</h3><ul>
+<li>클래스 메서드는 자기 클래스의 변수와 함수에 관심을 가져야지 다른 클래스의 변수와 함수에 관심을 가져서는 안 된다.</li>
+<li>다른 객체의 참조자와 변경자를 이용해 객체 내용을 조작한다면 욕심이다.</li>
+</ul>
+<h3 id="G15-선택자-인수"><a href="#G15-선택자-인수" class="headerlink" title="G15: 선택자 인수"></a>G15: 선택자 인수</h3><ul>
+<li>선택자 인수는 큰 함수를 작은 함수 여럿으로 쪼개지 않으려는 게으름의 소산이다.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TestClass</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">calculateWeeklyPay</span><span class="params">(<span class="type">boolean</span> overtime)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">tenthRate</span> <span class="operator">=</span> getTenthRate();</span><br><span class="line">        <span class="type">int</span> <span class="variable">tenthWorked</span> <span class="operator">=</span> getTenthsWorked();</span><br><span class="line">        <span class="type">int</span> <span class="variable">straightTime</span> <span class="operator">=</span> Math.min(<span class="number">400</span>, tenthWorked);</span><br><span class="line">        <span class="type">int</span> <span class="variable">overTime</span> <span class="operator">=</span> Math.max(<span class="number">0</span>, tenthWorked - straightTime);</span><br><span class="line">        <span class="type">int</span> <span class="variable">straightPay</span> <span class="operator">=</span> straightTime * tenthRate;</span><br><span class="line">        <span class="type">double</span> <span class="variable">overtimeRate</span> <span class="operator">=</span> overTime ? <span class="number">1.5</span> : <span class="number">1.0</span> * tenthRate;</span><br><span class="line">        <span class="type">int</span> <span class="variable">overtimePay</span> <span class="operator">=</span> (<span class="type">int</span>)Math.round(overTime * overtimeRate);</span><br><span class="line">        <span class="keyword">return</span> straightPay + overtimePay;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>초과근무 수당을 1.5배로 지급하면 true고 아니면 false다.</li>
+<li>독자는 calculateWeeklyPay(false)라는 코드를 발견할 때마다 의미를 떠올려야 한다.</li>
+<li>이렇게 구현했다면?</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TestClass</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">straightPay</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> getTenthsWorked() * getTenthRate();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">overTimePay</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">overTimeTenths</span> <span class="operator">=</span> Math.max(<span class="number">0</span>, getTenthsWorked() - <span class="number">400</span>);</span><br><span class="line">        <span class="type">int</span> <span class="variable">overTimePay</span> <span class="operator">=</span> overTimeBonus(overTimeTenths);</span><br><span class="line">        <span class="keyword">return</span> straightPay() + overTimePay;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="title function_">overTimeBonus</span><span class="params">(<span class="type">int</span> overTimeTenths)</span> &#123;</span><br><span class="line">        <span class="type">double</span> <span class="variable">bonus</span> <span class="operator">=</span> <span class="number">0.5</span> * getTenthRate() * overTimeTenths;</span><br><span class="line">        <span class="keyword">return</span> (<span class="type">int</span>) Math.round(bonus);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>일반적으로, 인수를 넘겨 동작을 선택하려는 대신 새로운 함수를 만드는 것이 좋다.</strong> <strong>(나도 너무 공감하고, 어서 회사 코드를 고쳐봐야겠다.)</strong></li>
+</ul>
+<h3 id="G16-모호한-의도"><a href="#G16-모호한-의도" class="headerlink" title="G16: 모호한 의도"></a>G16: 모호한 의도</h3><ul>
+<li>코드를 짤 때는 의도를 최대한 분명히 밝힌다.</li>
+<li>행을 바꾸지 않고 표현한 수식, 헝가리식 표기법, 매직 번호 등은 모두 저자의 의도를 흐린다.</li>
+</ul>
+<h3 id="G17-잘못-배치한-책임"><a href="#G17-잘못-배치한-책임" class="headerlink" title="G17: 잘못 배치한 책임"></a>G17: 잘못 배치한 책임</h3><ul>
+<li>코드를 배치하는 위치를 결정하는 것은 중요하다.</li>
+<li>영리하게 독자에게 직관적인 위치가 아닌 개발자에게 편한 함수에 배치한다면, 그 함수의 이름을 정확히 짓자.</li>
+</ul>
+<h3 id="G18-부적절한-static-함수"><a href="#G18-부적절한-static-함수" class="headerlink" title="G18: 부적절한 static 함수"></a>G18: 부적절한 static 함수</h3><ul>
+<li>간혹 우리는 static으로 정의하면 안 되는 함수를 static으로 정의하는 실수를 범할 수 있다.</li>
+<li>일반적으로 static 함수보다 인스턴스 함수가 더 좋다.</li>
+<li>반드시 static으로 정의해야겠다면, 재정의할 가능성이 없는지 꼼꼼히 따져본다.</li>
+</ul>
+<h3 id="G19-서술적-변수"><a href="#G19-서술적-변수" class="headerlink" title="G19: 서술적 변수"></a>G19: 서술적 변수</h3><ul>
+<li>서술적인 변수 이름은 많이 써도 괜찮다. 일반적으로 많을수록 더 좋다.</li>
+<li>계산을 몇 단계로 나누고 중간값에 좋은 변수 이름만 붙여도 해독하기 어렵던 모듈이 순식간에 읽기 쉬운 모듈로 탈바꿈한다.</li>
+</ul>
+<h3 id="G20-이름과-기능이-일치하는-함수"><a href="#G20-이름과-기능이-일치하는-함수" class="headerlink" title="G20: 이름과 기능이 일치하는 함수"></a>G20: 이름과 기능이 일치하는 함수</h3><ul>
+<li>이름만으로 분명하지 않기에 구현을 살피거나 문서를 뒤적여야 한다면 더 좋은 이름으로 바꾸거나 아니면 더 좋은 이름을 붙이기 쉽도록 기능을 정리해야 한다.</li>
+</ul>
+<h3 id="G21-알고리즘을-이해하라"><a href="#G21-알고리즘을-이해하라" class="headerlink" title="G21: 알고리즘을 이해하라"></a>G21: 알고리즘을 이해하라</h3><ul>
+<li>구현이 끝났다고 선언하기 전에 함수가 돌아가는 방식을 확실히 이해하는지 확인하라.</li>
+<li>테스트 케이스를 모두 통과한다는 사실만으로 부족하다.</li>
+<li>작성자가 알고리즘이 올바르다는 사실을 알아야 한다.</li>
+</ul>
+<h3 id="G22-논리적-의존성은-물리적으로-드러내라"><a href="#G22-논리적-의존성은-물리적으로-드러내라" class="headerlink" title="G22: 논리적 의존성은 물리적으로 드러내라"></a>G22: 논리적 의존성은 물리적으로 드러내라</h3><ul>
+<li>한 모듈이 다른 모듈에 의존한다면 물리적인 의존성도 있어야 한다.</li>
+<li>논리적인 의존성만으로는 부족하다.</li>
+<li>의존하는 모듈이 상대 모듈에 대해 뭔가를 가정하면 안 된다. (논리적으로 의존하면 안 된다.)</li>
+<li><strong>의존하는 모든 정보를 명시적으로 요청하는 편이 좋다.</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HourlyReporter</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> HourlyReporterFormatter formatter;</span><br><span class="line">    <span class="keyword">private</span> List&lt;LineItem&gt; page;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">PAGE_SIZE</span> <span class="operator">=</span> <span class="number">55</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">HourlyReporter</span><span class="params">(HourlyReporterFormatter formatter)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.formatter = formatter;</span><br><span class="line">        page = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;LineItem&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">generateReport</span><span class="params">(List&lt;HourlyEmployee&gt; employees)</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (HourlyEmployee e: employees) &#123;</span><br><span class="line">            addLineItemToPage(e);</span><br><span class="line">            <span class="keyword">if</span> (page.size() == PAGE_SIZE)</span><br><span class="line">                printAndClearItemList();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (page.size() &gt; <span class="number">0</span>)</span><br><span class="line">            printAndClearItemList();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">printAndClearItemList</span><span class="params">()</span> &#123;</span><br><span class="line">        formatter.format(page);</span><br><span class="line">        page.clear();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">addLineItemToPage</span><span class="params">(HourlyEmployee e)</span> &#123;</span><br><span class="line">        <span class="type">LineItem</span> <span class="variable">item</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LineItem</span>();</span><br><span class="line">        item.name = e.getName();</span><br><span class="line">        item.hours = e.getTenthsWorked() / <span class="number">10</span>;</span><br><span class="line">        item.tenths = e.getTenthWorked() % <span class="number">10</span>;</span><br><span class="line">        page.add(item);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LineItem</span> &#123;</span><br><span class="line">        <span class="keyword">public</span> String name;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> hours;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> tenths;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>PAGE_SIZE 상수에 대한 논리적인 의존성이 존재한다.</li>
+<li>HourlyReporter 클래스는 HourlyReportFormatter 클래스가 페이지 크기를 알 거라고 가정하고 있다.</li>
+<li>페이지 크기 55를 처리할 줄 안다는 사실에 의존한다.</li>
+<li>만약 HourlyReportFormatter 구현 중 하나가 페이지 크기 55를 제대로 처리하지 못한다면 <strong>오류가 생긴다.</strong></li>
+<li>HourlyReportFormatter 클레스에 getMaxPageSize()라는 메서드를 추가해 논리적인 의존성이 물리적인 의존성으로 변하도록 사용하면 된다.</li>
+</ul>
+<h3 id="G23-If-x2F-Else-혹은-Switch-x2F-Case-문보다-다형성을-사용하라"><a href="#G23-If-x2F-Else-혹은-Switch-x2F-Case-문보다-다형성을-사용하라" class="headerlink" title="G23: If&#x2F;Else 혹은 Switch&#x2F;Case 문보다 다형성을 사용하라"></a>G23: If&#x2F;Else 혹은 Switch&#x2F;Case 문보다 다형성을 사용하라</h3><ol>
+<li>switch를 선택하기 전에 다형성을 먼저 고려해보라</li>
+<li>유형보다 함수가 더 쉽게 변하는 경우는 극히 드물다. 그러므로 모든 switch 문을 의심해보라</li>
+</ol>
+<h3 id="G24-표준-표기법을-따르라"><a href="#G24-표준-표기법을-따르라" class="headerlink" title="G24: 표준 표기법을 따르라"></a>G24: 표준 표기법을 따르라</h3><ul>
+<li>팀은 업계 표준에 기반한 구현 표준을 따라야 한다.</li>
+<li>구현 표준은 인스턴스 변수 이름을 선언하는 위치, 클래스&#x2F;메서드&#x2F;변수 이름을 정하는 방법, 괄호를 넣는 위치 등을 명시해야 한다.</li>
+<li>표준을 설명하는 문서는 코드 자체로 충분해야 하며 별도 문서를 만들 필요는 없어야 한다.</li>
+</ul>
+<h3 id="G25-매직-숫자는-명명된-상수로-교체하라"><a href="#G25-매직-숫자는-명명된-상수로-교체하라" class="headerlink" title="G25: 매직 숫자는 명명된 상수로 교체하라"></a>G25: 매직 숫자는 명명된 상수로 교체하라</h3><ul>
+<li>의미가 분명하지 않은 토큰 값에 대해 상수로 선언하라</li>
+</ul>
+<h3 id="G26-정확하라"><a href="#G26-정확하라" class="headerlink" title="G26: 정확하라"></a>G26: 정확하라</h3><ul>
+<li>검색 결과 중 첫 번째 결과만 유일한 결과로 간주하는 행동은 순진하다.</li>
+<li>코드에서 뭔가를 결정할 때는 정확히 결정한다.</li>
+<li>결정을 내리는 이유와 예외를 처리할 방법을 분명히 알아야 한다.</li>
+</ul>
+<h3 id="G27-관례보다-구조를-사용하라"><a href="#G27-관례보다-구조를-사용하라" class="headerlink" title="G27: 관례보다 구조를 사용하라"></a>G27: 관례보다 구조를 사용하라</h3><ul>
+<li>설계 결정을 강요할 때는 규칙보다 관례를 사용한다.</li>
+<li>명명 관례도 좋지만 구조 자체로 강제하면 더 좋다.</li>
+<li>예를 들어, enum 변수가 멋진 switch&#x2F;case 문보다 추상 메서드가 있는 기초 클래스가 더 좋다.<ul>
+<li>파생 클래스는 추상 메서드를 모두 구현해야 하는 강제성이 생기기 때문이다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="G28-조건을-캡슐화하라"><a href="#G28-조건을-캡슐화하라" class="headerlink" title="G28: 조건을 캡슐화하라"></a>G28: 조건을 캡슐화하라</h3><ul>
+<li>부울 논리는 조건의 의도를 분명히 밝히는 함수로 표현하라.</li>
+</ul>
+<h3 id="G29-부정-조건은-피하라"><a href="#G29-부정-조건은-피하라" class="headerlink" title="G29: 부정 조건은 피하라"></a>G29: 부정 조건은 피하라</h3><ul>
+<li>부정 조건은 긍정 조건보다 이해하기 어렵다. 가능하면 긍정 조건으로 표현하라.</li>
+</ul>
+<h3 id="G30-함수는-한-가지만-해야-한다"><a href="#G30-함수는-한-가지만-해야-한다" class="headerlink" title="G30: 함수는 한 가지만 해야 한다"></a>G30: 함수는 한 가지만 해야 한다</h3><ul>
+<li>한 가지만 수행하는 좀 더 작은 함수 여럿으로 나눠야 마땅하다.</li>
+</ul>
+<h3 id="G31-숨겨진-시간적인-결합"><a href="#G31-숨겨진-시간적인-결합" class="headerlink" title="G31: 숨겨진 시간적인 결합"></a>G31: 숨겨진 시간적인 결합</h3><ul>
+<li>순서가 정해진 코드에서 시간 결합이 감춰져 있으면 실행 순서가 드러나지 않아, 잘못된 순서로 호출하게 되면 오류를 유발한다.</li>
+<li>시간 순서로 흘러야 하는 코드에선 여러 함수라면, 함수의 결과 값이 그 다음 함수의 인수로 들어가는 방식으로 결합을 드러내보자.</li>
+</ul>
+<h3 id="G32-일관성을-유지하라"><a href="#G32-일관성을-유지하라" class="headerlink" title="G32: 일관성을 유지하라"></a>G32: 일관성을 유지하라</h3><ul>
+<li>코드 구조를 잡을 때는 이유를 고민하라.</li>
+<li>구조에 일관성이 없어 보이면 남들이 마음대로 바꿔도 괜찮다고 생각하게 된다.</li>
+</ul>
+<h3 id="G33-경계-조건을-캡슐화하라"><a href="#G33-경계-조건을-캡슐화하라" class="headerlink" title="G33: 경계 조건을 캡슐화하라"></a>G33: 경계 조건을 캡슐화하라</h3><ul>
+<li>경계 조건은 if문에서만 사용하지 말고 변수로 캡슐화해라</li>
+</ul>
+<h3 id="G34-함수는-추상화-수준을-한-단계만-내려가야-한다"><a href="#G34-함수는-추상화-수준을-한-단계만-내려가야-한다" class="headerlink" title="G34: 함수는 추상화 수준을 한 단계만 내려가야 한다"></a>G34: 함수는 추상화 수준을 한 단계만 내려가야 한다</h3><ul>
+<li>함수 내 모든 문장은 추상화 수준이 동일해야 한다.</li>
+<li>인간은 추상화 수준을 뒤섞는 능력이 너무나도 뛰어나다. (ㅋㅋㅋㅋ)</li>
+<li>어렵겠지만, 결국 핵심은 SRP를 지켜내면서 함수 안에 담긴 추상화의 내용이 하나이면 해결될 것 같다.</li>
+</ul>
+<h3 id="G35-설정-정보는-최상위-단계에-둬라"><a href="#G35-설정-정보는-최상위-단계에-둬라" class="headerlink" title="G35: 설정 정보는 최상위 단계에 둬라"></a>G35: 설정 정보는 최상위 단계에 둬라</h3><ul>
+<li>그래야 나중에 변경하기도 쉽다.</li>
+<li>저차원 함수에 상수 값을 정의하지 말자.</li>
+</ul>
+<h3 id="G36-추이적-탐색을-피하라"><a href="#G36-추이적-탐색을-피하라" class="headerlink" title="G36: 추이적 탐색을 피하라"></a>G36: 추이적 탐색을 피하라</h3><ul>
+<li>디미터 법칙을 지키자</li>
+<li>자신이 직접 사용할 모듈만 알도록 구현하자</li>
+</ul>
+<blockquote>
+<p>myCollaborator.doSomething();</p>
+</blockquote>
+<h2 id="자바"><a href="#자바" class="headerlink" title="자바"></a>자바</h2><h3 id="J1-긴-import-목록을-피하고-와일드카드를-사용하라"><a href="#J1-긴-import-목록을-피하고-와일드카드를-사용하라" class="headerlink" title="J1: 긴 import 목록을 피하고 와일드카드를 사용하라"></a>J1: 긴 import 목록을 피하고 와일드카드를 사용하라</h3><ul>
+<li>패키지에서 클래스를 둘 이상 사용한다면 와일드카드 사용하라</li>
+</ul>
+<h3 id="J2-상수는-상속하지-않는다"><a href="#J2-상수는-상속하지-않는다" class="headerlink" title="J2: 상수는 상속하지 않는다."></a>J2: 상수는 상속하지 않는다.</h3><ul>
+<li>언어의 범위 규칙을 속이는 행위다.</li>
+<li>대신 <strong>static import</strong>를 사용해라</li>
+</ul>
+<h3 id="J3-상수-vs-Enum"><a href="#J3-상수-vs-Enum" class="headerlink" title="J3: 상수 vs Enum"></a>J3: 상수 vs Enum</h3><ul>
+<li>static final로 상수를 사용하기 보다 훨씬 더 유연하고 서술적인 enum을 사용하자</li>
+<li>메서드와 필드도 사용할 수 있다.</li>
+</ul>
+<h2 id="이름"><a href="#이름" class="headerlink" title="이름"></a>이름</h2><h3 id="N1-서술적인-이름을-사용하라"><a href="#N1-서술적인-이름을-사용하라" class="headerlink" title="N1: 서술적인 이름을 사용하라"></a>N1: 서술적인 이름을 사용하라</h3><ul>
+<li>이름은 성급하게 정하지 않는다.</li>
+<li>소프트웨어가 진화하면 의미도 변하므로 선택한 이름이 적합한지 자주 되돌아본다.</li>
+<li><strong>소프트웨어 가독성의 90%는 이름이 결정한다.</strong></li>
+<li>시간을 들여 현명한 이름을 선택하고 유효한 상태로 유지한다.</li>
+<li>대충 정하기에 이름은 너무나도 중요하다.</li>
+</ul>
+<h3 id="N2-적절한-추상화-수준에서-이름을-선택하라"><a href="#N2-적절한-추상화-수준에서-이름을-선택하라" class="headerlink" title="N2: 적절한 추상화 수준에서 이름을 선택하라"></a>N2: 적절한 추상화 수준에서 이름을 선택하라</h3><ul>
+<li>구현을 드러내는 이름은 피하라</li>
+<li>작업 대상 클래스나 함수가 위치하는 추상화 수준을 반영하는 이름을 선택하라</li>
+<li>발견할 때마다 기회를 잡아 바꿔놓으며 안정적인 코드를 만들기 위한 지속적인 개선과 노력이 필요하다.</li>
+</ul>
+<h3 id="N3-가능하다면-표준-명명법을-사용하라"><a href="#N3-가능하다면-표준-명명법을-사용하라" class="headerlink" title="N3: 가능하다면 표준 명명법을 사용하라"></a>N3: 가능하다면 표준 명명법을 사용하라</h3><ul>
+<li>데코레이터 패턴을 사용한다면, 클래스 이름에 Decorator 라는 단어를 사용해야 한다.</li>
+<li>자바에서 객체를 문자열로 변환하는 toString()은 관례이기 때문에 따르는 것이 좋다.</li>
+<li>프로젝트에 유효한 의미가 담긴 이름을 많이 사용할수록 독자가 코드를 이해하기 쉬워진다.</li>
+</ul>
+<h3 id="N4-명확한-이름"><a href="#N4-명확한-이름" class="headerlink" title="N4: 명확한 이름"></a>N4: 명확한 이름</h3><ul>
+<li>함수나 변수의 목적을 명확히 밝히는 이름을 선택한다.</li>
+<li>아주 긴 이름이어도 모듈에서 한 번만 호출되고, 그 이름이 확실하다면 사용하자</li>
+</ul>
+<h3 id="N5-긴-범위는-긴-이름을-사용하라"><a href="#N5-긴-범위는-긴-이름을-사용하라" class="headerlink" title="N5: 긴 범위는 긴 이름을 사용하라"></a>N5: 긴 범위는 긴 이름을 사용하라</h3><ul>
+<li>이름 길이는 범위 길이에 비례해야 한다.</li>
+<li>범위가 작으면 아주 짧은 이름을 사용해도 괜찮다.</li>
+<li>하지만 범위가 길어지면 긴 이름을 사용한다.</li>
+<li>이름 범위가 길수록 이름을 정확하고 길게 짓자</li>
+</ul>
+<h3 id="N6-인코딩을-피하라"><a href="#N6-인코딩을-피하라" class="headerlink" title="N6: 인코딩을 피하라"></a>N6: 인코딩을 피하라</h3><ul>
+<li>이름에 유형 정보나 범위 정보를 넣어서는 안 된다.</li>
+<li>접두어도 필요없다.</li>
+</ul>
+<h3 id="N7-이름으로-부수-효과를-설명하라"><a href="#N7-이름으로-부수-효과를-설명하라" class="headerlink" title="N7: 이름으로 부수 효과를 설명하라"></a>N7: 이름으로 부수 효과를 설명하라</h3><ul>
+<li>함수, 변수, 클래스가 하는 일을 모두 기술하는 이름을 사용한다.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.ObjectOutputStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> ObjectOutputStream <span class="title function_">getOos</span><span class="params">()</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="keyword">if</span> (m_oos == <span class="literal">null</span>) &#123;</span><br><span class="line">      m_oos = <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(m_socket.getOutputStream());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> m_oos;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>위의 코드에서 메서드 명이 단순이 oos를 가져오는 것이 아니라 oos가 없으면 생성한다.</li>
+<li><strong>createOrReturnOos</strong>라는 이름이 더 좋다.</li>
+</ul>
+<h2 id="테스트"><a href="#테스트" class="headerlink" title="테스트"></a>테스트</h2><h3 id="T1-불충분한-테스트"><a href="#T1-불충분한-테스트" class="headerlink" title="T1: 불충분한 테스트"></a>T1: 불충분한 테스트</h3><ul>
+<li>테스트 케이스는 잠재적으로 깨질 만한 부분을 모두 테스트해야 한다.</li>
+<li>테스트 케이스가 확인하지 않는 조건이나 검증하지 않는 계산이 있다면 그 테스트는 불완전하다.</li>
+</ul>
+<h3 id="T2-커버리지-도구를-사용하라"><a href="#T2-커버리지-도구를-사용하라" class="headerlink" title="T2: 커버리지 도구를 사용하라!"></a>T2: 커버리지 도구를 사용하라!</h3><ul>
+<li>커버리지 도구는 테스트가 빠뜨리는 공백을 알려준다.</li>
+<li>커버리지 도구를 사용하면 테스트가 불충분한 모듈, 클래스, 함수를 찾기 쉬워진다.</li>
+</ul>
+<h3 id="T3-사소한-테스트를-건너뛰지-마라"><a href="#T3-사소한-테스트를-건너뛰지-마라" class="headerlink" title="T3: 사소한 테스트를 건너뛰지 마라"></a>T3: 사소한 테스트를 건너뛰지 마라</h3><ul>
+<li>사소한 테스트가 제공하는 문서적 가치는 구현에 드는 비용을 넘어선다.</li>
+</ul>
+<h3 id="T4-무시한-테스트는-모호함을-뜻한다"><a href="#T4-무시한-테스트는-모호함을-뜻한다" class="headerlink" title="T4: 무시한 테스트는 모호함을 뜻한다"></a>T4: 무시한 테스트는 모호함을 뜻한다</h3><ul>
+<li>때로는 요구사항이 불분명하기에 프로그램이 돌아가는 방식을 확신하기 어렵다.</li>
+<li>불분명한 요구사항은 테스트 케이스를 주석으로 처리하거나 @Ignore 붙이기</li>
+</ul>
+<h3 id="T5-경계-조건을-테스트하라"><a href="#T5-경계-조건을-테스트하라" class="headerlink" title="T5: 경계 조건을 테스트하라"></a>T5: 경계 조건을 테스트하라</h3><ul>
+<li>알고리즘의 중앙 조건은 올바로 짜놓고 경계 조건에서 실수하는 경우가 흔하다.</li>
+</ul>
+<h3 id="T6-버그-주변은-철저히-테스트하라"><a href="#T6-버그-주변은-철저히-테스트하라" class="headerlink" title="T6: 버그 주변은 철저히 테스트하라"></a>T6: 버그 주변은 철저히 테스트하라</h3><ul>
+<li>버그는 서로 모이는 경향이 있다.</li>
+<li>한 함수에서 버그를 발견했다면 그 함수를 철저히 테스트하는 편이 좋다.</li>
+</ul>
+<h3 id="T7-실패-패턴을-살펴라"><a href="#T7-실패-패턴을-살펴라" class="headerlink" title="T7: 실패 패턴을 살펴라"></a>T7: 실패 패턴을 살펴라</h3><ul>
+<li>때로는 테스트 케이스가 실패하는 패턴으로 문제를 진단할 수 있다.</li>
+<li>합리적인 순서로 정렬된 꼼꼼한 테스틑 케이스는 실패 패턴을 드러낸다.</li>
+</ul>
+<h3 id="T8-테스트-커버리지-패턴을-살펴라"><a href="#T8-테스트-커버리지-패턴을-살펴라" class="headerlink" title="T8: 테스트 커버리지 패턴을 살펴라"></a>T8: 테스트 커버리지 패턴을 살펴라</h3><ul>
+<li>통과하는 테스트가 실행하거나 실행하지 않는 코드를 살펴보면 실패하는 테스트 케이스의 실패 원인이 드러난다.</li>
+</ul>
+<h3 id="T9-테스트는-빨라야-한다"><a href="#T9-테스트는-빨라야-한다" class="headerlink" title="T9: 테스트는 빨라야 한다"></a>T9: 테스트는 빨라야 한다</h3><ul>
+<li>느린 테스트 케이스는 실행하지 않게 된다.</li>
+<li>일정이 촉박하면 건너뛰게 되고, 그러지 않기 위해 테스트 케이스가 빨리 돌아가도록 최대한 노력하자</li>
+</ul>
+<h2 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h2><ul>
+<li>일군의 규칙만 따른다고 깨끗한 코드가 얻어지지 않는다.</li>
+<li>전문가 정신과 장인 정신은 가치에서 나온다.</li>
+<li>그 가치에 기반한 규율과 절제가 필요하다.</li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2022/02/27/junit/junit_14/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2022-03-17 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/Clean-Code/" title="Clean_Code">
+                        <b>#</b> Clean_Code
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/java/" title="java">
+                        <b>#</b> java
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2022/03/18/flutter/ui/flutter-ui3/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%A3%BC%EC%84%9D"><span class="toc-text">주석</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#C1-%EB%B6%80%EC%A0%81%EC%A0%88%ED%95%9C-%EC%A0%95%EB%B3%B4"><span class="toc-text">C1: 부적절한 정보</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C2-%EC%93%B8%EB%AA%A8-%EC%97%86%EB%8A%94-%EC%A3%BC%EC%84%9D"><span class="toc-text">C2: 쓸모 없는 주석</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C3-%EC%A4%91%EB%B3%B5%EB%90%9C-%EC%A3%BC%EC%84%9D"><span class="toc-text">C3: 중복된 주석</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C4-%EC%84%B1%EC%9D%98-%EC%97%86%EB%8A%94-%EC%A3%BC%EC%84%9D"><span class="toc-text">C4: 성의 없는 주석</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C5-%EC%A3%BC%EC%84%9D-%EC%B2%98%EB%A6%AC%EB%90%9C-%EC%BD%94%EB%93%9C"><span class="toc-text">C5: 주석 처리된 코드</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%ED%99%98%EA%B2%BD"><span class="toc-text">환경</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#E1-%EC%97%AC%EB%9F%AC-%EB%8B%A8%EA%B3%84%EB%A1%9C-%EB%B9%8C%EB%93%9C%ED%95%B4%EC%95%BC-%ED%95%9C%EB%8B%A4"><span class="toc-text">E1: 여러 단계로 빌드해야 한다</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#E2-%EC%97%AC%EB%9F%AC-%EB%8B%A8%EA%B3%84%EB%A1%9C-%ED%85%8C%EC%8A%A4%ED%8A%B8%ED%95%B4%EC%95%BC-%ED%95%9C%EB%8B%A4"><span class="toc-text">E2: 여러 단계로 테스트해야 한다</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%ED%95%A8%EC%88%98"><span class="toc-text">함수</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#F1-%EB%84%88%EB%AC%B4-%EB%A7%8E%EC%9D%80-%EC%9D%B8%EC%88%98"><span class="toc-text">F1: 너무 많은 인수</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#F2-%EC%B6%9C%EB%A0%A5-%EC%9D%B8%EC%88%98"><span class="toc-text">F2: 출력 인수</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#F3-%ED%94%8C%EB%9E%98%EA%B7%B8-%EC%9D%B8%EC%88%98"><span class="toc-text">F3: 플래그 인수</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#F4-%EC%A3%BD%EC%9D%80-%ED%95%A8%EC%88%98"><span class="toc-text">F4: 죽은 함수</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%9D%BC%EB%B0%98"><span class="toc-text">일반</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#G1-%ED%95%9C-%EC%86%8C%EC%8A%A4-%ED%8C%8C%EC%9D%BC%EC%97%90-%EC%97%AC%EB%9F%AC-%EC%96%B8%EC%96%B4%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%9C%EB%8B%A4"><span class="toc-text">G1: 한 소스 파일에 여러 언어를 사용한다</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G2-%EB%8B%B9%EC%97%B0%ED%95%9C-%EB%8F%99%EC%9E%91%EC%9D%84-%EA%B5%AC%ED%98%84%ED%95%98%EC%A7%80-%EC%95%8A%EB%8A%94%EB%8B%A4"><span class="toc-text">G2: 당연한 동작을 구현하지 않는다</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G3-%EA%B2%BD%EA%B3%84%EB%A5%BC-%EC%98%AC%EB%B0%94%EB%A1%9C-%EC%B2%98%EB%A6%AC%ED%95%98%EC%A7%80-%EC%95%8A%EB%8A%94%EB%8B%A4"><span class="toc-text">G3: 경계를 올바로 처리하지 않는다</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G4-%EC%95%88%EC%A0%84-%EC%A0%88%EC%B0%A8-%EB%AC%B4%EC%8B%9C"><span class="toc-text">G4: 안전 절차 무시</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G5-%EC%A4%91%EB%B3%B5"><span class="toc-text">G5: 중복</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G6-%EC%B6%94%EC%83%81%ED%99%94-%EC%88%98%EC%A4%80%EC%9D%B4-%EC%98%AC%EB%B0%94%EB%A5%B4%EC%A7%80-%EB%AA%BB%ED%95%98%EB%8B%A4"><span class="toc-text">G6: 추상화 수준이 올바르지 못하다</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G7-%EA%B8%B0%EC%B4%88-%ED%81%B4%EB%9E%98%EC%8A%A4%EA%B0%80-%ED%8C%8C%EC%83%9D-%ED%81%B4%EB%9E%98%EC%8A%A4%EC%97%90-%EC%9D%98%EC%A1%B4%ED%95%9C%EB%8B%A4"><span class="toc-text">G7: 기초 클래스가 파생 클래스에 의존한다</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G8-%EA%B3%BC%EB%8F%84%ED%95%9C-%EC%A0%95%EB%B3%B4"><span class="toc-text">G8: 과도한 정보</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G9-%EC%A3%BD%EC%9D%80-%EC%BD%94%EB%93%9C"><span class="toc-text">G9: 죽은 코드</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G10-%EC%88%98%EC%A7%81-%EB%B6%84%EB%A6%AC"><span class="toc-text">G10: 수직 분리</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G11-%EC%9D%BC%EA%B4%80%EC%84%B1-%EB%B6%80%EC%A1%B1"><span class="toc-text">G11: 일관성 부족</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G12-%EC%9E%A1%EB%8F%99%EC%82%AC%EB%8B%88"><span class="toc-text">G12: 잡동사니</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G13-%EC%9D%B8%EC%9C%84%EC%A0%81-%EA%B2%B0%ED%95%A9"><span class="toc-text">G13: 인위적 결합</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G14-%EA%B8%B0%EB%8A%A5-%EC%9A%95%EC%8B%AC"><span class="toc-text">G14: 기능 욕심</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G15-%EC%84%A0%ED%83%9D%EC%9E%90-%EC%9D%B8%EC%88%98"><span class="toc-text">G15: 선택자 인수</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G16-%EB%AA%A8%ED%98%B8%ED%95%9C-%EC%9D%98%EB%8F%84"><span class="toc-text">G16: 모호한 의도</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G17-%EC%9E%98%EB%AA%BB-%EB%B0%B0%EC%B9%98%ED%95%9C-%EC%B1%85%EC%9E%84"><span class="toc-text">G17: 잘못 배치한 책임</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G18-%EB%B6%80%EC%A0%81%EC%A0%88%ED%95%9C-static-%ED%95%A8%EC%88%98"><span class="toc-text">G18: 부적절한 static 함수</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G19-%EC%84%9C%EC%88%A0%EC%A0%81-%EB%B3%80%EC%88%98"><span class="toc-text">G19: 서술적 변수</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G20-%EC%9D%B4%EB%A6%84%EA%B3%BC-%EA%B8%B0%EB%8A%A5%EC%9D%B4-%EC%9D%BC%EC%B9%98%ED%95%98%EB%8A%94-%ED%95%A8%EC%88%98"><span class="toc-text">G20: 이름과 기능이 일치하는 함수</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G21-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%EC%9D%84-%EC%9D%B4%ED%95%B4%ED%95%98%EB%9D%BC"><span class="toc-text">G21: 알고리즘을 이해하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G22-%EB%85%BC%EB%A6%AC%EC%A0%81-%EC%9D%98%EC%A1%B4%EC%84%B1%EC%9D%80-%EB%AC%BC%EB%A6%AC%EC%A0%81%EC%9C%BC%EB%A1%9C-%EB%93%9C%EB%9F%AC%EB%82%B4%EB%9D%BC"><span class="toc-text">G22: 논리적 의존성은 물리적으로 드러내라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G23-If-x2F-Else-%ED%98%B9%EC%9D%80-Switch-x2F-Case-%EB%AC%B8%EB%B3%B4%EB%8B%A4-%EB%8B%A4%ED%98%95%EC%84%B1%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC"><span class="toc-text">G23: If&#x2F;Else 혹은 Switch&#x2F;Case 문보다 다형성을 사용하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G24-%ED%91%9C%EC%A4%80-%ED%91%9C%EA%B8%B0%EB%B2%95%EC%9D%84-%EB%94%B0%EB%A5%B4%EB%9D%BC"><span class="toc-text">G24: 표준 표기법을 따르라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G25-%EB%A7%A4%EC%A7%81-%EC%88%AB%EC%9E%90%EB%8A%94-%EB%AA%85%EB%AA%85%EB%90%9C-%EC%83%81%EC%88%98%EB%A1%9C-%EA%B5%90%EC%B2%B4%ED%95%98%EB%9D%BC"><span class="toc-text">G25: 매직 숫자는 명명된 상수로 교체하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G26-%EC%A0%95%ED%99%95%ED%95%98%EB%9D%BC"><span class="toc-text">G26: 정확하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G27-%EA%B4%80%EB%A1%80%EB%B3%B4%EB%8B%A4-%EA%B5%AC%EC%A1%B0%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC"><span class="toc-text">G27: 관례보다 구조를 사용하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G28-%EC%A1%B0%EA%B1%B4%EC%9D%84-%EC%BA%A1%EC%8A%90%ED%99%94%ED%95%98%EB%9D%BC"><span class="toc-text">G28: 조건을 캡슐화하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G29-%EB%B6%80%EC%A0%95-%EC%A1%B0%EA%B1%B4%EC%9D%80-%ED%94%BC%ED%95%98%EB%9D%BC"><span class="toc-text">G29: 부정 조건은 피하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G30-%ED%95%A8%EC%88%98%EB%8A%94-%ED%95%9C-%EA%B0%80%EC%A7%80%EB%A7%8C-%ED%95%B4%EC%95%BC-%ED%95%9C%EB%8B%A4"><span class="toc-text">G30: 함수는 한 가지만 해야 한다</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G31-%EC%88%A8%EA%B2%A8%EC%A7%84-%EC%8B%9C%EA%B0%84%EC%A0%81%EC%9D%B8-%EA%B2%B0%ED%95%A9"><span class="toc-text">G31: 숨겨진 시간적인 결합</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G32-%EC%9D%BC%EA%B4%80%EC%84%B1%EC%9D%84-%EC%9C%A0%EC%A7%80%ED%95%98%EB%9D%BC"><span class="toc-text">G32: 일관성을 유지하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G33-%EA%B2%BD%EA%B3%84-%EC%A1%B0%EA%B1%B4%EC%9D%84-%EC%BA%A1%EC%8A%90%ED%99%94%ED%95%98%EB%9D%BC"><span class="toc-text">G33: 경계 조건을 캡슐화하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G34-%ED%95%A8%EC%88%98%EB%8A%94-%EC%B6%94%EC%83%81%ED%99%94-%EC%88%98%EC%A4%80%EC%9D%84-%ED%95%9C-%EB%8B%A8%EA%B3%84%EB%A7%8C-%EB%82%B4%EB%A0%A4%EA%B0%80%EC%95%BC-%ED%95%9C%EB%8B%A4"><span class="toc-text">G34: 함수는 추상화 수준을 한 단계만 내려가야 한다</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G35-%EC%84%A4%EC%A0%95-%EC%A0%95%EB%B3%B4%EB%8A%94-%EC%B5%9C%EC%83%81%EC%9C%84-%EB%8B%A8%EA%B3%84%EC%97%90-%EB%91%AC%EB%9D%BC"><span class="toc-text">G35: 설정 정보는 최상위 단계에 둬라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G36-%EC%B6%94%EC%9D%B4%EC%A0%81-%ED%83%90%EC%83%89%EC%9D%84-%ED%94%BC%ED%95%98%EB%9D%BC"><span class="toc-text">G36: 추이적 탐색을 피하라</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%9E%90%EB%B0%94"><span class="toc-text">자바</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#J1-%EA%B8%B4-import-%EB%AA%A9%EB%A1%9D%EC%9D%84-%ED%94%BC%ED%95%98%EA%B3%A0-%EC%99%80%EC%9D%BC%EB%93%9C%EC%B9%B4%EB%93%9C%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC"><span class="toc-text">J1: 긴 import 목록을 피하고 와일드카드를 사용하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#J2-%EC%83%81%EC%88%98%EB%8A%94-%EC%83%81%EC%86%8D%ED%95%98%EC%A7%80-%EC%95%8A%EB%8A%94%EB%8B%A4"><span class="toc-text">J2: 상수는 상속하지 않는다.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#J3-%EC%83%81%EC%88%98-vs-Enum"><span class="toc-text">J3: 상수 vs Enum</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%9D%B4%EB%A6%84"><span class="toc-text">이름</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#N1-%EC%84%9C%EC%88%A0%EC%A0%81%EC%9D%B8-%EC%9D%B4%EB%A6%84%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC"><span class="toc-text">N1: 서술적인 이름을 사용하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#N2-%EC%A0%81%EC%A0%88%ED%95%9C-%EC%B6%94%EC%83%81%ED%99%94-%EC%88%98%EC%A4%80%EC%97%90%EC%84%9C-%EC%9D%B4%EB%A6%84%EC%9D%84-%EC%84%A0%ED%83%9D%ED%95%98%EB%9D%BC"><span class="toc-text">N2: 적절한 추상화 수준에서 이름을 선택하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#N3-%EA%B0%80%EB%8A%A5%ED%95%98%EB%8B%A4%EB%A9%B4-%ED%91%9C%EC%A4%80-%EB%AA%85%EB%AA%85%EB%B2%95%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC"><span class="toc-text">N3: 가능하다면 표준 명명법을 사용하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#N4-%EB%AA%85%ED%99%95%ED%95%9C-%EC%9D%B4%EB%A6%84"><span class="toc-text">N4: 명확한 이름</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#N5-%EA%B8%B4-%EB%B2%94%EC%9C%84%EB%8A%94-%EA%B8%B4-%EC%9D%B4%EB%A6%84%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC"><span class="toc-text">N5: 긴 범위는 긴 이름을 사용하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#N6-%EC%9D%B8%EC%BD%94%EB%94%A9%EC%9D%84-%ED%94%BC%ED%95%98%EB%9D%BC"><span class="toc-text">N6: 인코딩을 피하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#N7-%EC%9D%B4%EB%A6%84%EC%9C%BC%EB%A1%9C-%EB%B6%80%EC%88%98-%ED%9A%A8%EA%B3%BC%EB%A5%BC-%EC%84%A4%EB%AA%85%ED%95%98%EB%9D%BC"><span class="toc-text">N7: 이름으로 부수 효과를 설명하라</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%ED%85%8C%EC%8A%A4%ED%8A%B8"><span class="toc-text">테스트</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#T1-%EB%B6%88%EC%B6%A9%EB%B6%84%ED%95%9C-%ED%85%8C%EC%8A%A4%ED%8A%B8"><span class="toc-text">T1: 불충분한 테스트</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#T2-%EC%BB%A4%EB%B2%84%EB%A6%AC%EC%A7%80-%EB%8F%84%EA%B5%AC%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC"><span class="toc-text">T2: 커버리지 도구를 사용하라!</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#T3-%EC%82%AC%EC%86%8C%ED%95%9C-%ED%85%8C%EC%8A%A4%ED%8A%B8%EB%A5%BC-%EA%B1%B4%EB%84%88%EB%9B%B0%EC%A7%80-%EB%A7%88%EB%9D%BC"><span class="toc-text">T3: 사소한 테스트를 건너뛰지 마라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#T4-%EB%AC%B4%EC%8B%9C%ED%95%9C-%ED%85%8C%EC%8A%A4%ED%8A%B8%EB%8A%94-%EB%AA%A8%ED%98%B8%ED%95%A8%EC%9D%84-%EB%9C%BB%ED%95%9C%EB%8B%A4"><span class="toc-text">T4: 무시한 테스트는 모호함을 뜻한다</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#T5-%EA%B2%BD%EA%B3%84-%EC%A1%B0%EA%B1%B4%EC%9D%84-%ED%85%8C%EC%8A%A4%ED%8A%B8%ED%95%98%EB%9D%BC"><span class="toc-text">T5: 경계 조건을 테스트하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#T6-%EB%B2%84%EA%B7%B8-%EC%A3%BC%EB%B3%80%EC%9D%80-%EC%B2%A0%EC%A0%80%ED%9E%88-%ED%85%8C%EC%8A%A4%ED%8A%B8%ED%95%98%EB%9D%BC"><span class="toc-text">T6: 버그 주변은 철저히 테스트하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#T7-%EC%8B%A4%ED%8C%A8-%ED%8C%A8%ED%84%B4%EC%9D%84-%EC%82%B4%ED%8E%B4%EB%9D%BC"><span class="toc-text">T7: 실패 패턴을 살펴라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#T8-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%BB%A4%EB%B2%84%EB%A6%AC%EC%A7%80-%ED%8C%A8%ED%84%B4%EC%9D%84-%EC%82%B4%ED%8E%B4%EB%9D%BC"><span class="toc-text">T8: 테스트 커버리지 패턴을 살펴라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#T9-%ED%85%8C%EC%8A%A4%ED%8A%B8%EB%8A%94-%EB%B9%A8%EB%9D%BC%EC%95%BC-%ED%95%9C%EB%8B%A4"><span class="toc-text">T9: 테스트는 빨라야 한다</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EA%B2%B0%EB%A1%A0"><span class="toc-text">결론</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/boring-km">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="kmjin@kakao.com">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="linkedin" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/">
+            <i class="iconfont icon-linkedin"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="TIL" target="_blank" rel="noopener" href="https://boring-km.github.io/TIL">
+            <i class="iconfont icon-emoji-friendly"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/boring-km">머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="내용 검색...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Clean%20Code%2017%EC%9E%A5%20-%20%EB%83%84%EC%83%88%EC%99%80%20%ED%9C%B4%EB%A6%AC%EC%8A%A4%ED%8B%B1 + '&url=' + http%3A%2F%2Fexample.com%2F2022%2F03%2F17%2Fclean_code%2Fchapter17%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2022/03/17/clean_code/chapter17/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

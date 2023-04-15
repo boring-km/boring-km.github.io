@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      Flutter의 다양한 Widget(2) 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">boring-km</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Flutter의 다양한 Widget(2)</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2022-02-09 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/flutter-ui/" title="flutter-ui">
+                    <b>#</b> flutter-ui
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/flutter/" title="flutter">
+                    <b>#</b> flutter
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <blockquote>
+<p>자주 사용하는 기본적인 Widget에 대해서만 소개합니다.</p>
+<p>자세한 사용 방법을 제시하기 보다는 이 상황에선 이것을 사용했었다는 정도의 설명입니다.</p>
+</blockquote>
+<ul>
+<li>텍스트 입력&#x2F;표현, 버튼</li>
+<li>위젯 여러 개를 표현하는 방법</li>
+<li>위젯 겹치기</li>
+<li>상자 만들기</li>
+</ul>
+<h2 id="텍스트-입력-x2F-표현-버튼"><a href="#텍스트-입력-x2F-표현-버튼" class="headerlink" title="텍스트 입력&#x2F;표현, 버튼"></a>텍스트 입력&#x2F;표현, 버튼</h2><h3 id="Text"><a href="#Text" class="headerlink" title="Text"></a>Text</h3><ul>
+<li>문서: <a target="_blank" rel="noopener" href="https://docs.flutter.dev/development/ui/widgets/text">https://docs.flutter.dev/development/ui/widgets/text</a></li>
+<li>문자열을 화면에 보여주는 위젯</li>
+<li>Text 위젯을 꾸미려면 style 필드에 TextStyle 객체를 넣어 원하는 옵션을 추가하면 됩니다.</li>
+<li>main()에서 선언한 MaterialApp 위젯 안에서 textTheme을 설정해놓고 사용하는 것도 가능합니다.</li>
+<li>만약 폰트를 적용하고 싶다면 프로젝트에 폰트 파일을 추가하고 pubspec.yaml에 사용할 폰트파일을 명시해야 합니다. (자세한 사용방법은 pubspec.yaml 사용 방법에서…)</li>
+</ul>
+<h3 id="TextField"><a href="#TextField" class="headerlink" title="TextField"></a>TextField</h3><ul>
+<li>문서: <a target="_blank" rel="noopener" href="https://api.flutter.dev/flutter/material/TextField-class.html">https://api.flutter.dev/flutter/material/TextField-class.html</a></li>
+<li>문자 입력을 받는 위젯</li>
+<li>controller 필드에 TextEditingController 인스턴스를 넣으면, TextField 안에 입력한 값을 제어할 수 있습니다.</li>
+</ul>
+<h3 id="Buttons"><a href="#Buttons" class="headerlink" title="Buttons"></a>Buttons</h3><ul>
+<li>문서: <a target="_blank" rel="noopener" href="https://docs.flutter.dev/release/breaking-changes/buttons">https://docs.flutter.dev/release/breaking-changes/buttons</a></li>
+<li>3가지 종류의 버튼 위젯: TextButton, ElevatedButton, OutlinedButton</li>
+<li>상황에 맞는 버튼을 골라 쓰면 되는데, 만약 버튼 위젯으로 구현이 어렵다 싶은 디자인이면 GestureDetector 위젯을 사용합니다. (자세한 사용방법은 ‘GestureDetector’ 에서…)</li>
+<li>이미지 버튼이 따로 없어서 버튼 위젯 안에다 이미지를 넣게 되면 풀사이즈 이미지 버튼이 나오지 않고 테두리에 버튼 위젯 고유 테두리가 입혀집니다. (만들고 싶으면 위의 방법 사용)</li>
+<li>style 필드에 버튼 디자인을 좀더 자세하게 작성합니다.</li>
+<li>child 필드에 버튼 내용을 위젯으로 작성합니다.</li>
+</ul>
+<h2 id="위젯-여러-개를-표현하는-방식들"><a href="#위젯-여러-개를-표현하는-방식들" class="headerlink" title="위젯 여러 개를 표현하는 방식들"></a>위젯 여러 개를 표현하는 방식들</h2><ul>
+<li>Android LinearLayout과 거의 비슷한 Row, Column 위젯</li>
+<li>ListView, GridView</li>
+<li>복수의 위젯을 포함하는 위젯들은 children 필드 내에 리스트 형태로 지정합니다.</li>
+</ul>
+<h3 id="Row-Column"><a href="#Row-Column" class="headerlink" title="Row, Column"></a>Row, Column</h3><ul>
+<li>Row 문서: <a target="_blank" rel="noopener" href="https://api.flutter.dev/flutter/widgets/Row-class.html">https://api.flutter.dev/flutter/widgets/Row-class.html</a></li>
+<li>Column 문서: <a target="_blank" rel="noopener" href="https://api.flutter.dev/flutter/widgets/Column-class.html">https://api.flutter.dev/flutter/widgets/Column-class.html</a></li>
+<li>Row는 가로 방향으로, Column은 세로 방향으로 위젯들을 나열합니다.</li>
+<li>mainAxisAlignment, crossAxisAlignment 필드를 통해 여러 개의 위젯들을 상황마다 정렬이 가능합니다.</li>
+</ul>
+<h3 id="ListView-GridView"><a href="#ListView-GridView" class="headerlink" title="ListView, GridView"></a>ListView, GridView</h3><ul>
+<li>ListView 문서: <a target="_blank" rel="noopener" href="https://api.flutter.dev/flutter/widgets/ListView-class.html">https://api.flutter.dev/flutter/widgets/ListView-class.html</a></li>
+<li>GridView 문서: <a target="_blank" rel="noopener" href="https://api.flutter.dev/flutter/widgets/GridView-class.html">https://api.flutter.dev/flutter/widgets/GridView-class.html</a></li>
+<li>수평이나 수직으로 스크롤이 가능하도록 위젯들을 포함합니다.</li>
+<li>ListView&#x2F;GridView에 담기는 모든 위젯들이 같은 UI 형태를 띄고 있다면 ListView.builder&#x2F;GridView.builder 위젯으로 사용하는 것이 깔끔합니다.</li>
+<li>ListView 내부에 Card 위젯과 ListTile 위젯을 사용해 기본적인 ListView 위젯의 항목들을 그릴 수도 있습니다. (리스트 항목 내에 그려야 할 요구사항이 많아지면 위젯을 직접 그리는 것이 편할 것입니다.)</li>
+</ul>
+<h2 id="위젯-겹치기"><a href="#위젯-겹치기" class="headerlink" title="위젯 겹치기"></a>위젯 겹치기</h2><h3 id="Stack"><a href="#Stack" class="headerlink" title="Stack"></a>Stack</h3><ul>
+<li>Stack 문서: <a target="_blank" rel="noopener" href="https://api.flutter.dev/flutter/widgets/Stack-class.html">https://api.flutter.dev/flutter/widgets/Stack-class.html</a></li>
+<li>Stack: 위젯을 독립적인 위치에 고정시키거나 어떤 위젯 위에 겹쳐서 위젯을 보이고 싶을 때 사용합니다.</li>
+<li>원하는 위치에 위젯을 그리기 위해 Align 위젯을 사용해 처음 위치를 지정하고 그리기 시작하면 편리합니다.</li>
+</ul>
+<h3 id="Padding"><a href="#Padding" class="headerlink" title="Padding"></a>Padding</h3><ul>
+<li>Padding 문서: <a target="_blank" rel="noopener" href="https://api.flutter.dev/flutter/widgets/Padding-class.html">https://api.flutter.dev/flutter/widgets/Padding-class.html</a></li>
+<li>어떤 위젯에 padding을 넣을 때 사용합니다.</li>
+<li>몇몇 위젯의 경우에는 위젯 내에 padding 필드가 존재하기도 합니다.<br>(Container 위젯의 경우는 decoration을 추가했을 때 padding 영역까지 decoration이 적용되면서 Padding 위젯을 직접 사용할 때와 결과가 달라집니다.)</li>
+</ul>
+<h2 id="상자-만들기"><a href="#상자-만들기" class="headerlink" title="상자 만들기"></a>상자 만들기</h2><h3 id="SizedBox"><a href="#SizedBox" class="headerlink" title="SizedBox"></a>SizedBox</h3><ul>
+<li>SizedBox 문서: <a target="_blank" rel="noopener" href="https://api.flutter.dev/flutter/widgets/SizedBox-class.html">https://api.flutter.dev/flutter/widgets/SizedBox-class.html</a></li>
+<li>위젯의 크기를 특정 크기로 제한할 때 사용합니다.</li>
+<li>아무것도 표현하지 않는 위젯을 그릴 때는 ‘const SizedBox.shrink()’ 로 보통 사용합니다.</li>
+</ul>
+<h3 id="Container"><a href="#Container" class="headerlink" title="Container"></a>Container</h3><ul>
+<li>Container 문서: <a target="_blank" rel="noopener" href="https://api.flutter.dev/flutter/widgets/Container-class.html">https://api.flutter.dev/flutter/widgets/Container-class.html</a></li>
+<li>위젯의 크기를 특정 크기로 제한하거나, 특정 영역에 사각형, 원 등의 모양을 낼 때 사용합니다.</li>
+<li>Container 위젯을 꾸밀 때는 <strong>color</strong> 필드와 <strong>decoration</strong> 필드 둘 중 <strong>하나만 사용</strong>합니다.</li>
+<li>decoration 필드에 들어갈 객체는 BoxDecoration 클래스입니다. <a target="_blank" rel="noopener" href="https://api.flutter.dev/flutter/painting/BoxDecoration-class.html">문서</a></li>
+<li>decoration 값을 통해 사각형과 원 모양을 다양하게 꾸밀 수 있습니다.</li>
+<li>color나 decoration을 사용하지 않은 채 크기만 제한하려면 SizedBox를 사용하는 것이 좋습니다.</li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2022/02/08/clean_code/chapter16/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2022-02-09 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/flutter-ui/" title="flutter-ui">
+                        <b>#</b> flutter-ui
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/flutter/" title="flutter">
+                        <b>#</b> flutter
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2022/02/18/flutter/ui/flutter-reactive-ui/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%ED%85%8D%EC%8A%A4%ED%8A%B8-%EC%9E%85%EB%A0%A5-x2F-%ED%91%9C%ED%98%84-%EB%B2%84%ED%8A%BC"><span class="toc-text">텍스트 입력&#x2F;표현, 버튼</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Text"><span class="toc-text">Text</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TextField"><span class="toc-text">TextField</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Buttons"><span class="toc-text">Buttons</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%9C%84%EC%A0%AF-%EC%97%AC%EB%9F%AC-%EA%B0%9C%EB%A5%BC-%ED%91%9C%ED%98%84%ED%95%98%EB%8A%94-%EB%B0%A9%EC%8B%9D%EB%93%A4"><span class="toc-text">위젯 여러 개를 표현하는 방식들</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Row-Column"><span class="toc-text">Row, Column</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ListView-GridView"><span class="toc-text">ListView, GridView</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%9C%84%EC%A0%AF-%EA%B2%B9%EC%B9%98%EA%B8%B0"><span class="toc-text">위젯 겹치기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Stack"><span class="toc-text">Stack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Padding"><span class="toc-text">Padding</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%83%81%EC%9E%90-%EB%A7%8C%EB%93%A4%EA%B8%B0"><span class="toc-text">상자 만들기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SizedBox"><span class="toc-text">SizedBox</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Container"><span class="toc-text">Container</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/boring-km">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="kmjin@kakao.com">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="linkedin" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/">
+            <i class="iconfont icon-linkedin"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="TIL" target="_blank" rel="noopener" href="https://boring-km.github.io/TIL">
+            <i class="iconfont icon-emoji-friendly"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/boring-km">머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="내용 검색...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Flutter%EC%9D%98%20%EB%8B%A4%EC%96%91%ED%95%9C%20Widget(2) + '&url=' + http%3A%2F%2Fexample.com%2F2022%2F02%2F09%2Fflutter%2Fui%2Fflutter-ui2%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2022/02/09/flutter/ui/flutter-ui2/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

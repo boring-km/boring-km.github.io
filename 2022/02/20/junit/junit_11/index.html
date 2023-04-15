@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      11. 테스트 리팩토링 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">boring-km</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">11. 테스트 리팩토링</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2022-02-20 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/JUnit/" title="JUnit">
+                    <b>#</b> JUnit
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/java/" title="java">
+                    <b>#</b> java
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/test/" title="test">
+                    <b>#</b> test
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/kotlin/" title="kotlin">
+                    <b>#</b> kotlin
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <ul>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/boring-km/JunitPractice">https://github.com/boring-km/JunitPractice</a></p>
+</li>
+<li><p>이해 검색</p>
+</li>
+<li><p>테스트 냄새: 불필요한 테스트 코드</p>
+</li>
+<li><p>테스트 냄새: 추상화 누락</p>
+</li>
+<li><p>테스트 냄새: 부적절한 정보</p>
+</li>
+<li><p>테스트 냄새: 부푼 생성</p>
+</li>
+<li><p>테스트 냄새: 다수의 단언</p>
+</li>
+<li><p>테스트 냄새: 테스트와 무관한 세부 사항들</p>
+</li>
+<li><p>테스트 냄새: 잘못된 조직</p>
+</li>
+<li><p>테스트 냄새: 암시적 의미</p>
+</li>
+<li><p>새로운 테스트 추가</p>
+</li>
+<li><p>마치며</p>
+</li>
+</ul>
+<blockquote>
+<p>테스트는 결함을 최소화하고 리팩토링으로 프로덕션 시스템을 깔끔하게 유지시켜 주지만, 이것은 지속적인 비용을 의미한다.</p>
+<p>비용 증가로 이어지는 테스트 문제들을 해결해보자</p>
+</blockquote>
+<h2 id="11-1-이해-검색"><a href="#11-1-이해-검색" class="headerlink" title="11.1 이해 검색"></a>11.1 이해 검색</h2><ul>
+<li>많이 복잡해보이는 Search 클래스의 테스트 코드</li>
+<li>테스트가 무엇을 하는지 완전히 이해하려면 테스트를 매 행마다 꼼꼼하게 읽고 의미 조각들을 맞추어 보아야 한다.</li>
+<li>리팩토링을 시작해보자…</li>
+<li>(<strong>나는 역시 Kotlin 코드로 변환한 후부터 시작하고자 한다.</strong>)</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.hamcrest.CoreMatchers</span><br><span class="line"><span class="keyword">import</span> org.junit.Assert</span><br><span class="line"><span class="keyword">import</span> org.junit.Test</span><br><span class="line"><span class="keyword">import</span> java.io.ByteArrayInputStream</span><br><span class="line"><span class="keyword">import</span> java.net.URL</span><br><span class="line"><span class="keyword">import</span> java.util.logging.Level</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SearchTest</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">testSearch</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">val</span> pageContent = (<span class="string">&quot;There are certain queer times and occasions &quot;</span></span><br><span class="line">                    + <span class="string">&quot;in this strange mixed affair we call life when a man &quot;</span></span><br><span class="line">                    + <span class="string">&quot;takes this whole universe for a vast practical joke, &quot;</span></span><br><span class="line">                    + <span class="string">&quot;though the wit thereof he but dimly discerns, and more &quot;</span></span><br><span class="line">                    + <span class="string">&quot;than suspects that the joke is at nobody&#x27;s expense but &quot;</span></span><br><span class="line">                    + <span class="string">&quot;his own.&quot;</span>)</span><br><span class="line">            <span class="keyword">val</span> bytes = pageContent.toByteArray()</span><br><span class="line">            <span class="keyword">val</span> stream = ByteArrayInputStream(bytes)</span><br><span class="line">            <span class="comment">// search</span></span><br><span class="line">            <span class="keyword">var</span> search = Search(stream, <span class="string">&quot;practical joke&quot;</span>, <span class="string">&quot;1&quot;</span>)</span><br><span class="line">            Search.LOGGER.level = Level.OFF</span><br><span class="line">            search.setSurroundingCharacterCount(<span class="number">10</span>)</span><br><span class="line">            search.execute()</span><br><span class="line">            Assert.assertFalse(search.errored())</span><br><span class="line">            <span class="keyword">val</span> matches: List&lt;Match&gt; = search.getMatches()</span><br><span class="line">            Assert.assertThat&lt;List&lt;Match&gt;&gt;(matches, CoreMatchers.`<span class="keyword">is</span>`(CoreMatchers.notNullValue()))</span><br><span class="line">            Assert.assertTrue(matches.size &gt;= <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">val</span> match: Match = matches[<span class="number">0</span>]</span><br><span class="line">            Assert.assertThat(match.searchString, CoreMatchers.equalTo(<span class="string">&quot;practical joke&quot;</span>))</span><br><span class="line">            Assert.assertThat(match.surroundingContext,</span><br><span class="line">                CoreMatchers.equalTo(<span class="string">&quot;or a vast practical joke, though t&quot;</span>))</span><br><span class="line">            stream.close()</span><br><span class="line"></span><br><span class="line">            <span class="comment">// negative</span></span><br><span class="line">            <span class="keyword">val</span> connection = URL(<span class="string">&quot;http://bit.ly/15sYPA7&quot;</span>).openConnection()</span><br><span class="line">            <span class="keyword">val</span> inputStream = connection.getInputStream()</span><br><span class="line">            search = Search(inputStream, <span class="string">&quot;smelt&quot;</span>, <span class="string">&quot;http://bit.ly/15sYPA7&quot;</span>)</span><br><span class="line">            search.execute()</span><br><span class="line">            Assert.assertThat(search.getMatches().size, CoreMatchers.equalTo(<span class="number">0</span>))</span><br><span class="line">            stream.close()</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e: Exception) &#123;</span><br><span class="line">            e.printStackTrace()</span><br><span class="line">            Assert.fail(<span class="string">&quot;exception thrown in test&quot;</span> + e.message)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="11-2-테스트-냄새-불필요한-코드"><a href="#11-2-테스트-냄새-불필요한-코드" class="headerlink" title="11.2 테스트 냄새: 불필요한 코드"></a>11.2 테스트 냄새: 불필요한 코드</h2><ul>
+<li>테스트 코드가 예외를 기대하지 않는다면 그냥 throw 해버리면 된다. (try-catch 지우자)</li>
+<li>not null assert는 유용한 정보를 담고 있지 않은 불필요한 테스트이다.</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.hamcrest.CoreMatchers</span><br><span class="line"><span class="keyword">import</span> org.junit.Assert</span><br><span class="line"><span class="keyword">import</span> org.junit.Test</span><br><span class="line"><span class="keyword">import</span> java.io.ByteArrayInputStream</span><br><span class="line"><span class="keyword">import</span> java.io.IOException</span><br><span class="line"><span class="keyword">import</span> java.net.URL</span><br><span class="line"><span class="keyword">import</span> java.util.logging.Level</span><br><span class="line"><span class="keyword">import</span> kotlin.jvm.Throws</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SearchTest</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="meta">@Throws(IOException::class)</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">testSearch</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">val</span> pageContent = (<span class="string">&quot;There are certain queer times and occasions &quot;</span></span><br><span class="line">                + <span class="string">&quot;in this strange mixed affair we call life when a man &quot;</span></span><br><span class="line">                + <span class="string">&quot;takes this whole universe for a vast practical joke, &quot;</span></span><br><span class="line">                + <span class="string">&quot;though the wit thereof he but dimly discerns, and more &quot;</span></span><br><span class="line">                + <span class="string">&quot;than suspects that the joke is at nobody&#x27;s expense but &quot;</span></span><br><span class="line">                + <span class="string">&quot;his own.&quot;</span>)</span><br><span class="line">        <span class="keyword">val</span> bytes = pageContent.toByteArray()</span><br><span class="line">        <span class="keyword">val</span> stream = ByteArrayInputStream(bytes)</span><br><span class="line">        <span class="comment">// search</span></span><br><span class="line">        <span class="keyword">var</span> search = Search(stream, <span class="string">&quot;practical joke&quot;</span>, <span class="string">&quot;1&quot;</span>)</span><br><span class="line">        Search.LOGGER.level = Level.OFF</span><br><span class="line">        search.setSurroundingCharacterCount(<span class="number">10</span>)</span><br><span class="line">        search.execute()</span><br><span class="line">        Assert.assertFalse(search.errored())</span><br><span class="line">        <span class="keyword">val</span> matches: List&lt;Match&gt; = search.getMatches()</span><br><span class="line">        Assert.assertTrue(matches.size &gt;= <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">val</span> match: Match = matches[<span class="number">0</span>]</span><br><span class="line">        Assert.assertThat(match.searchString, CoreMatchers.equalTo(<span class="string">&quot;practical joke&quot;</span>))</span><br><span class="line">        Assert.assertThat(match.surroundingContext,</span><br><span class="line">            CoreMatchers.equalTo(<span class="string">&quot;or a vast practical joke, though t&quot;</span>))</span><br><span class="line">        stream.close()</span><br><span class="line"></span><br><span class="line">        <span class="comment">// negative</span></span><br><span class="line">        <span class="keyword">val</span> connection = URL(<span class="string">&quot;http://bit.ly/15sYPA7&quot;</span>).openConnection()</span><br><span class="line">        <span class="keyword">val</span> inputStream = connection.getInputStream()</span><br><span class="line">        search = Search(inputStream, <span class="string">&quot;smelt&quot;</span>, <span class="string">&quot;http://bit.ly/15sYPA7&quot;</span>)</span><br><span class="line">        search.execute()</span><br><span class="line">        Assert.assertThat(search.getMatches().size, CoreMatchers.equalTo(<span class="number">0</span>))</span><br><span class="line">        stream.close()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="11-3-테스트-냄새-추상화-누락"><a href="#11-3-테스트-냄새-추상화-누락" class="headerlink" title="11.3 테스트 냄새: 추상화 누락"></a>11.3 테스트 냄새: 추상화 누락</h2><ul>
+<li>잘 구성된 테스트는 시스템과 상호 작용을 ‘데이터 준비하기’, ‘시스템과 동작하기’, ‘결과 단언하기’ 세 가지 관점에서 보여준다.</li>
+<li>추상화로 필수적인 개념을 최대화하고 불필요한 세부 사항은 감춘다.</li>
+</ul>
+<blockquote>
+<p>좋은 테스트는 클라이언트가 시스템과 어떻게 상호 작용하는지 추상화한다.</p>
+</blockquote>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> chapter11.util.ContainsMatches.Companion.containsMatches</span><br><span class="line"><span class="keyword">import</span> org.hamcrest.MatcherAssert.assertThat</span><br><span class="line"><span class="keyword">import</span> org.junit.Assert.*</span><br><span class="line"><span class="keyword">import</span> org.junit.Test</span><br><span class="line"><span class="keyword">import</span> java.io.ByteArrayInputStream</span><br><span class="line"><span class="keyword">import</span> java.io.IOException</span><br><span class="line"><span class="keyword">import</span> java.net.URL</span><br><span class="line"><span class="keyword">import</span> java.util.logging.Level</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SearchTest</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="meta">@Throws(IOException::class)</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">testSearch</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">val</span> pageContent = (<span class="string">&quot;There are certain queer times and occasions &quot;</span></span><br><span class="line">                + <span class="string">&quot;in this strange mixed affair we call life when a man &quot;</span></span><br><span class="line">                + <span class="string">&quot;takes this whole universe for a vast practical joke, &quot;</span></span><br><span class="line">                + <span class="string">&quot;though the wit thereof he but dimly discerns, and more &quot;</span></span><br><span class="line">                + <span class="string">&quot;than suspects that the joke is at nobody&#x27;s expense but &quot;</span></span><br><span class="line">                + <span class="string">&quot;his own.&quot;</span>)</span><br><span class="line">        <span class="keyword">val</span> bytes = pageContent.toByteArray()</span><br><span class="line">        <span class="keyword">val</span> stream = ByteArrayInputStream(bytes)</span><br><span class="line">        <span class="comment">// search</span></span><br><span class="line">        <span class="keyword">var</span> search = Search(stream, <span class="string">&quot;practical joke&quot;</span>, <span class="string">&quot;1&quot;</span>)</span><br><span class="line">        Search.LOGGER.level = Level.OFF</span><br><span class="line">        search.setSurroundingCharacterCount(<span class="number">10</span>)</span><br><span class="line">        search.execute()</span><br><span class="line">        assertFalse(search.errored())</span><br><span class="line">        assertThat(search.getMatches(),</span><br><span class="line">            containsMatches&lt;Match&gt;(arrayOf(</span><br><span class="line">                Match(<span class="string">&quot;1&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;practical joke&quot;</span>,</span><br><span class="line">            <span class="string">&quot;or a vast practical joke, though t&quot;</span></span><br><span class="line">                ))))</span><br><span class="line">        stream.close()</span><br><span class="line"></span><br><span class="line">        <span class="comment">// negative</span></span><br><span class="line">        <span class="keyword">val</span> connection = URL(<span class="string">&quot;http://bit.ly/15sYPA7&quot;</span>).openConnection()</span><br><span class="line">        <span class="keyword">val</span> inputStream = connection.getInputStream()</span><br><span class="line">        search = Search(inputStream, <span class="string">&quot;smelt&quot;</span>, <span class="string">&quot;http://bit.ly/15sYPA7&quot;</span>)</span><br><span class="line">        search.execute()</span><br><span class="line">        assertTrue(search.getMatches().isEmpty())</span><br><span class="line">        stream.close()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>search.getMatches() 호출에서 반환된 매칭 목록에 대한 구현 세부 사항 5줄을 커스텀 Matcher Class로 구현 (ContainsMatches)</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.hamcrest.Description</span><br><span class="line"><span class="keyword">import</span> org.hamcrest.Factory</span><br><span class="line"><span class="keyword">import</span> org.hamcrest.Matcher</span><br><span class="line"><span class="keyword">import</span> org.hamcrest.TypeSafeMatcher</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ContainsMatches</span></span>(<span class="keyword">private</span> <span class="keyword">val</span> expected: Array&lt;Match&gt;) : TypeSafeMatcher&lt;List&lt;Match&gt;&gt;() &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">describeTo</span><span class="params">(description: <span class="type">Description</span>)</span></span> &#123;</span><br><span class="line">        description.appendText(<span class="string">&quot;&lt;<span class="variable">$expected</span>&gt;&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">equals</span><span class="params">(expected: <span class="type">Match</span>, <span class="keyword">actual</span>: <span class="type">Match</span>)</span></span>: <span class="built_in">Boolean</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> expected.searchString == <span class="keyword">actual</span>.searchString &amp;&amp; expected.surroundingContext == <span class="keyword">actual</span>.surroundingContext</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">matchesSafely</span><span class="params">(<span class="keyword">actual</span>: <span class="type">List</span>&lt;<span class="type">Match</span>&gt;)</span></span>: <span class="built_in">Boolean</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">actual</span>.size != expected.size) <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">        <span class="keyword">for</span> (i <span class="keyword">in</span> expected.indices) <span class="keyword">if</span> (!equals(expected[i], <span class="keyword">actual</span>[i])) <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">        <span class="meta">@Factory</span></span><br><span class="line">        <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> <span class="title">containsMatches</span><span class="params">(expected: <span class="type">Array</span>&lt;<span class="type">Match</span>&gt;)</span></span>: Matcher&lt;List&lt;Match&gt;&gt; &#123;</span><br><span class="line">            <span class="keyword">return</span> ContainsMatches(expected)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="11-4-테스트-냄새-부적절한-정보"><a href="#11-4-테스트-냄새-부적절한-정보" class="headerlink" title="11.4 테스트 냄새: 부적절한 정보"></a>11.4 테스트 냄새: 부적절한 정보</h2><ul>
+<li>매직 리터럴: 프로그래밍에서 상수로 선언하지 않은 숫자 리터럴을 ‘매직 넘버’라고 하며, 코드에는 되도록 사용하면 안 된다. (<strong>무의식적으로 쓴 코드가 생각난다. 내일 바로 수정해야겠다.</strong>)</li>
+<li>“1”과 Search 생성자에 들어있는 불필요한 URL 값을 같은 상수로 전환</li>
+<li><strong>상수로 표현해 두면 의미를 분명하게 전달할 수 있다.</strong></li>
+</ul>
+<h2 id="11-5-테스트-냄새-부푼-생성"><a href="#11-5-테스트-냄새-부푼-생성" class="headerlink" title="11.5 테스트 냄새: 부푼 생성"></a>11.5 테스트 냄새: 부푼 생성</h2><ul>
+<li>구현 세부 사항 추상화를 위해 InputStream 객체를 생성해주는 도우미 메서드를 만들자</li>
+</ul>
+<h2 id="11-6-테스트-냄새-다수의-단언"><a href="#11-6-테스트-냄새-다수의-단언" class="headerlink" title="11.6 테스트 냄새: 다수의 단언"></a>11.6 테스트 냄새: 다수의 단언</h2><ul>
+<li>search, negative assert를 분리하기</li>
+<li>테스트마다 assert 하나로 만들면 테스트 이름을 깔끔하게 만들기 쉽다.</li>
+</ul>
+<h2 id="11-7-테스트-냄새-테스트와-무관한-세부-사항들"><a href="#11-7-테스트-냄새-테스트와-무관한-세부-사항들" class="headerlink" title="11.7 테스트 냄새: 테스트와 무관한 세부 사항들"></a>11.7 테스트 냄새: 테스트와 무관한 세부 사항들</h2><ul>
+<li>군더더기가 되는 코드들을 @Before, @After로 분리하기</li>
+<li>좋은 테스트는 독자가 테스트를 이해하는 데 다른 함수를 파헤치지 않도록 한다.</li>
+</ul>
+<h2 id="11-8-테스트-냄새-잘못된-조직"><a href="#11-8-테스트-냄새-잘못된-조직" class="headerlink" title="11.8 테스트 냄새: 잘못된 조직"></a>11.8 테스트 냄새: 잘못된 조직</h2><ul>
+<li>테스트에서 어느 부분들이 준비(Arrange), 실행(Act), 단언(Assert) 부분인지 아는 것은 테스트를 빠르게 인지할 수 있게 한다.</li>
+<li>띄어쓰기로 각 영역을 분리해준다.</li>
+</ul>
+<h2 id="11-9-테스트-냄새-암시적-의미"><a href="#11-9-테스트-냄새-암시적-의미" class="headerlink" title="11.9 테스트 냄새: 암시적 의미"></a>11.9 테스트 냄새: 암시적 의미</h2><ul>
+<li>각 테스트가 분명하게 대답해야 할 가장 큰 질문은 “왜 그러한 결과를 기대하는가?” 이다.</li>
+<li>좀 더 나은 테스트 데이터를 골라서 명시적으로 바꿔보자</li>
+</ul>
+<h2 id="11-10-새로운-테스트-추가"><a href="#11-10-새로운-테스트-추가" class="headerlink" title="11.10 새로운 테스트 추가"></a>11.10 새로운 테스트 추가</h2><ul>
+<li>검색할 때 errored() query에 true가 반환되는 테스트를 작성해보자</li>
+<li>반대의 경우도 테스트</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 최종</span></span><br><span class="line"><span class="keyword">import</span> chapter11.util.ContainsMatches.Companion.containsMatches</span><br><span class="line"><span class="keyword">import</span> org.hamcrest.MatcherAssert.assertThat</span><br><span class="line"><span class="keyword">import</span> org.junit.After</span><br><span class="line"><span class="keyword">import</span> org.junit.Assert.*</span><br><span class="line"><span class="keyword">import</span> org.junit.Before</span><br><span class="line"><span class="keyword">import</span> org.junit.Test</span><br><span class="line"><span class="keyword">import</span> java.io.ByteArrayInputStream</span><br><span class="line"><span class="keyword">import</span> java.io.IOException</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream</span><br><span class="line"><span class="keyword">import</span> java.net.MalformedURLException</span><br><span class="line"><span class="keyword">import</span> java.net.URL</span><br><span class="line"><span class="keyword">import</span> java.util.logging.Level</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SearchTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">lateinit</span> <span class="keyword">var</span> stream: InputStream</span><br><span class="line"></span><br><span class="line">    <span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">const</span> <span class="keyword">val</span> A_TITLE = <span class="string">&quot;1&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Before</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">turnOFfLogging</span><span class="params">()</span></span> &#123;</span><br><span class="line">        Search.LOGGER.level = Level.OFF</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@After</span></span><br><span class="line">    <span class="meta">@Throws(IOException::class)</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">closeResources</span><span class="params">()</span></span> &#123;</span><br><span class="line">        stream.close()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">testSearch</span><span class="params">()</span></span> &#123;</span><br><span class="line">        stream = streamOn(<span class="string">&quot;rest of text here&quot;</span> +</span><br><span class="line">                <span class="string">&quot;1234567890search term1234567890&quot;</span> +</span><br><span class="line">                <span class="string">&quot;more rest of text&quot;</span>)</span><br><span class="line">        <span class="keyword">val</span> search = Search(stream, <span class="string">&quot;search term&quot;</span>, A_TITLE)</span><br><span class="line">        search.setSurroundingCharacterCount(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">        search.execute()</span><br><span class="line"></span><br><span class="line">        assertThat(search.getMatches(), containsMatches&lt;Match&gt;(arrayOf(</span><br><span class="line">            Match(A_TITLE,</span><br><span class="line">                <span class="string">&quot;search term&quot;</span>,</span><br><span class="line">                <span class="string">&quot;1234567890search term1234567890&quot;</span></span><br><span class="line">            ))))</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">streamOn</span><span class="params">(pageContent: <span class="type">String</span>)</span></span>: InputStream &#123;</span><br><span class="line">        <span class="keyword">return</span> ByteArrayInputStream(pageContent.toByteArray())</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">noMatchesReturnedWhenSearchStringNotInContent</span><span class="params">()</span></span> &#123;</span><br><span class="line">        stream = streamOn(<span class="string">&quot;any text&quot;</span>)</span><br><span class="line">        <span class="keyword">val</span> search = Search(stream, <span class="string">&quot;text that doesn&#x27;t match&quot;</span>, A_TITLE)</span><br><span class="line"></span><br><span class="line">        search.execute()</span><br><span class="line"></span><br><span class="line">        assertTrue(search.getMatches().isEmpty())</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">returnsErroredWhenUnableToReadStream</span><span class="params">()</span></span> &#123;</span><br><span class="line">        stream = createStreamThrowingErrorWhenRead()</span><br><span class="line">        <span class="keyword">val</span> search = Search(stream, <span class="string">&quot;&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line">        search.execute()</span><br><span class="line"></span><br><span class="line">        assertTrue(search.errored())</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">createStreamThrowingErrorWhenRead</span><span class="params">()</span></span>: InputStream &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">object</span> : InputStream() &#123;</span><br><span class="line">            <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">read</span><span class="params">()</span></span>: <span class="built_in">Int</span> &#123;</span><br><span class="line">                <span class="keyword">throw</span> IOException()</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">erroredReturnsFalseWhenReadSucceeds</span><span class="params">()</span></span> &#123;</span><br><span class="line">        stream = streamOn(<span class="string">&quot;&quot;</span>)</span><br><span class="line">        <span class="keyword">val</span> search = Search(stream, <span class="string">&quot;&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line">        search.execute()</span><br><span class="line"></span><br><span class="line">        assertFalse(search.errored())</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="11-11-마치며"><a href="#11-11-마치며" class="headerlink" title="11.11 마치며"></a>11.11 마치며</h2><ul>
+<li>리팩토링된 테스트는 단순해진다.</li>
+<li>독자는 테스트 이름을 읽고 어떤 케이스인지 이해할 수 있다.</li>
+<li>먼저 테스트의 실행 부분에 집중하여 코드가 무엇을 실행하는지 안다.</li>
+<li><strong>테스트로 시스템을 이해하고자 한다면 테스트를 깔끔하게 유지하는 것이 좋다.</strong></li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2022/02/18/flutter/ui/flutter-reactive-ui/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2022-02-20 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/JUnit/" title="JUnit">
+                        <b>#</b> JUnit
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/java/" title="java">
+                        <b>#</b> java
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/test/" title="test">
+                        <b>#</b> test
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/kotlin/" title="kotlin">
+                        <b>#</b> kotlin
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2022/02/22/junit/junit_12/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#11-1-%EC%9D%B4%ED%95%B4-%EA%B2%80%EC%83%89"><span class="toc-text">11.1 이해 검색</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-2-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EB%83%84%EC%83%88-%EB%B6%88%ED%95%84%EC%9A%94%ED%95%9C-%EC%BD%94%EB%93%9C"><span class="toc-text">11.2 테스트 냄새: 불필요한 코드</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-3-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EB%83%84%EC%83%88-%EC%B6%94%EC%83%81%ED%99%94-%EB%88%84%EB%9D%BD"><span class="toc-text">11.3 테스트 냄새: 추상화 누락</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-4-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EB%83%84%EC%83%88-%EB%B6%80%EC%A0%81%EC%A0%88%ED%95%9C-%EC%A0%95%EB%B3%B4"><span class="toc-text">11.4 테스트 냄새: 부적절한 정보</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-5-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EB%83%84%EC%83%88-%EB%B6%80%ED%91%BC-%EC%83%9D%EC%84%B1"><span class="toc-text">11.5 테스트 냄새: 부푼 생성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-6-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EB%83%84%EC%83%88-%EB%8B%A4%EC%88%98%EC%9D%98-%EB%8B%A8%EC%96%B8"><span class="toc-text">11.6 테스트 냄새: 다수의 단언</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-7-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EB%83%84%EC%83%88-%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80-%EB%AC%B4%EA%B4%80%ED%95%9C-%EC%84%B8%EB%B6%80-%EC%82%AC%ED%95%AD%EB%93%A4"><span class="toc-text">11.7 테스트 냄새: 테스트와 무관한 세부 사항들</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-8-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EB%83%84%EC%83%88-%EC%9E%98%EB%AA%BB%EB%90%9C-%EC%A1%B0%EC%A7%81"><span class="toc-text">11.8 테스트 냄새: 잘못된 조직</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-9-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EB%83%84%EC%83%88-%EC%95%94%EC%8B%9C%EC%A0%81-%EC%9D%98%EB%AF%B8"><span class="toc-text">11.9 테스트 냄새: 암시적 의미</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-10-%EC%83%88%EB%A1%9C%EC%9A%B4-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%B6%94%EA%B0%80"><span class="toc-text">11.10 새로운 테스트 추가</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-11-%EB%A7%88%EC%B9%98%EB%A9%B0"><span class="toc-text">11.11 마치며</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/boring-km">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="kmjin@kakao.com">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="linkedin" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/">
+            <i class="iconfont icon-linkedin"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="TIL" target="_blank" rel="noopener" href="https://boring-km.github.io/TIL">
+            <i class="iconfont icon-emoji-friendly"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/boring-km">머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="내용 검색...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + 11.%20%ED%85%8C%EC%8A%A4%ED%8A%B8%20%EB%A6%AC%ED%8C%A9%ED%86%A0%EB%A7%81 + '&url=' + http%3A%2F%2Fexample.com%2F2022%2F02%2F20%2Fjunit%2Fjunit_11%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2022/02/20/junit/junit_11/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

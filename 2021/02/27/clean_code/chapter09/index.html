@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      Clean Code 9장 - 단위 테스트 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">boring-km</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Clean Code 9장 - 단위 테스트</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2021-02-27 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/Clean-Code/" title="Clean_Code">
+                    <b>#</b> Clean_Code
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/java/" title="java">
+                    <b>#</b> java
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <ul>
+<li>TDD 법칙 3가지</li>
+<li>깨끗한 테스트 코드 유지하기</li>
+<li>깨끗한 테스트 코드</li>
+<li>테스트 당 assert 하나</li>
+<li>F.I.R.S.T</li>
+<li>결론</li>
+</ul>
+<h3 id="TDD-법칙-3가지"><a href="#TDD-법칙-3가지" class="headerlink" title="TDD 법칙 3가지"></a>TDD 법칙 3가지</h3><ol>
+<li>실패하는 단위 테스트를 작성할 때까지 실제 코드를 작성하지 않는다.</li>
+<li>컴파일은 실패하지 않으면서 실행이 실패하는 정도로만 단위 테스트를 작성한다.</li>
+<li>현재 실패하는 테스트를 통과할 정도로만 실제 코드를 작성한다.</li>
+</ol>
+<ul>
+<li>위 3가지 규칙에 따르면 테스트 코드와 실제 코드가 함께 나올뿐더러 테스트 코드가 실제 코드보다 불과 몇 초 전에 나온다.</li>
+<li>이렇게 일하면 사실상 전부 테스트하는 테스트 케이스가 나온다.</li>
+<li>실제 코드와 맞먹을 정도로 방대한 테스트 코드는 심각한 관리 문제를 유발하기도 한다.</li>
+</ul>
+<h3 id="깨끗한-테스트-코드-유지하기"><a href="#깨끗한-테스트-코드-유지하기" class="headerlink" title="깨끗한 테스트 코드 유지하기"></a>깨끗한 테스트 코드 유지하기</h3><ul>
+<li>문제는 실제 코드가 진화하면 테스트 코드도 변해야 한다는 데 있다.</li>
+<li>그런데 테스트 코드가 지저분할수록 변경하기 어려워진다.</li>
+<li>테스트 코드가 복잡할수록 실제 코드를 짜는 시간보다 테스트 케이스를 추가하는 시간이 더 걸리기 십상이다.</li>
+<li><strong>테스트 코드는 실제 코드 못지 않게 중요하다</strong></li>
+<li>테스트 코드는 사고와 설계와 주의가 필요하다.</li>
+<li>실제 코드 못지 않게 깨끗하게 써야 한다.</li>
+</ul>
+<p><em><strong>테스트는 유연성, 유지보수성, 재사용성을 제공한다.</strong></em></p>
+<ul>
+<li>테스트 케이스가 없다면 모든 변경이 잠정적인 버그다.</li>
+<li>아키텍처가 아무리 유연하더라도, 설계를 아무리 잘 나눴더라도, 테스트 케이스가 없으면 개발자는 변경을 주저한다.</li>
+<li>버그가 숨어들까 두렵기 때문이다.</li>
+<li>테스트가 있다면 공포는 사라지고, 테스트 커버리지가 높을수록 공포는 줄어든다.</li>
+<li>실제 코드를 점검하는 자동화된 단위 테스트 슈트는 설계와 아키텍처를 최대한 깨끗하게 보존하는 열쇠다.</li>
+<li>테스트 코드가 지저분할수록 실제 코드도 지저분해진다.</li>
+</ul>
+<h3 id="깨끗한-테스트-코드"><a href="#깨끗한-테스트-코드" class="headerlink" title="깨끗한 테스트 코드"></a>깨끗한 테스트 코드</h3><ul>
+<li><strong>가독성, 가독성, 가독성</strong></li>
+<li>교재의 개선한 테스트 코드(한글 버전)</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> 페이지_계층을_XML형태로_가져오는지_테스트한다() &#123;</span><br><span class="line">  makePages(<span class="string">&quot;PageOne&quot;</span>, <span class="string">&quot;PageOne.ChildOne&quot;</span>, <span class="string">&quot;PageTwo&quot;</span>);</span><br><span class="line">  </span><br><span class="line">  submitRequest(<span class="string">&quot;root&quot;</span>, <span class="string">&quot;type:pages&quot;</span>);</span><br><span class="line">  </span><br><span class="line">  assertResponseIsXML();</span><br><span class="line">  assertResponseContains(</span><br><span class="line">    <span class="string">&quot;&lt;name&gt;PageOne&lt;/name&gt;&quot;</span>, <span class="string">&quot;&lt;name&gt;PageTwo&lt;/name&gt;&quot;</span>, <span class="string">&quot;&lt;name&gt;ChildOne&lt;/name&gt;&quot;</span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> 심볼릭_링크들이_XML_페이지_계층에_없는지_테스트한다() &#123;</span><br><span class="line">  <span class="type">WikiPage</span> <span class="variable">page</span> <span class="operator">=</span> makePage(<span class="string">&quot;PageOne&quot;</span>);</span><br><span class="line">  makePages(<span class="string">&quot;PageOne.ChildOne&quot;</span>, <span class="string">&quot;PageTwo&quot;</span>);</span><br><span class="line">  </span><br><span class="line">  addLinkTo(page, <span class="string">&quot;PageTwo&quot;</span>, <span class="string">&quot;SymPage&quot;</span>);</span><br><span class="line">  </span><br><span class="line">  submitRequest(<span class="string">&quot;root&quot;</span>, <span class="string">&quot;type:pages&quot;</span>);</span><br><span class="line">  </span><br><span class="line">  assertResponseIsXML();</span><br><span class="line">  assertResponseContains(</span><br><span class="line">    <span class="string">&quot;&lt;name&gt;PageOne&lt;/name&gt;&quot;</span>, <span class="string">&quot;&lt;name&gt;PageTwo&lt;/name&gt;&quot;</span>, <span class="string">&quot;&lt;name&gt;ChildOne&lt;/name&gt;&quot;</span></span><br><span class="line">  );</span><br><span class="line">  assertResponseDoesNotContain(<span class="string">&quot;SymPage&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> XML형태로_데이터를_가져오는지_테스트한다() <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">  makePageWithContent(<span class="string">&quot;TestPageOne&quot;</span>, <span class="string">&quot;test page&quot;</span>);</span><br><span class="line">  </span><br><span class="line">  submitRequest(<span class="string">&quot;TestPageOne&quot;</span>, <span class="string">&quot;type:data&quot;</span>);</span><br><span class="line">  </span><br><span class="line">  assertResponseIsXML();</span><br><span class="line">  assertResponseContains(<span class="string">&quot;test page&quot;</span>, <span class="string">&quot;&lt;Test&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>테스트는 명확히 세 부분으로 나눠진다.<ul>
+<li><ol>
+<li>테스트 자료를 만든다.</li>
+<li>테스트 자료를 조작하며,</li>
+<li>조작한 결과가 올바른지 확인한다.</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>테스트 코드는 본론에 돌입해 진짜 필요한 자료 유형과 함수만 사용한다.</li>
+<li>그러므로 코드를 읽는 사람은 온갖 잡다하고 세세한 코드에 주눅들고 헷갈릴 필요 없이 코드가 수행하는 기능을 재빨리 이해한다.</li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/swlh/usual-production-patterns-applied-to-integration-tests-50a941f0b04a">Build-Operate-Check 패턴</a>이 위와 같은 테스트 구조에 적합하다. (링크는 아래 그림에 대한 출처)<ul>
+<li>Build: 테스트 시나리오를 준비하는 단계 (주로 DB에 데이터를 넣는 단계이다.)</li>
+<li>Operate: 테스트하고자 하는 객체&#x2F;API를 사용하는 메서드를 실행하는 단계</li>
+<li>Check: 실행된 메서드가 예상한 효과를 시스템에 가져다 주었는지 확인하는 단계</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://miro.medium.com/max/1260/1*YslDrfj6TUWlQvaUoC3xXQ.jpeg" alt="Image for post"></p>
+<p><em><strong>도메인에 특화된 테스트 언어</strong></em></p>
+<ul>
+<li>흔히 쓰는 시스템 조작 API를 사용하는 대신 <strong>API 위에다 함수와 유틸리티를 구현한 후 그 함수와 유틸리티를 사용</strong>하므로 테스트 코드를 짜기도 읽기도 쉬워진다. (도메인에 가까운 이름을 사용한 함수와 유틸리티로 테스트를 작성하라는 의미같다.)</li>
+<li>이렇게 구현한 함수와 유틸리티는 테스트 코드에서 사용하는 특수 API가 된다.</li>
+<li>즉, 테스트를 구현하는 당사자와 나중에 테스트를 읽어볼 독자를 도와주는 테스트 언어이다.</li>
+</ul>
+<p><em><strong>이중 표준</strong></em></p>
+<ul>
+<li>테스트 API 코드에 적용하는 표준은 실제 코드에 적용하는 표준과 확실히 다르다.</li>
+<li>단순하고, 간결하고, 표현력이 풍부해야 하지만, 실제 코드만큼 효율적일 필요는 없다.</li>
+<li>테스트 환경은 제한적일 가능성이 낮다.</li>
+<li>실제 환경에서는 절대로 안 되지만 테스트 환경에서는 전혀 문제없는 방식이 있다.</li>
+<li>대개 메모리나 CPU나 효율과 관련 있는 경우다. (<strong>코드의 깨끗함과는 철저히 무관하다.</strong>)</li>
+<li>(이 내용으로 볼 때, 테스트 코드에서는 Stream 사용이 좀더 자유로울 수 있겠다.)</li>
+</ul>
+<h3 id="테스트-당-assert-하나"><a href="#테스트-당-assert-하나" class="headerlink" title="테스트 당 assert 하나?"></a>테스트 당 assert 하나?</h3><ul>
+<li>JUnit으로 테스트 코드를 짤 때는 함수마다 assert 문을 단 하나만 사용해야 한다? (훌륭하지만 때로는 여러 개도 필요하다.)<ul>
+<li>물론 코드를 이해하기 쉽고 빠르다.</li>
+<li>하지만.. 위에서 작성하고 온 코드에 보면 공통적으로 “출력이 XML”이다라는 assert 문과 “특정 문자열을 포함한다”는 assert 문을 하나로 병합하는 방식이 불합리해 보인다.</li>
+<li><strong>given-when-then</strong>  (TDD를 공부하면서도 봤던 방식이다.)</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> 페이지_계층을_XML형태로_가져오는지_테스트한다() <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">  givenPages(<span class="string">&quot;PageOne&quot;</span>, <span class="string">&quot;PageOne.ChildOne&quot;</span>, <span class="string">&quot;PageTwo&quot;</span>);</span><br><span class="line">  </span><br><span class="line">  whenRequestIsIssued(<span class="string">&quot;root&quot;</span>, <span class="string">&quot;type:pages&quot;</span>);</span><br><span class="line">  </span><br><span class="line">  thenResponseShouldBeXML();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> 페이지_계층이_옳은_태그들을_가져오는지_테스트한다() &#123;</span><br><span class="line">  givenPages(<span class="string">&quot;PageOne&quot;</span>, <span class="string">&quot;PageOne.ChildOne&quot;</span>, <span class="string">&quot;PageTwo&quot;</span>);	<span class="comment">// 중복</span></span><br><span class="line">  </span><br><span class="line">  whenRequestIsIssued(<span class="string">&quot;root&quot;</span>, <span class="string">&quot;type:pages&quot;</span>);	<span class="comment">// 중복</span></span><br><span class="line">  </span><br><span class="line">  thenResponseShouldContain(</span><br><span class="line">    <span class="string">&quot;&lt;name&gt;PageOne&lt;/name&gt;&quot;</span>, <span class="string">&quot;&lt;name&gt;PageTwo&lt;/name&gt;&quot;</span>, <span class="string">&quot;&lt;name&gt;ChildOne&lt;/name&gt;&quot;</span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>테스트 코드를 읽기 쉬워졌지만, 테스트를 분리하면 중복되는 코드가 많아진다.</li>
+<li>Template Method 패턴을 사용해 중복을 제거할 수 있다.<ul>
+<li>given&#x2F;when 부분을 부모 클래스에 두고 then 부분을 자식 클래스에 두면된다.</li>
+<li>아니면 완전히 독자적인 테스트 클래스를 만들어 @Before 함수에 given&#x2F;when 부분을 넣고 @Test  함수에 then 부분을 넣어도 된다.</li>
+<li>하지만 모두 배보다 배꼽이 더 크다. (<strong>비용이 크다.</strong>)</li>
+<li>결국 저 위에 있는 코드가 더 좋아보인다.</li>
+</ul>
+</li>
+<li>‘’단일 assert 문’이라는 규칙이 훌륭한 지침이긴 해도, 때로는 주저 없이 함수 하나에 여러 assert 문을 넣어야 할 수도 있다.</li>
+<li>최대한 assert 문 개수를 줄이는 방법이 좋겠다.</li>
+</ul>
+<p><em><strong>테스트 당 개념 하나</strong></em></p>
+<ul>
+<li>(테스트 함수마다 한 개념만 테스트하라)</li>
+<li>이것저것 잡다한 개념을 연속으로 테스트하는 긴 함수는 피한다.</li>
+</ul>
+<h3 id="F-I-R-S-T-깨끗한-테스트의-5가지-규칙"><a href="#F-I-R-S-T-깨끗한-테스트의-5가지-규칙" class="headerlink" title="F.I.R.S.T (깨끗한 테스트의 5가지 규칙)"></a>F.I.R.S.T (깨끗한 테스트의 5가지 규칙)</h3><ul>
+<li><strong>Fast</strong>: 테스트는 빨리 돌아야 한다.</li>
+<li><strong>Independent</strong>: 각 테스트는 서로 의존하면 안 된다.<ul>
+<li>실행 순서가 뒤바뀌어도 전혀 상관 없어야 한다.</li>
+<li>(실제로 하나의 테스트 코드 자바 파일을 IDE에서 함수를 지정하지 않고 테스트하기 버튼을 누르면 모든 테스트 함수를 실행하는 것을 볼 수 있다.)</li>
+</ul>
+</li>
+<li><strong>Repeatable</strong>: 테스트는 어떤 환경에서도 반복 가능해야 한다.<ul>
+<li>테스트가 돌아가지 않는 환경이 있다면, 테스트가 실패한 이유를 둘러댈 변명이 생긴다. (네트워크 연결이라도!)</li>
+</ul>
+</li>
+<li><strong>Self-Validating</strong>: 테스트는 bool 값으로 결과를 내야 한다. 성공 아니면 실패다.<ul>
+<li>테스트가 스스로 성공과 실패를 가늠하지 않는다면 판단은 주관적이 되며 지루한 수작업 평가가 필요하게 된다.</li>
+</ul>
+</li>
+<li><strong>Timely</strong>: 테스트는 적시에 작성해야 한다.<ul>
+<li>단위 테스트는 테스트하려는 실제 코드를 구현하기 직전에 구현한다.</li>
+<li>실제 코드를 구현한 다음에는 테스트가 어렵다는 사실을 발견할지도 모른다. (실제로 그랬다.. ㅠㅠ)</li>
+</ul>
+</li>
+</ul>
+<h3 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h3><ul>
+<li>테스트 코드는 실제 코드만큼이나 프로젝트 건강에 중요하다.</li>
+<li>테스트 코드는 실제 코드의 유연성, 유지보수성, 재사용성을 보존하고 강화하기 때문이다.</li>
+<li><strong>테스트 코드는 지속적으로 깨끗하게 관리하자</strong></li>
+<li>표현력을 높이고 간결하게 정리하자.</li>
+<li>테스트 API를 구현해 도메인 특화 언어(DSL)를 만들자.</li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2021/02/24/clean_code/chapter08/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2021-02-27 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/Clean-Code/" title="Clean_Code">
+                        <b>#</b> Clean_Code
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/java/" title="java">
+                        <b>#</b> java
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2021/02/28/clean_code/chapter10/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#TDD-%EB%B2%95%EC%B9%99-3%EA%B0%80%EC%A7%80"><span class="toc-text">TDD 법칙 3가지</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EA%B9%A8%EB%81%97%ED%95%9C-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%BD%94%EB%93%9C-%EC%9C%A0%EC%A7%80%ED%95%98%EA%B8%B0"><span class="toc-text">깨끗한 테스트 코드 유지하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EA%B9%A8%EB%81%97%ED%95%9C-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%BD%94%EB%93%9C"><span class="toc-text">깨끗한 테스트 코드</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%85%8C%EC%8A%A4%ED%8A%B8-%EB%8B%B9-assert-%ED%95%98%EB%82%98"><span class="toc-text">테스트 당 assert 하나?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#F-I-R-S-T-%EA%B9%A8%EB%81%97%ED%95%9C-%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%9D%98-5%EA%B0%80%EC%A7%80-%EA%B7%9C%EC%B9%99"><span class="toc-text">F.I.R.S.T (깨끗한 테스트의 5가지 규칙)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EA%B2%B0%EB%A1%A0"><span class="toc-text">결론</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/boring-km">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="kmjin@kakao.com">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="linkedin" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/">
+            <i class="iconfont icon-linkedin"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="TIL" target="_blank" rel="noopener" href="https://boring-km.github.io/TIL">
+            <i class="iconfont icon-emoji-friendly"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/boring-km">머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="내용 검색...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Clean%20Code%209%EC%9E%A5%20-%20%EB%8B%A8%EC%9C%84%20%ED%85%8C%EC%8A%A4%ED%8A%B8 + '&url=' + http%3A%2F%2Fexample.com%2F2021%2F02%2F27%2Fclean_code%2Fchapter09%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2021/02/27/clean_code/chapter09/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      Clean Code 11장 - 시스템 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">boring-km</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Clean Code 11장 - 시스템</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2021-03-26 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/Clean-Code/" title="Clean_Code">
+                    <b>#</b> Clean_Code
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/java/" title="java">
+                    <b>#</b> java
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <ul>
+<li>도시를 세운다면?</li>
+<li>시스템 제작과 시스템 사용을 분리하라</li>
+<li>확장</li>
+<li>자바 프록시</li>
+<li>순수 자바 AOP 프레임워크</li>
+<li>AspectJ 관점</li>
+<li>테스트 주도 시스템 아키텍처 구축</li>
+<li>의사 결정을 최적화하라</li>
+<li>명백한 가치가 있을 때 표준을 현명하게 사용하라</li>
+<li>시스템은 도메인 특화 언어가 필요하다</li>
+<li>결론</li>
+</ul>
+<h3 id="도시를-세운다면"><a href="#도시를-세운다면" class="headerlink" title="도시를 세운다면?"></a>도시를 세운다면?</h3><ul>
+<li>혼자서 온갖 세세한 상황을 직접 관리할 수는 없지</li>
+<li>각 분야를 관리하는 팀이 있기 때문에 도시는 돌아간다.</li>
+<li>도시의 큰 그림을 그리는 사람도 있고, 작은 사항에 집중하는 사람들도 있다.</li>
+<li>적절한 추상화와 모듈화로 큰 그림을 이해하지 못할지라도 개인과 개인이 관리하는 ‘구성요소’는 효율적으로 돌아간다.</li>
+<li><strong>깨끗한 코드를 구현하면 낮은 추상화 수준에서 관심사를 분리하기 쉬워진다</strong></li>
+<li>높은 추상화 수준, 즉 <strong>시스템 수준</strong>에서도 깨끗함을 유지하는 방법을 알아보자</li>
+</ul>
+<h3 id="시스템-제작과-시스템-사용을-분리하라"><a href="#시스템-제작과-시스템-사용을-분리하라" class="headerlink" title="시스템 제작과 시스템 사용을 분리하라"></a>시스템 제작과 시스템 사용을 분리하라</h3><ul>
+<li><strong>제작(construction)은 사용(use)과 아주 다르다</strong></li>
+</ul>
+<blockquote>
+<p><strong>소프트웨어 시스템은 (애플리케이션 객체를 제작하고 의존성을 서로 ‘연결’하는)</strong></p>
+<p><strong>준비 과정과 (그 후에 이어지는) 런타임 로직을 분리해야 한다.</strong></p>
+</blockquote>
+<ul>
+<li><p>시작 단계는 모든 애플리케이션이 풀어야 할 <strong>관심사</strong>다.</p>
+</li>
+<li><p><strong>관심사 분리는</strong> 우리 분야에서 가장 오래되고 가장 중요한 설계 기법 중 하나이다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Service <span class="title function_">getService</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (service == <span class="literal">null</span>) </span><br><span class="line">    service = <span class="keyword">new</span> <span class="title class_">MyServiceImpl</span>(...);	<span class="comment">// 모든 상황에 적합한 기본값일까?</span></span><br><span class="line">  <span class="keyword">return</span> service;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><em>전형적으로 관심사를 분리하지 않는 예시</em></p>
+<ul>
+<li>초기화 지연 방식 (Kotlin에서 lateinit을 사용하는 것이 생각난다.)</li>
+<li>실제로 필요할 때까지 객체를 생성하지 않으므로 불필요한 부하가 걸리지 않는다.</li>
+<li>어떤 경우에도 null 포인터를 반환하지 않는다.</li>
+</ul>
+</li>
+<li><p>하지만 getService 메서드가 MyServiceImpl과 (위에서는 생략한) 생성자 인수에 명시적으로 의존한다.</p>
+</li>
+<li><p><strong>런타임 로직에서 MyServiceImpl 객체를 전혀 사용하지 않더라도 의존성을 해결하지 않으면 컴파일이 안 된다.</strong> (해당 서비스가 불필요하더라도 무조건 객체를 생성해야 하는 의존성 발생한다. 메서드 이름이라도 좀더 구체적이었으면 혹시 몰라도..)</p>
+<ul>
+<li>테스트 할 때도 MyServiceImpl이 무거운 객체라면 단위 테스트에서 getService 메서드를 호출하기 전에 적절한 테스트 전용 객체(Mock Object)를 service 필드에 할당해야 테스트 가능하다.</li>
+<li><strong>또한 일반 런타임 로직에 객체 생성 로직을 섞어놓은 탓에 (service가 null인 경로와 null이 아닌 경로 등) 모든 실행 경로도 테스트해야 한다.</strong> (팩토리 메서드 패턴을 이래서 사용하나보다.)</li>
+</ul>
+</li>
+<li><p>작지만 <strong>SRP</strong> 위반이다.</p>
+</li>
+<li><p>초기화 지연 기법을 한 번 정도 사용한다면 별로 심각한 문제는 아니지만, 이런 설정 기법이 수시로 사용되면 모듈성은 저조해지고 대개 중복이 심각하다.</p>
+</li>
+<li><p><strong>설정 논리</strong>는 일반 실행 논리와 분리해야 모듈성이 높아진다.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="Main-분리"><a href="#Main-분리" class="headerlink" title="Main 분리"></a>Main 분리</h4><ul>
+<li>생성과 관련한 코드는 모두 main이나 main이 호출하는 모듈로 옮기고, 나머지 시스템은 모든 객체가 생성되었고 모든 의존성이 연결되었다고 가정한다.</li>
+<li>main 함수에서 시스템에 필요한 객체를 생성한 후 이를 애플리케이션에 넘긴다.</li>
+<li><strong>애플리케이션은 main이나 객체가 생성되는 과정을 전혀 모른다.</strong> (단지 모든 객체가 적절히 생성되었다고 가정한다.)</li>
+</ul>
+<h4 id="팩토리"><a href="#팩토리" class="headerlink" title="팩토리"></a>팩토리</h4><ul>
+<li>물론 때로는 객체가 생성되는 <strong>시점</strong>을 애플리케이션이 결정할 필요도 생긴다.</li>
+<li>Abstract Factory: 교재 그림을 보고 예상되는 코드 작성함 (코드 참조)</li>
+<li>객체의 생성 시점은 애플리케이션이 결정하지만 객체를 생성하는 코드는 애플리케이션이 모르도록 구현</li>
+</ul>
+<h4 id="의존성-주입-DI"><a href="#의존성-주입-DI" class="headerlink" title="의존성 주입(DI)"></a>의존성 주입(DI)</h4><ul>
+<li>클래스가 의존성을 해결하려 시도하지 않는다.</li>
+<li>클래스는 완전히 수동적이다.</li>
+<li>대신 의존성을 주입하는 방법으로 (Object 교재에서 보았던 3가지 방법 - <a target="_blank" rel="noopener" href="https://github.com/boring-km/Object-Study/blob/master/chapter09/chapter09.md">링크</a>)<ul>
+<li>setter 메서드</li>
+<li>생성자 인수</li>
+<li>혹은 둘 다</li>
+</ul>
+</li>
+<li>~ DI 컨테이너는 필요한 객체의 인스턴스를 만든 후 생성자 인수나 설정자 메서드를 사용해 의존성을 설정한다.</li>
+<li>초기화 지연으로 얻는 장점을 무조건 포기할 필요는 없다. DI를 사용하더라도 때론 여전히 유용하다.<ul>
+<li>대다수 DI 컨테이너는 필요할 때까지는 객체를 생성하지 않고, 대부분은 계산 지연이나 비슷한 최적화를 쓸 수 있도록 팩토리를 호출하거나 프록시를 생성하는 방법을 제공한다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="확장"><a href="#확장" class="headerlink" title="확장"></a>확장</h3><ul>
+<li>‘처음부터 올바르게’ 시스템을 만들 수 있다는 믿음은 미신이다.</li>
+<li>소프트웨어 시스템은 ‘수명이 짧다’는 본질로 인해 아키텍처의 점진적인 발전이 가능하다.</li>
+<li>EJB1과 EJB2 예시를 통해 관심사를 적절히 분리하지 못한 경우는 책에서 확인 (p.200 ~ 202)</li>
+</ul>
+<h3 id="자바-프록시"><a href="#자바-프록시" class="headerlink" title="자바 프록시"></a>자바 프록시</h3><ul>
+<li>개별 객체나 클래스에서 메서드 호출을 wrapping 하는 경우</li>
+<li>JDK에서는 기본으로 인터페이스만 지원하고, 클래스 프록시를 사용하려면 추가 라이브러리가 필요하다. (현재도 그런지 확인 필요!)</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// JDK 프록시 예제</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Bank.java - 은행 추상화</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Bank</span> &#123;</span><br><span class="line">  Collection&lt;Account&gt; <span class="title function_">getAccounts</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> <span class="title function_">setAccounts</span><span class="params">(Collection&lt;Account&gt; accounts)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// BankImpl.java - 추상화를 위한 POJO 구현</span></span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BankImpl</span> <span class="keyword">implements</span> <span class="title class_">Bank</span> &#123;</span><br><span class="line">  <span class="keyword">private</span> List&lt;Account&gt; accounts;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> Collection&lt;Account&gt; <span class="title function_">getAccounts</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> accounts;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setAccounts</span><span class="params">(Collection&lt;Account&gt; accounts)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.accounts = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Account&gt;();</span><br><span class="line">    <span class="built_in">this</span>.accounts.addAll(accounts);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// BankProxyHandler.java - Proxy API가 필요로 하는 InvocationHandler</span></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.*;</span><br><span class="line">        <span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BankProxyHandler</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line">  <span class="keyword">private</span> Bank bank;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="title function_">BankProxyHandler</span><span class="params">(Bank bank)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.bank = bank;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 자바 리플렉션 사용</span></span><br><span class="line">  <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">methodName</span> <span class="operator">=</span> method.getName();</span><br><span class="line">    <span class="keyword">if</span> (methodName.equals(<span class="string">&quot;getAccounts&quot;</span>)) &#123;</span><br><span class="line">      bank.setAccounts((Collection&lt;Account&gt;) args[<span class="number">0</span>]);</span><br><span class="line">      <span class="keyword">return</span> bank.getAccounts();</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (methodName.equals(<span class="string">&quot;setAccounts&quot;</span>)) &#123;</span><br><span class="line">      bank.setAccounts((Collection&lt;Account&gt;) args[<span class="number">0</span>]);</span><br><span class="line">      setAccountsToDatabase(bank.getAccounts());</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 교재에서도 생략된 부분</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> Collection&lt;Account&gt; <span class="title function_">getAccountsFromDatabase</span><span class="params">()</span> &#123; <span class="comment">/* 구현 코드 */</span> &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">setAccountsToDatabase</span><span class="params">(Collection&lt;Account&gt; accounts)</span> &#123; <span class="comment">/* 구현 코드 */</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// BankService.java (교재에서는 이름 따로 없음)</span></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Proxy;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BankService</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">someMethod</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">Bank</span> <span class="variable">bank</span> <span class="operator">=</span> (Bank) Proxy.newProxyInstance(</span><br><span class="line">            Bank.class.getClassLoader(),</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Bank.class&#125;,</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">BankProxyHandler</span>(<span class="keyword">new</span> <span class="title class_">BankImpl</span>()));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>단점1: 코드의 양과 크기 -&gt; 깨끗한 코드를 작성하기 어렵다</li>
+<li>단점2: 시스템 단위로 실행 지점을 명시하는 메커니즘을 제공하지 않는다. -&gt; (AOP에서 해결)</li>
+</ul>
+<h3 id="순수-자바-AOP-프레임워크"><a href="#순수-자바-AOP-프레임워크" class="headerlink" title="순수 자바 AOP 프레임워크"></a>순수 자바 AOP 프레임워크</h3><ul>
+<li>내부적으로는 프록시를 사용한다.</li>
+<li>스프링은 비즈니스 로직을 POJO로 구현한다.</li>
+<li>POJO는 순수하게 도메인에 초점을 맞추기 때문에 테스트가 개념적으로 더 쉽고 간단하여 보수하고 개선하기도 쉽다.</li>
+<li>결론적으로 스프링과 같은 프레임워크에서 사용자가 모르게 프록시나 바이트코드 라이브러리를 사용해 <strong>영속성, 트랜잭션, 보안, 캐시, 장애조치</strong>와 같은 횡단 관심사를 구현하고 있다.</li>
+<li>이는 프레임워크에서 코드를 작성한다고 하지만 사실상 많은 부분에서 이미 프레임워크와 독립적인 코드가 만들어지게 되었다.</li>
+<li>XML이 조금 읽기 어렵지만 그런 설정 파일에 명시된 정책이 겉으로 잘 보이지 않지만 자동으로 생성되는 프록시나 관점 논리보다 단순하다는 평가에 따라 Spring과 EJB3에 기여한다.</li>
+<li>개선된 코드는 교재에서 확인 (p.208~p.209)</li>
+</ul>
+<h3 id="AspectJ-관점"><a href="#AspectJ-관점" class="headerlink" title="AspectJ 관점"></a>AspectJ 관점</h3><ul>
+<li>관심사를 관점으로 분리하는 가장 강력한 도구: AspectJ 언어</li>
+<li>새로 배워야하는 어려움이 있어서 AspectJ를 쉽게 사용하도록 도와주는 다양한 도구가 마련되어 있다.</li>
+<li>(추가) 개발해보면서 spring aop 라이브러리만 추가해도 대부분 사용이 가능한 것 같다.</li>
+</ul>
+<h3 id="테스트-주도-시스템-아키텍처-구축"><a href="#테스트-주도-시스템-아키텍처-구축" class="headerlink" title="테스트 주도 시스템 아키텍처 구축"></a>테스트 주도 시스템 아키텍처 구축</h3><ul>
+<li>애플리케이션 도메인 논리를 POJO로 작성할 수 있다면 테스트 주도 아키텍처 구축이 가능해진다.</li>
+<li>아주 단순하면서도 멋지게 분리된 아키텍처로 프로젝트를 재빨리 진행한 다음, 기반 구조를 추가하면서 조금씩 확장해도 괜찮다.</li>
+<li>하지만! 설계가 아무리 멋진 API라도 정말 필요하지 않으면 <strong>과유불급</strong></li>
+</ul>
+<h3 id="의사-결정을-최적화하라"><a href="#의사-결정을-최적화하라" class="headerlink" title="의사 결정을 최적화하라"></a>의사 결정을 최적화하라</h3><ul>
+<li>모듈을 나누고 관심사를 분리하면 지엽적인 관리와 결정이 가능해진다.</li>
+<li><strong>가능한 마지막 순간까지 결정을 미루는 방법</strong>이 좋을 때도 있다.</li>
+<li>요약: 관심사를 모듈로 분리한 POJO 시스템은 기민함을 제공한다. 이런 기민함 덕택에 최신 정보에 기반해 최선의 시점에 최적의 결정을 내리기가 쉬워진다. 또한 결정의 복잡성도 줄어든다.</li>
+</ul>
+<h3 id="명백한-가치가-있을-때-표준을-현명하게-사용하라"><a href="#명백한-가치가-있을-때-표준을-현명하게-사용하라" class="headerlink" title="명백한 가치가 있을 때 표준을 현명하게 사용하라"></a>명백한 가치가 있을 때 표준을 현명하게 사용하라</h3><ul>
+<li>표준을 사용하면 아이디어와 컴포넌트를 재사용하기 쉽다.</li>
+<li>적절한 경험을 가진 사람을 구하기 쉽다.</li>
+<li>컴포넌트를 엮기 쉽다.</li>
+<li><strong>하지만</strong> 때로는 표준을 만드는 시간이 너무 오래 걸려 업계가 기다리지 못하거나 표준을 제정한 본래 목적을 잊어버리기도 한다.</li>
+</ul>
+<h3 id="시스템은-도메인-특화-언어가-필요하다"><a href="#시스템은-도메인-특화-언어가-필요하다" class="headerlink" title="시스템은 도메인 특화 언어가 필요하다"></a>시스템은 도메인 특화 언어가 필요하다</h3><ul>
+<li>DSL: 간단한 스크립트 언어나 표준 언어로 구현한 API를 가리킨다.</li>
+<li>좋은 DSL은 도메인 개념과 그 개념을 구현한 코드 사이에 존재하는 ‘의사소통 간극’을 줄여준다.</li>
+<li>효과적으로 잘 사용한다면 추상화 수준을 코드 관용구나 디자인 패턴 이상으로 끌어올려서 개발자가 적절한 추상화 수준에서 코드 의도를 표현할 수 있다!</li>
+</ul>
+<h3 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h3><ul>
+<li>시스템 역시 <strong>깨끗해야</strong> 한다.</li>
+<li>깨끗하지 못한 아키텍처는 도메인 논리를 흐리며 기민성을 떨어뜨린다.</li>
+<li>도메인 논리가 흐려지면 제품 품질이 떨어진다. 버그가 숨어들기 쉬워지고, 스토리를 구현하기 어려워진다.</li>
+<li>기민성이 떨어지면 생산성이 낮아져 TDD가 제공하는 장점이 사라진다.</li>
+<li>모든 추상화 단계에서 의도는 명확히 표현해야 한다.</li>
+<li><strong>POJO를 작성하고 관점 or 관점과 유사한 메커니즘을 사용해 각 구현 관심사를 분리해야 한다.</strong></li>
+<li>시스템을 설계하든 개별 모듈을 설계하든, <strong>실제로 돌아가는 가장 단순한 수단</strong>을 사용해야 한다는 사실을 명심하자!</li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2021/02/28/clean_code/chapter10/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2021-03-26 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/Clean-Code/" title="Clean_Code">
+                        <b>#</b> Clean_Code
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/java/" title="java">
+                        <b>#</b> java
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2021/04/01/effective_java/2021-04-01-item1/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%8F%84%EC%8B%9C%EB%A5%BC-%EC%84%B8%EC%9A%B4%EB%8B%A4%EB%A9%B4"><span class="toc-text">도시를 세운다면?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%A0%9C%EC%9E%91%EA%B3%BC-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%82%AC%EC%9A%A9%EC%9D%84-%EB%B6%84%EB%A6%AC%ED%95%98%EB%9D%BC"><span class="toc-text">시스템 제작과 시스템 사용을 분리하라</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Main-%EB%B6%84%EB%A6%AC"><span class="toc-text">Main 분리</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%ED%8C%A9%ED%86%A0%EB%A6%AC"><span class="toc-text">팩토리</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EC%9D%98%EC%A1%B4%EC%84%B1-%EC%A3%BC%EC%9E%85-DI"><span class="toc-text">의존성 주입(DI)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%99%95%EC%9E%A5"><span class="toc-text">확장</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%9E%90%EB%B0%94-%ED%94%84%EB%A1%9D%EC%8B%9C"><span class="toc-text">자바 프록시</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%88%9C%EC%88%98-%EC%9E%90%EB%B0%94-AOP-%ED%94%84%EB%A0%88%EC%9E%84%EC%9B%8C%ED%81%AC"><span class="toc-text">순수 자바 AOP 프레임워크</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AspectJ-%EA%B4%80%EC%A0%90"><span class="toc-text">AspectJ 관점</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%A3%BC%EB%8F%84-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98-%EA%B5%AC%EC%B6%95"><span class="toc-text">테스트 주도 시스템 아키텍처 구축</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%9D%98%EC%82%AC-%EA%B2%B0%EC%A0%95%EC%9D%84-%EC%B5%9C%EC%A0%81%ED%99%94%ED%95%98%EB%9D%BC"><span class="toc-text">의사 결정을 최적화하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%AA%85%EB%B0%B1%ED%95%9C-%EA%B0%80%EC%B9%98%EA%B0%80-%EC%9E%88%EC%9D%84-%EB%95%8C-%ED%91%9C%EC%A4%80%EC%9D%84-%ED%98%84%EB%AA%85%ED%95%98%EA%B2%8C-%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC"><span class="toc-text">명백한 가치가 있을 때 표준을 현명하게 사용하라</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%9D%80-%EB%8F%84%EB%A9%94%EC%9D%B8-%ED%8A%B9%ED%99%94-%EC%96%B8%EC%96%B4%EA%B0%80-%ED%95%84%EC%9A%94%ED%95%98%EB%8B%A4"><span class="toc-text">시스템은 도메인 특화 언어가 필요하다</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EA%B2%B0%EB%A1%A0"><span class="toc-text">결론</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/boring-km">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="kmjin@kakao.com">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="linkedin" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/">
+            <i class="iconfont icon-linkedin"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="TIL" target="_blank" rel="noopener" href="https://boring-km.github.io/TIL">
+            <i class="iconfont icon-emoji-friendly"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/boring-km">머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="내용 검색...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Clean%20Code%2011%EC%9E%A5%20-%20%EC%8B%9C%EC%8A%A4%ED%85%9C + '&url=' + http%3A%2F%2Fexample.com%2F2021%2F03%2F26%2Fclean_code%2Fchapter11%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2021/03/26/clean_code/chapter11/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

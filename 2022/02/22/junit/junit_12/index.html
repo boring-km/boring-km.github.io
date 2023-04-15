@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      12. 테스트 주도 개발 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">boring-km</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">12. 테스트 주도 개발</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2022-02-22 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/JUnit/" title="JUnit">
+                    <b>#</b> JUnit
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/java/" title="java">
+                    <b>#</b> java
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/test/" title="test">
+                    <b>#</b> test
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/kotlin/" title="kotlin">
+                    <b>#</b> kotlin
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <ul>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/boring-km/JunitPractice/commits/master/src/test/kotlin/chapter12">https://github.com/boring-km/JunitPractice/commits/master/src/test/kotlin/chapter12</a></p>
+</li>
+<li><p>TDD의 주된 이익</p>
+</li>
+<li><p>단순하게 시작</p>
+</li>
+<li><p>또 다른 증분 추가</p>
+</li>
+<li><p>테스트 정리</p>
+</li>
+<li><p>또 다른 작은 증분</p>
+</li>
+<li><p>다수의 응답 지원: 작은 설계 우회로</p>
+</li>
+<li><p>인터페이스 확장</p>
+</li>
+<li><p>마지막 테스트들</p>
+</li>
+<li><p>문서로서의 테스트</p>
+</li>
+<li><p>TDD의 리듬</p>
+</li>
+<li><p>마치며</p>
+</li>
+</ul>
+<blockquote>
+<p>TDD에서 단위 테스트를 시스템의 모양을 잡고 통제하는 도구로 활용해야 한다.</p>
+<p>단위 테스트는 소프트웨어를 어떻게 만들어야 할지에 관한 잘 훈련된 사이클의 핵심적인 부분이다.</p>
+</blockquote>
+<h2 id="12-1-TDD의-주된-이익"><a href="#12-1-TDD의-주된-이익" class="headerlink" title="12.1 TDD의 주된 이익"></a>12.1 TDD의 주된 이익</h2><ul>
+<li><strong>코드가 예상한 대로 동작한다는 자신감을 얻는 것</strong></li>
+<li>TDD에서는 코드가 변경될 것이라는 두려움을 지울 수 있다.</li>
+<li>(전에 공부한 TDD 책의 내용과 유사한 점이 많아 PASS)</li>
+</ul>
+<h2 id="12-2-단순하게-시작"><a href="#12-2-단순하게-시작" class="headerlink" title="12.2 단순하게 시작"></a>12.2 단순하게 시작</h2><ol>
+<li>실패하는 테스트 코드 작성하기</li>
+<li>테스트 통과시키기</li>
+<li>이전 두 단계에서 추가되거나 변경된 코드 개선하기</li>
+</ol>
+<ul>
+<li>(전에 읽었던 TDD 책의 3단계와 표현된 방식은 좀 달라도 이해는 하고 있다.)</li>
+<li>일단 테스트 통과시키기까지 해보기</li>
+</ul>
+<h2 id="12-3-또-다른-증분-추가"><a href="#12-3-또-다른-증분-추가" class="headerlink" title="12.3 또 다른 증분 추가"></a>12.3 또 다른 증분 추가</h2><ul>
+<li>실패하는 각 테스트에 대해 그 테스트를 통과할 수 있는 코드만 추가해라</li>
+<li>가능한 가장 작은 증분을 추가하는 것이다.</li>
+<li>프로파일이 매칭되는 경우를 찾는 테스트를 추가해보자.</li>
+</ul>
+<h2 id="12-4-테스트-정리"><a href="#12-4-테스트-정리" class="headerlink" title="12.4 테스트 정리"></a>12.4 테스트 정리</h2><ul>
+<li>2번까지 진행한 코드에서 테스트 코드를 한번 정리해준다.</li>
+</ul>
+<h2 id="12-5-또-다른-작은-증분"><a href="#12-5-또-다른-작은-증분" class="headerlink" title="12.5 또 다른 작은 증분"></a>12.5 또 다른 작은 증분</h2><ul>
+<li>Profile 인스턴스가 매칭되는 Answer 객체가 없을 때 matches() 메서드가 false를 반환하는 것이다.</li>
+<li>TDD로 생각하는 부분의 일부는 작성할 필요가 있는 다음 테스트를 결정하는 것이다.</li>
+<li>프로그래머로서의 임무는 코드가 다루어야 하는 모든 가능한 순열과 시나리오를 이해하는 것이다.</li>
+<li><strong>TDD로 성공하려면 이들 시나리오를 테스트로 만들고 각 테스트를 통과하게 만드는 코드 증분을 최소화하는 순으로 코드를 작성하는 것이다.</strong></li>
+</ul>
+<h2 id="12-6-다수의-응답-지원-작은-설계-우회로"><a href="#12-6-다수의-응답-지원-작은-설계-우회로" class="headerlink" title="12.6 다수의 응답 지원: 작은 설계 우회로"></a>12.6 다수의 응답 지원: 작은 설계 우회로</h2><ul>
+<li>다수의 응답을 포함하는 Profile에 대한 시나리오를 처리해본다.</li>
+<li>TDD를 할 때 다른 코드를 전혀 건드리지 않고 Profile 클래스만 변경할 필요는 없다.</li>
+<li>필요하다면 설계를 변경하여 다른 클래스로 넘어가도 된다.</li>
+</ul>
+<h2 id="12-7-인터페이스-확장"><a href="#12-7-인터페이스-확장" class="headerlink" title="12.7 인터페이스 확장"></a>12.7 인터페이스 확장</h2><ul>
+<li>컬렉션 객체 Criteria를 matches()로 처리할 수 있도록 수정해본다.</li>
+</ul>
+<h2 id="12-8-마지막-테스트들"><a href="#12-8-마지막-테스트들" class="headerlink" title="12.8 마지막 테스트들"></a>12.8 마지막 테스트들</h2><ul>
+<li>다른 특수 경우 추가해보기</li>
+<li>조건이 “don’t care” 라면 matches() 메서드는 true 반환</li>
+<li>점수 계산 요구사항 추가해보기</li>
+<li>ProfileMatch 클래스로 책임 이동하여 Profile 클래스의 SRP 준수하자</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Profile</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> answers: MutableMap&lt;String, Answer&gt; = HashMap()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">add</span><span class="params">(answer: <span class="type">Answer</span>)</span></span> &#123;</span><br><span class="line">        answers[answer.questionText] = answer</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">match</span><span class="params">(criteria: <span class="type">Criteria</span>)</span></span>: ProfileMatch &#123;</span><br><span class="line">        <span class="keyword">return</span> ProfileMatch(answers, criteria)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProfileMatch</span></span>(<span class="keyword">private</span> <span class="keyword">val</span> answers: MutableMap&lt;String, Answer&gt;, <span class="keyword">private</span> <span class="keyword">val</span> criteria: Criteria) &#123;</span><br><span class="line">    <span class="keyword">var</span> score = <span class="number">0</span></span><br><span class="line">    <span class="keyword">var</span> isMatch = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">matches</span><span class="params">()</span></span>: <span class="built_in">Boolean</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> matches = <span class="literal">false</span></span><br><span class="line">        <span class="keyword">for</span> (criterion: Criterion <span class="keyword">in</span> criteria) &#123;</span><br><span class="line">            <span class="keyword">if</span> (matches(criterion)) &#123;</span><br><span class="line">                matches = <span class="literal">true</span></span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (criterion.weight == Weight.MustMatch) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (matches) score = <span class="number">100</span></span><br><span class="line">        <span class="keyword">return</span> matches</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">init</span> &#123;</span><br><span class="line">        isMatch = matches()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">matches</span><span class="params">(criterion: <span class="type">Criterion</span>)</span></span>: <span class="built_in">Boolean</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> criterion.weight == Weight.DontCare ||</span><br><span class="line">                criterion.answer.match(getMatchingProfileAnswer(criterion))</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">getMatchingProfileAnswer</span><span class="params">(criterion: <span class="type">Criterion</span>)</span></span>: Answer? &#123;</span><br><span class="line">        <span class="keyword">return</span> answers[criterion.answer.questionText]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="12-9-문서로서의-테스트"><a href="#12-9-문서로서의-테스트" class="headerlink" title="12.9 문서로서의 테스트"></a>12.9 문서로서의 테스트</h2><ul>
+<li>테스트 코드들을 하나의 클래스에 넣을 필요도 없다.</li>
+<li>테스트 이름도 수정해보자</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 최종</span></span><br><span class="line"><span class="keyword">import</span> org.hamcrest.CoreMatchers.equalTo</span><br><span class="line"><span class="keyword">import</span> org.hamcrest.MatcherAssert.assertThat</span><br><span class="line"><span class="keyword">import</span> org.junit.Assert.assertFalse</span><br><span class="line"><span class="keyword">import</span> org.junit.Assert.assertTrue</span><br><span class="line"><span class="keyword">import</span> org.junit.Before</span><br><span class="line"><span class="keyword">import</span> org.junit.Test</span><br><span class="line"></span><br><span class="line"><span class="keyword">open</span> <span class="class"><span class="keyword">class</span> <span class="title">ProfileTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">lateinit</span> <span class="keyword">var</span> profile: Profile</span><br><span class="line">    <span class="keyword">lateinit</span> <span class="keyword">var</span> questionIsThereRelocation: BooleanQuestion</span><br><span class="line">    <span class="keyword">lateinit</span> <span class="keyword">var</span> answerThereIsRelocation: Answer</span><br><span class="line">    <span class="keyword">lateinit</span> <span class="keyword">var</span> answerThereIsNotRelocation: Answer</span><br><span class="line">    <span class="keyword">lateinit</span> <span class="keyword">var</span> questionReimbursesTuition: BooleanQuestion</span><br><span class="line">    <span class="keyword">lateinit</span> <span class="keyword">var</span> answerDoesNotReimburseTuition: Answer</span><br><span class="line">    <span class="keyword">lateinit</span> <span class="keyword">var</span> answerReimbursesTuition: Answer</span><br><span class="line"></span><br><span class="line">    <span class="keyword">lateinit</span> <span class="keyword">var</span> criteria: Criteria</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Before</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">createCriteria</span><span class="params">()</span></span> &#123;</span><br><span class="line">        criteria = Criteria()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Before</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">createProfile</span><span class="params">()</span></span> &#123;</span><br><span class="line">        profile = Profile()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Before</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">createQuestionAndAnswer</span><span class="params">()</span></span> &#123; <span class="comment">// 이렇게 2가지를 같이 생성하는 의미로 사용해도 되려나...?</span></span><br><span class="line">        questionIsThereRelocation = BooleanQuestion(<span class="number">1</span>, <span class="string">&quot;Relocation package?&quot;</span>)</span><br><span class="line">        answerThereIsRelocation = Answer(questionIsThereRelocation, Bool.TRUE)</span><br><span class="line">        answerThereIsNotRelocation = Answer(questionIsThereRelocation, Bool.FALSE)</span><br><span class="line">        questionReimbursesTuition = BooleanQuestion(<span class="number">1</span>, <span class="string">&quot;Reimburses tuition?&quot;</span>)</span><br><span class="line">        answerDoesNotReimburseTuition = Answer(questionReimbursesTuition, Bool.FALSE)</span><br><span class="line">        answerReimbursesTuition = Answer(questionReimbursesTuition, Bool.TRUE)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Profile_MatchesCriterionTest</span>: <span class="type">ProfileTest</span></span>() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">trueWhenMatchesSoleAnswer</span><span class="params">()</span></span> &#123;</span><br><span class="line">        profile.add(answerThereIsRelocation)</span><br><span class="line">        <span class="keyword">val</span> criterion = Criterion(answerThereIsRelocation, Weight.Important)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> result = profile.match(criterion).isMatch</span><br><span class="line"></span><br><span class="line">        assertTrue(result)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">falseWhenNoMatchingAnswerContained</span><span class="params">()</span></span> &#123;</span><br><span class="line">        profile.add(answerThereIsNotRelocation)</span><br><span class="line">        <span class="keyword">val</span> criterion = Criterion(answerThereIsRelocation, Weight.Important)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> result = profile.match(criterion).isMatch</span><br><span class="line"></span><br><span class="line">        assertFalse(result)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">matchesWhenContainsMultipleAnswers</span><span class="params">()</span></span> &#123;</span><br><span class="line">        profile.add(answerThereIsRelocation)</span><br><span class="line">        profile.add(answerDoesNotReimburseTuition)</span><br><span class="line">        <span class="keyword">val</span> criterion = Criterion(answerThereIsRelocation, Weight.Important)</span><br><span class="line"></span><br><span class="line">        assertTrue(profile.match(criterion).isMatch)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">matchesWhenCriterionIsDontCare</span><span class="params">()</span></span> &#123;</span><br><span class="line">        profile.add(answerDoesNotReimburseTuition)</span><br><span class="line">        <span class="keyword">val</span> criterion = Criterion(answerReimbursesTuition, Weight.DontCare)</span><br><span class="line"></span><br><span class="line">        assertTrue(profile.match(criterion).isMatch)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Profile_MatchesCriteriaTest</span>: <span class="type">ProfileTest</span></span>() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">falseWhenNoneOfMultipleCriteriaMatch</span><span class="params">()</span></span> &#123;</span><br><span class="line">        profile.add(answerDoesNotReimburseTuition)</span><br><span class="line">        <span class="keyword">val</span> criteria = Criteria()</span><br><span class="line">        criteria.add(Criterion(answerThereIsRelocation, Weight.Important))</span><br><span class="line">        criteria.add(Criterion(answerReimbursesTuition, Weight.Important))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> result = profile.match(criteria).isMatch</span><br><span class="line"></span><br><span class="line">        assertFalse(result)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">trueWhenAnyOfMultipleCriteriaMatch</span><span class="params">()</span></span> &#123;</span><br><span class="line">        profile.add(answerThereIsRelocation)</span><br><span class="line">        <span class="keyword">val</span> criteria = Criteria()</span><br><span class="line">        criteria.add(Criterion(answerThereIsRelocation, Weight.Important))</span><br><span class="line">        criteria.add(Criterion(answerReimbursesTuition, Weight.Important))</span><br><span class="line">        assertTrue(profile.match(criteria).isMatch)   <span class="comment">// AAA 규칙을 안지켜도 잘 읽힌다.</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">falseWhenAnyMustMeetCriteriaNotMet</span><span class="params">()</span></span> &#123;</span><br><span class="line">        profile.add(answerThereIsRelocation)</span><br><span class="line">        profile.add(answerDoesNotReimburseTuition)</span><br><span class="line">        criteria.add(Criterion(answerThereIsRelocation, Weight.Important))</span><br><span class="line">        criteria.add(Criterion(answerReimbursesTuition, Weight.MustMatch))</span><br><span class="line"></span><br><span class="line">        assertFalse(profile.match(criteria).isMatch)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Profile_ScoreTest</span>: <span class="type">ProfileTest</span></span>() &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">zeroWhenThereAreNoMatches</span><span class="params">()</span></span> &#123;</span><br><span class="line">        criteria.add(Criterion(answerThereIsRelocation, Weight.Important))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> match: ProfileMatch = profile.match(criteria)</span><br><span class="line"></span><br><span class="line">        assertThat(match.score, equalTo(<span class="number">0</span>))</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> 모두_일치하면_Score는_100이다<span class="params">()</span></span> &#123;</span><br><span class="line">        criteria.add(Criterion(answerThereIsRelocation, Weight.DontCare))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> match = profile.match(criteria)</span><br><span class="line"></span><br><span class="line">        assertThat(match.score, equalTo(<span class="number">100</span>))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="12-10-TDD의-리듬"><a href="#12-10-TDD의-리듬" class="headerlink" title="12.10 TDD의 리듬"></a>12.10 TDD의 리듬</h2><ul>
+<li>TDD의 리듬을 형성하면 좋다! ㅋㅋ</li>
+<li>10분 정도 시간 제한을 걸어보고 테스트 통과를 못했다면 작업 중인 코드를 버리고 다시 좀 더 작은 단계로 도전해보자</li>
+<li>각 TDD 사이클은 테스트를 가설로 한 시간 제한이 있는 실험으로 취급해라</li>
+</ul>
+<h2 id="12-11-마치며"><a href="#12-11-마치며" class="headerlink" title="12.11 마치며"></a>12.11 마치며</h2><ul>
+<li><strong>테스트를 작성하고, 그것을 통과하고 코드가 깔끔한지 확인하고 반복하는 것이다!</strong></li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2022/02/20/junit/junit_11/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2022-02-22 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/JUnit/" title="JUnit">
+                        <b>#</b> JUnit
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/java/" title="java">
+                        <b>#</b> java
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/test/" title="test">
+                        <b>#</b> test
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/kotlin/" title="kotlin">
+                        <b>#</b> kotlin
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2022/02/26/junit/junit_13/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#12-1-TDD%EC%9D%98-%EC%A3%BC%EB%90%9C-%EC%9D%B4%EC%9D%B5"><span class="toc-text">12.1 TDD의 주된 이익</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-2-%EB%8B%A8%EC%88%9C%ED%95%98%EA%B2%8C-%EC%8B%9C%EC%9E%91"><span class="toc-text">12.2 단순하게 시작</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-3-%EB%98%90-%EB%8B%A4%EB%A5%B8-%EC%A6%9D%EB%B6%84-%EC%B6%94%EA%B0%80"><span class="toc-text">12.3 또 다른 증분 추가</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-4-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%A0%95%EB%A6%AC"><span class="toc-text">12.4 테스트 정리</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-5-%EB%98%90-%EB%8B%A4%EB%A5%B8-%EC%9E%91%EC%9D%80-%EC%A6%9D%EB%B6%84"><span class="toc-text">12.5 또 다른 작은 증분</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-6-%EB%8B%A4%EC%88%98%EC%9D%98-%EC%9D%91%EB%8B%B5-%EC%A7%80%EC%9B%90-%EC%9E%91%EC%9D%80-%EC%84%A4%EA%B3%84-%EC%9A%B0%ED%9A%8C%EB%A1%9C"><span class="toc-text">12.6 다수의 응답 지원: 작은 설계 우회로</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-7-%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4-%ED%99%95%EC%9E%A5"><span class="toc-text">12.7 인터페이스 확장</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-8-%EB%A7%88%EC%A7%80%EB%A7%89-%ED%85%8C%EC%8A%A4%ED%8A%B8%EB%93%A4"><span class="toc-text">12.8 마지막 테스트들</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-9-%EB%AC%B8%EC%84%9C%EB%A1%9C%EC%84%9C%EC%9D%98-%ED%85%8C%EC%8A%A4%ED%8A%B8"><span class="toc-text">12.9 문서로서의 테스트</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-10-TDD%EC%9D%98-%EB%A6%AC%EB%93%AC"><span class="toc-text">12.10 TDD의 리듬</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-11-%EB%A7%88%EC%B9%98%EB%A9%B0"><span class="toc-text">12.11 마치며</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/boring-km">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="kmjin@kakao.com">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="linkedin" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/">
+            <i class="iconfont icon-linkedin"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="TIL" target="_blank" rel="noopener" href="https://boring-km.github.io/TIL">
+            <i class="iconfont icon-emoji-friendly"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/boring-km">머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="내용 검색...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + 12.%20%ED%85%8C%EC%8A%A4%ED%8A%B8%20%EC%A3%BC%EB%8F%84%20%EA%B0%9C%EB%B0%9C + '&url=' + http%3A%2F%2Fexample.com%2F2022%2F02%2F22%2Fjunit%2Fjunit_12%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2022/02/22/junit/junit_12/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

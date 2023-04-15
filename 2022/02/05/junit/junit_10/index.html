@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      10. 목 객체 사용 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">boring-km</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">10. 목 객체 사용</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2022-02-05 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/JUnit/" title="JUnit">
+                    <b>#</b> JUnit
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/java/" title="java">
+                    <b>#</b> java
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/test/" title="test">
+                    <b>#</b> test
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/kotlin/" title="kotlin">
+                    <b>#</b> kotlin
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/boring-km/JunitPractice">https://github.com/boring-km/JunitPractice</a></li>
+<li></li>
+<li>테스트 도전 과제</li>
+<li>번거로운 동작을 스텁으로 대체</li>
+<li>테스트를 지원하기 위한 설계 변경</li>
+<li>스텁에 지능 더하기: 인자 검증</li>
+<li>목 도구를 사용하여 테스트 단순화</li>
+<li>마지막 하나의 단순화: 주입 도구 소개</li>
+<li>목을 올바르게 사용할 때 중요한 것</li>
+<li>마치며</li>
+</ul>
+<h2 id="10-1-테스트-도전-과제"><a href="#10-1-테스트-도전-과제" class="headerlink" title="10.1 테스트 도전 과제"></a>10.1 테스트 도전 과제</h2><ul>
+<li>주소를 입력하는 대신 사용자는 지도에서 Profile 주소를 나타내는 지점을 선택할 수 있다.</li>
+<li>애플리케이션은 선택된 지점의 위도와 경도 좌표를 AddressRetriever 클래스의 retrieve() 메서드로 넘긴다.</li>
+<li>chapter10 패키지 참조</li>
+<li>HTTP 호출을 실행하기 때문에 생기는 2가지 시사점<ul>
+<li>실제 호출에 대한 테스트는 나머지 대다수의 빠른 테스트들에 비해 속도가 느릴 것이다.</li>
+<li>Nominatim HTTP API가 항상 가용한지 보장할 수 없다. 통제 밖에 있다.</li>
+</ul>
+</li>
+<li>API의 테스트 버전이라면 가용성 부분을 통제할 수 있겠지만 여전히 느리다.</li>
+<li>의존성 있는 다른 코드와 분리하여 retrieve() 메서드의 로직에 관한 단위 테스트를 하자</li>
+</ul>
+<h2 id="10-2-번거로운-동작을-스텁-stub-으로-대체"><a href="#10-2-번거로운-동작을-스텁-stub-으로-대체" class="headerlink" title="10.2 번거로운 동작을 스텁(stub)으로 대체"></a>10.2 번거로운 동작을 스텁(stub)으로 대체</h2><ul>
+<li>먼저 HTTP 호출에서 반환되는 JSON 응답을 이용해 Address 객체를 생성하는 로직을 검증하는 데 집중하자</li>
+<li>stub: 테스트 용도로 하드 코딩한 값을 반환하는 구현체</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> chapter10.AddressRetriever</span><br><span class="line"><span class="keyword">import</span> chapter10.util.Http</span><br><span class="line"><span class="keyword">import</span> org.hamcrest.CoreMatchers.equalTo</span><br><span class="line"><span class="keyword">import</span> org.hamcrest.MatcherAssert.assertThat</span><br><span class="line"><span class="keyword">import</span> org.junit.Test</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AddressRetrieverTest</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">answersAppropriateAddressForValidCoordinates</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">val</span> http: Http = <span class="keyword">object</span> : Http &#123;</span><br><span class="line">            <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">get</span><span class="params">(url: <span class="type">String</span>)</span></span>: String &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;&#123;\&quot;address\&quot;: &#123;&quot;</span> +</span><br><span class="line">                        <span class="string">&quot;\&quot;house_number\&quot;:\&quot;324\&quot;,&quot;</span> +</span><br><span class="line">                        <span class="string">&quot;\&quot;road\&quot;:\&quot;North Tejon Street\&quot;,&quot;</span> +</span><br><span class="line">                        <span class="string">&quot;\&quot;city\&quot;: \&quot;Colorado Springs\&quot;,&quot;</span> +</span><br><span class="line">                        <span class="string">&quot;\&quot;state\&quot;: \&quot;Colorado\&quot;,&quot;</span> +</span><br><span class="line">                        <span class="string">&quot;\&quot;postcode\&quot;: \&quot;80903\&quot;,&quot;</span> +</span><br><span class="line">                        <span class="string">&quot;\&quot;country_code\&quot;: \&quot;us\&quot;&#125;&quot;</span> +</span><br><span class="line">                        <span class="string">&quot;&#125;&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">val</span> retriever = AddressRetriever(http)</span><br><span class="line">        <span class="keyword">val</span> address = retriever.retrieve(<span class="number">38.0</span>, -<span class="number">104.0</span>)</span><br><span class="line"></span><br><span class="line">        assertThat(address.houseNumber, equalTo(<span class="string">&quot;324&quot;</span>))</span><br><span class="line">        assertThat(address.road, equalTo(<span class="string">&quot;North Tejon Street&quot;</span>))</span><br><span class="line">        assertThat(address.city, equalTo(<span class="string">&quot;Colorado Springs&quot;</span>))</span><br><span class="line">        assertThat(address.state, equalTo(<span class="string">&quot;Colorado&quot;</span>))</span><br><span class="line">        assertThat(address.zip, equalTo(<span class="string">&quot;80903&quot;</span>))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Http의 stub 인스턴스 생성한다.<ul>
+<li>스텁은 get(url: String) 단일 메서드가 있으며 하드 코딩된 JSON 문자열을 반환한다.</li>
+</ul>
+</li>
+<li>테스트는 AddressRetriever 객체를 생성하고 생성자에 스텁을 전달한다.</li>
+<li>AddressRetriever 객체는 스텁을 저장한다.</li>
+<li>실행될 때 retrieve() 메서드는 먼저 넘어온 파라미터의 포맷을 정한다.<br>그다음 스텁이 저장된 http 필드에 get() 메서드를 호출한다.<br>retrieve() 메서드는 http 필드가 스텁을 참조하는지 프로덕션 구현을 참조하는지 관여하지 않는다.<br>메서드가 아는 것은 get() 메서드를 구현한 객체와 상호 작용하고 있다는 점이다.</li>
+<li>스텁은 테스트에 하드 코딩된 JSON 문자열을 당연히 반환하겠지!!</li>
+<li>나머지 retrieve() 메서드는 하드 코딩된 JSON 문자열을 파싱하고 그에 따라 Address 객체를 구성한다.</li>
+<li>테스트는 반환된 Address 객체의 요소를 검증한다.</li>
+</ul>
+<h2 id="10-3-테스트를-지원하기-위한-설계-변경"><a href="#10-3-테스트를-지원하기-위한-설계-변경" class="headerlink" title="10.3 테스트를 지원하기 위한 설계 변경"></a>10.3 테스트를 지원하기 위한 설계 변경</h2><ul>
+<li>이전에 Http 인스턴스는 retrieve() 메서드에서 생성되어 AddressRetriever 클래스의 세부 사항이었다.</li>
+<li>이제 AddressRetriever 클래스와 상호 작용하는 어떤 클라이언트는 다음과 같이 적절한 Http 인스턴스를 생성하여 넘겨주어야 한다.</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> retriever = AddressRetriever(HttpImpl())</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>간단한 방법으로 시스템이 기대하는 방식으로 동작함을 보여 주는 것이 가장 중요하다.</strong></li>
+<li>생성자 주입 말고도 다른 많은 방법으로 stub을 주입할 수 있다.</li>
+<li>setter, factory method override, abstract factory 등을 사용하거나 프레임워크 사용</li>
+</ul>
+<h2 id="10-4-스텁에-지능-더하기-인자-검증"><a href="#10-4-스텁에-지능-더하기-인자-검증" class="headerlink" title="10.4 스텁에 지능 더하기: 인자 검증"></a>10.4 스텁에 지능 더하기: 인자 검증</h2><ul>
+<li>retrieve() 메서드의 코드가 올바르게 HttpImpl 코드와 상호 작용하는지 검증해보자</li>
+<li>stub에 Http 클래스의 get() 메서드에 전달되는 URL을 검증하는 보호절을 추가</li>
+<li>기대하는 인자 문자열을 포함하지 않으면 그 시점에 명시적으로 테스트를 실패 처리한다.</li>
+<li>일부러 문자열 하나 빼놓고 테스트</li>
+<li><strong>목은 의도적으로 흉내 낸 동작을 제공하고 수신한 인자가 모두 정상인지 여부를 검증하는 일을 하는 테스트 구조물이다.</strong></li>
+</ul>
+<h2 id="10-5-목-도구를-사용하여-테스트-단순화"><a href="#10-5-목-도구를-사용하여-테스트-단순화" class="headerlink" title="10.5 목 도구를 사용하여 테스트 단순화"></a>10.5 목 도구를 사용하여 테스트 단순화</h2><ul>
+<li><p>stub을 Mock으로 바꿔보자</p>
+<ul>
+<li>테스트에 어떤 인자를 기대하는지 명시하기</li>
+<li>get() 메서드에 넘겨진 인자들을 잡아서 저장하기</li>
+<li>get() 메서드에 저장된 인자들이 기대하는 인자들인지 테스트가 완료될 때 검증하는 능력 지원하기</li>
+</ul>
+</li>
+<li><p>Mockito 사용해보자</p>
+</li>
+<li><p>테스트의 기대 사항 설정은 실제 테스트보다 먼저 해야 한다.</p>
+</li>
+<li><p>when(…).thenReturn(…)의 대안으로 처리 과정에서 어떤 메서드가 호출되었는지 검증하는 verify()도 있다.</p>
+</li>
+</ul>
+<h2 id="10-6-마지막-하나의-단순화-주입-도구-소개"><a href="#10-6-마지막-하나의-단순화-주입-도구-소개" class="headerlink" title="10.6 마지막 하나의 단순화: 주입 도구 소개"></a>10.6 마지막 하나의 단순화: 주입 도구 소개</h2><ul>
+<li>mockito DI 기능 사용하기</li>
+</ul>
+<ol>
+<li>@Mock 사용하여 Mock 인스턴스 생성하기</li>
+<li>@InjectMocks을 붙인 대상 인스턴스 변수를 선언한다.</li>
+<li>대상 인스턴스를 인스턴스화 한 후에 MockitoAnnotations.initMocks(this) 호출하기</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> chapter10.AddressRetriever</span><br><span class="line"><span class="keyword">import</span> chapter10.util.Http</span><br><span class="line"><span class="keyword">import</span> org.hamcrest.CoreMatchers.equalTo</span><br><span class="line"><span class="keyword">import</span> org.hamcrest.MatcherAssert.assertThat</span><br><span class="line"><span class="keyword">import</span> org.junit.Before</span><br><span class="line"><span class="keyword">import</span> org.junit.Test</span><br><span class="line"><span class="keyword">import</span> org.mockito.InjectMocks</span><br><span class="line"><span class="keyword">import</span> org.mockito.Mock</span><br><span class="line"><span class="keyword">import</span> org.mockito.Mockito.*</span><br><span class="line"><span class="keyword">import</span> org.mockito.MockitoAnnotations</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AddressRetrieverTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Mock</span> <span class="keyword">private</span> <span class="keyword">lateinit</span> <span class="keyword">var</span> http: Http</span><br><span class="line">    <span class="meta">@InjectMocks</span> <span class="keyword">private</span> <span class="keyword">lateinit</span> <span class="keyword">var</span> retriever: AddressRetriever</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Before</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">createRetriever</span><span class="params">()</span></span> &#123;</span><br><span class="line">        retriever = AddressRetriever()</span><br><span class="line">        MockitoAnnotations.openMocks(<span class="keyword">this</span>)  <span class="comment">// 교재 코드에서는 initMocks(this)</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">answersAppropriateAddressForValidCoordinates</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="comment">// 테스트의 기대 사항들을 설정</span></span><br><span class="line">        `<span class="keyword">when</span>`(http.<span class="keyword">get</span>(contains(<span class="string">&quot;lat=38.000000&amp;lon=-104.000000&quot;</span>)))</span><br><span class="line">            .thenReturn(    <span class="comment">// 기대 사항이 충족되었을 때 처리</span></span><br><span class="line">            <span class="string">&quot;&#123;\&quot;address\&quot;: &#123;&quot;</span> +</span><br><span class="line">                    <span class="string">&quot;\&quot;house_number\&quot;:\&quot;324\&quot;,&quot;</span> +</span><br><span class="line">                    <span class="string">&quot;\&quot;road\&quot;:\&quot;North Tejon Street\&quot;,&quot;</span> +</span><br><span class="line">                    <span class="string">&quot;\&quot;city\&quot;: \&quot;Colorado Springs\&quot;,&quot;</span> +</span><br><span class="line">                    <span class="string">&quot;\&quot;state\&quot;: \&quot;Colorado\&quot;,&quot;</span> +</span><br><span class="line">                    <span class="string">&quot;\&quot;postcode\&quot;: \&quot;80903\&quot;,&quot;</span> +</span><br><span class="line">                    <span class="string">&quot;\&quot;country_code\&quot;: \&quot;us\&quot;&#125;&quot;</span> +</span><br><span class="line">                    <span class="string">&quot;&#125;&quot;</span></span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> address = retriever.retrieve(<span class="number">38.0</span>, -<span class="number">104.0</span>)</span><br><span class="line"></span><br><span class="line">        assertThat(address.houseNumber, equalTo(<span class="string">&quot;324&quot;</span>))</span><br><span class="line">        assertThat(address.road, equalTo(<span class="string">&quot;North Tejon Street&quot;</span>))</span><br><span class="line">        assertThat(address.city, equalTo(<span class="string">&quot;Colorado Springs&quot;</span>))</span><br><span class="line">        assertThat(address.state, equalTo(<span class="string">&quot;Colorado&quot;</span>))</span><br><span class="line">        assertThat(address.zip, equalTo(<span class="string">&quot;80903&quot;</span>))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Http와 retriever 인스턴스를 DI를 통해 얻었다.</li>
+<li>더이상 생성자에 파라미터도 없게 되었다.</li>
+</ul>
+<h2 id="10-7-목을-올바르게-사용할-때-중요한-것"><a href="#10-7-목을-올바르게-사용할-때-중요한-것" class="headerlink" title="10.7 목을 올바르게 사용할 때 중요한 것"></a>10.7 목을 올바르게 사용할 때 중요한 것</h2><ul>
+<li>mock을 사용한 테스트는 진행하길 원하는 내용을 분명하게 기술해야 한다.</li>
+<li><strong>연관성</strong></li>
+<li>테스트를 보는 사람이 코드를 깊게 파지 않아도 이러한 연관성을 쉽게 파악할 수 있도록 코드는 더 좋아진다. -&gt; 결국 클린코드</li>
+<li>mock이 실제 동작을 대신한다는 것을 잊지 말라<ul>
+<li>mock이 프로덕션 코드의 동작을 올바르게 묘사하고 있는가?</li>
+<li>프로덕션 코드는 생각하지 못한 다른 형식으로 반환하는가?</li>
+<li>프로덕션 코드는 예외를 던지는가? null을 반환하는가?</li>
+</ul>
+</li>
+<li>프로덕션 코드를 직접 테스트하고 있지 않다는 걸 기억하자</li>
+</ul>
+<h2 id="10-8-마치며"><a href="#10-8-마치며" class="headerlink" title="10.8 마치며"></a>10.8 마치며</h2><ul>
+<li><strong>테스트는 라이브 서비스, 파일, 데이터베이스, 다른 번거로운 의존성들과 상호 작용할 필요가 없다!</strong></li>
+<li>적절한 도구를 활용해 목을 생성하고 주입하는 노력을 최소화할 수도 있다.</li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2022/02/02/junit/junit_09/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2022-02-05 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/JUnit/" title="JUnit">
+                        <b>#</b> JUnit
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/java/" title="java">
+                        <b>#</b> java
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/test/" title="test">
+                        <b>#</b> test
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/kotlin/" title="kotlin">
+                        <b>#</b> kotlin
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2022/02/06/effective_java/2022-02-06-item22/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#10-1-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EB%8F%84%EC%A0%84-%EA%B3%BC%EC%A0%9C"><span class="toc-text">10.1 테스트 도전 과제</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-2-%EB%B2%88%EA%B1%B0%EB%A1%9C%EC%9A%B4-%EB%8F%99%EC%9E%91%EC%9D%84-%EC%8A%A4%ED%85%81-stub-%EC%9C%BC%EB%A1%9C-%EB%8C%80%EC%B2%B4"><span class="toc-text">10.2 번거로운 동작을 스텁(stub)으로 대체</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-3-%ED%85%8C%EC%8A%A4%ED%8A%B8%EB%A5%BC-%EC%A7%80%EC%9B%90%ED%95%98%EA%B8%B0-%EC%9C%84%ED%95%9C-%EC%84%A4%EA%B3%84-%EB%B3%80%EA%B2%BD"><span class="toc-text">10.3 테스트를 지원하기 위한 설계 변경</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-4-%EC%8A%A4%ED%85%81%EC%97%90-%EC%A7%80%EB%8A%A5-%EB%8D%94%ED%95%98%EA%B8%B0-%EC%9D%B8%EC%9E%90-%EA%B2%80%EC%A6%9D"><span class="toc-text">10.4 스텁에 지능 더하기: 인자 검증</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-5-%EB%AA%A9-%EB%8F%84%EA%B5%AC%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EC%97%AC-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EB%8B%A8%EC%88%9C%ED%99%94"><span class="toc-text">10.5 목 도구를 사용하여 테스트 단순화</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-6-%EB%A7%88%EC%A7%80%EB%A7%89-%ED%95%98%EB%82%98%EC%9D%98-%EB%8B%A8%EC%88%9C%ED%99%94-%EC%A3%BC%EC%9E%85-%EB%8F%84%EA%B5%AC-%EC%86%8C%EA%B0%9C"><span class="toc-text">10.6 마지막 하나의 단순화: 주입 도구 소개</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-7-%EB%AA%A9%EC%9D%84-%EC%98%AC%EB%B0%94%EB%A5%B4%EA%B2%8C-%EC%82%AC%EC%9A%A9%ED%95%A0-%EB%95%8C-%EC%A4%91%EC%9A%94%ED%95%9C-%EA%B2%83"><span class="toc-text">10.7 목을 올바르게 사용할 때 중요한 것</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-8-%EB%A7%88%EC%B9%98%EB%A9%B0"><span class="toc-text">10.8 마치며</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/boring-km">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="kmjin@kakao.com">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="linkedin" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/">
+            <i class="iconfont icon-linkedin"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="TIL" target="_blank" rel="noopener" href="https://boring-km.github.io/TIL">
+            <i class="iconfont icon-emoji-friendly"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/boring-km">머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="내용 검색...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + 10.%20%EB%AA%A9%20%EA%B0%9D%EC%B2%B4%20%EC%82%AC%EC%9A%A9 + '&url=' + http%3A%2F%2Fexample.com%2F2022%2F02%2F05%2Fjunit%2Fjunit_10%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2022/02/05/junit/junit_10/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      아이템14. Comparable을 구현할지 고려하라 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">boring-km</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">아이템14. Comparable을 구현할지 고려하라</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2021-07-31 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/Effective-Java/" title="Effective_Java">
+                    <b>#</b> Effective_Java
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/java/" title="java">
+                    <b>#</b> java
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <ul>
+<li><p>Comparable 인터페이스의 유일무이한 메서드: compareTo</p>
+</li>
+<li><p>equals와 거의 비슷하지만 딱 2가지가 다르다.</p>
+<ul>
+<li>compareTo는 단순 동치성 비교에 더해 순서까지 비교할 수 있으며, 제네릭하다.</li>
+<li>Comparable을 구현했다는 것은 그 클래스의 인스턴스들에는 자연적인 순서가 있음을 뜻한다.</li>
+<li>그래서 정렬이 쉽다. Arrays.sort(a);</li>
+</ul>
+</li>
+<li><p>컬렉션 관리도 쉽다.</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WordList</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    Set&lt;String&gt; s = <span class="keyword">new</span> <span class="title class_">TreeSet</span>&lt;&gt;();</span><br><span class="line">    Collections.addAll(s, args);</span><br><span class="line">    System.out.println(s);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="compareTo-메서드의-일반-규약"><a href="#compareTo-메서드의-일반-규약" class="headerlink" title="compareTo 메서드의 일반 규약"></a>compareTo 메서드의 일반 규약</h3><ul>
+<li><p>equals와 거의 비슷하기 때문에 생략 (equals와 다른점만 확인)</p>
+</li>
+<li><p>표현식의 값이 음수, 0, 양수일 때 -1, 0, 1을 반환하도록 정의</p>
+</li>
+<li><p>타입이 다른 객체를 신경 쓰지 않아도 된다.</p>
+<ul>
+<li>타입이 다르면 간단히 ClassCastException을 던진다.</li>
+<li>다른 타입 사이의 비교도 허용한다. (공통 인터페이스를 가질 때)</li>
+</ul>
+</li>
+<li><p>교재 88p 참조</p>
+</li>
+<li><p>compareTo 규약을 지키지 못하면 비교를 활용하는 클래스와 어울리지 못한다. (TreeSet, TreeMap)</p>
+</li>
+<li><p>equals와 동일하게 반사성, 대칭성, 추이성을 충족해야 한다.</p>
+</li>
+</ul>
+<h3 id="일반-규약-요약"><a href="#일반-규약-요약" class="headerlink" title="일반 규약 요약"></a>일반 규약 요약</h3><ul>
+<li><ol>
+<li>두 객체 참조의 순서를 바꿔 비교해도 예상한 결과가 나와야 한다.</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>첫 번째가 두 번째보다 크고 두 번째가 세 번째보다 크면, 첫 번째는 세 번째보다 커야 한다.</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>크기가 같은 객체들끼리는 어떤 객체와 비교하더라도 항상 같아야 한다. (필수는 아니지만 지키면 좋음)</li>
+</ol>
+</li>
+</ul>
+<h3 id="주의점"><a href="#주의점" class="headerlink" title="주의점"></a>주의점</h3><ul>
+<li>Comparable은 타입을 인수로 받는 제네릭 인터페이스이므로 compareTo 메서드의 인수 타입은 컴파일타임에 정해진다.<ul>
+<li>입력 인수의 타입을 확인하거나 형변환할 필요 없음 (바로 빨간줄로 보이니까!!)</li>
+</ul>
+</li>
+<li>null을 인수에 넣으면 NullPointerException</li>
+<li>각 필드가 동치인지를 비교하는 게 아니라 그 순서를 비교한다.</li>
+</ul>
+<h4 id="비교자가-하나인-compareTo"><a href="#비교자가-하나인-compareTo" class="headerlink" title="비교자가 하나인 compareTo"></a>비교자가 하나인 compareTo</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">CaseInsensitiveString</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;CaseInsensitiveString&gt; &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(CaseInsensitiveString cis)</span> &#123;	<span class="comment">// 해당 객체의 인스턴스 변수 s와 인수 객체 속 s</span></span><br><span class="line">    <span class="keyword">return</span> String.CASE_INSENSITIVE_ORDER.compare(s, cis.s);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="자바7-이후-변경-상황"><a href="#자바7-이후-변경-상황" class="headerlink" title="자바7 이후 변경 상황"></a>자바7 이후 변경 상황</h3><ul>
+<li>compareTo 메서드에서 관계 연산자 &lt;와 &gt;를 사용하는 이전 방식은 거추장스럽고 오류를 유발하니, 이제는 추천 X</li>
+</ul>
+<h3 id="자바-8에서-객체를-비교하는-방식"><a href="#자바-8에서-객체를-비교하는-방식" class="headerlink" title="자바 8에서 객체를 비교하는 방식"></a>자바 8에서 객체를 비교하는 방식</h3><ul>
+<li><p>간결하고 성능 조금 안좋아지는 방식</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Comparator 인터페이스가 일련의 비교자 생성 메서드와 팀을 꾸려 메서드 연쇄 방식으로 비교자를 생성할 수 있게 되었다.</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Comparator&lt;PhoneNumer&gt; COMPARATOR = comparingInt((PhoneNumber pn) -&gt; pn.areaCode)</span><br><span class="line">  .thenComparingInt(pn -&gt; pn.prefix)	<span class="comment">// 추가 비교, thenComparingInt 사용 시 타입 추론 가능</span></span><br><span class="line">  .thenComparingInt(pn -&gt; pn.lineNum);	<span class="comment">// 추가 비교</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(PhoneNumber pn)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> COMPARATOR.compare(<span class="built_in">this</span>, pn);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>comparingInt는 객체 참조를 int 타입 키에 매핑하는 키 추출 함수를 인수로 받아, 그 키를 기준으로 순서를 정하는 비교자를 반환하는 정적 메서드</li>
+</ul>
+</li>
+</ul>
+<h3 id="객체-참조용-비교자-생성-메서드도-준비됨"><a href="#객체-참조용-비교자-생성-메서드도-준비됨" class="headerlink" title="객체 참조용 비교자 생성 메서드도 준비됨"></a>객체 참조용 비교자 생성 메서드도 준비됨</h3><ul>
+<li><p>comparing이라는 정적 메서드 2개가 다중정의되어 있다.</p>
+</li>
+<li><p>첫번째 메서드: 키 추출자를 받아서 그 키의 자연적 순서를 사용한다.</p>
+</li>
+<li><p>두번째 메서드: 키 추출자 하나와 추출된 키를 비교할 비교자까지 총 2개의 인수를 받는다.</p>
+</li>
+<li><p>또한, thenComparing이란 인스턴스 메서드가 3개 다중정의되어 있다.</p>
+</li>
+</ul>
+<blockquote>
+<p>그냥 comparing을 찾아와보자</p>
+<p>Comparator 인터페이스를 가져와봤다.</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Copyright (c) 1997, 2020, Oracle and/or its affiliates. All rights reserved.</span></span><br><span class="line"><span class="comment"> * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> java.util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"><span class="keyword">import</span> java.util.function.Function;</span><br><span class="line"><span class="keyword">import</span> java.util.function.ToIntFunction;</span><br><span class="line"><span class="keyword">import</span> java.util.function.ToLongFunction;</span><br><span class="line"><span class="keyword">import</span> java.util.function.ToDoubleFunction;</span><br><span class="line"><span class="keyword">import</span> java.util.Comparators;</span><br><span class="line"></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparator</span>&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> <span class="title function_">compare</span><span class="params">(T o1, T o2)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object obj)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> Comparator&lt;T&gt; <span class="title function_">reversed</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Collections.reverseOrder(<span class="built_in">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> Comparator&lt;T&gt; <span class="title function_">thenComparing</span><span class="params">(Comparator&lt;? <span class="built_in">super</span> T&gt; other)</span> &#123;</span><br><span class="line">        Objects.requireNonNull(other);</span><br><span class="line">        <span class="keyword">return</span> (Comparator&lt;T&gt; &amp; Serializable) (c1, c2) -&gt; &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">res</span> <span class="operator">=</span> compare(c1, c2);</span><br><span class="line">            <span class="keyword">return</span> (res != <span class="number">0</span>) ? res : other.compare(c1, c2);</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> &lt;U&gt; Comparator&lt;T&gt; <span class="title function_">thenComparing</span><span class="params">(</span></span><br><span class="line"><span class="params">            Function&lt;? <span class="built_in">super</span> T, ? extends U&gt; keyExtractor,</span></span><br><span class="line"><span class="params">            Comparator&lt;? <span class="built_in">super</span> U&gt; keyComparator)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> thenComparing(comparing(keyExtractor, keyComparator));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> &lt;U <span class="keyword">extends</span> <span class="title class_">Comparable</span>&lt;? <span class="built_in">super</span> U&gt;&gt; Comparator&lt;T&gt; <span class="title function_">thenComparing</span><span class="params">(</span></span><br><span class="line"><span class="params">            Function&lt;? <span class="built_in">super</span> T, ? extends U&gt; keyExtractor)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> thenComparing(comparing(keyExtractor));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> Comparator&lt;T&gt; <span class="title function_">thenComparingInt</span><span class="params">(ToIntFunction&lt;? <span class="built_in">super</span> T&gt; keyExtractor)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> thenComparing(comparingInt(keyExtractor));</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">default</span> Comparator&lt;T&gt; <span class="title function_">thenComparingLong</span><span class="params">(ToLongFunction&lt;? <span class="built_in">super</span> T&gt; keyExtractor)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> thenComparing(comparingLong(keyExtractor));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> Comparator&lt;T&gt; <span class="title function_">thenComparingDouble</span><span class="params">(ToDoubleFunction&lt;? <span class="built_in">super</span> T&gt; keyExtractor)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> thenComparing(comparingDouble(keyExtractor));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T <span class="keyword">extends</span> <span class="title class_">Comparable</span>&lt;? <span class="built_in">super</span> T&gt;&gt; Comparator&lt;T&gt; <span class="title function_">reverseOrder</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Collections.reverseOrder();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T <span class="keyword">extends</span> <span class="title class_">Comparable</span>&lt;? <span class="built_in">super</span> T&gt;&gt; Comparator&lt;T&gt; <span class="title function_">naturalOrder</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> (Comparator&lt;T&gt;) Comparators.NaturalOrderComparator.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; Comparator&lt;T&gt; <span class="title function_">nullsFirst</span><span class="params">(Comparator&lt;? <span class="built_in">super</span> T&gt; comparator)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Comparators</span>.NullComparator&lt;&gt;(<span class="literal">true</span>, comparator);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; Comparator&lt;T&gt; <span class="title function_">nullsLast</span><span class="params">(Comparator&lt;? <span class="built_in">super</span> T&gt; comparator)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Comparators</span>.NullComparator&lt;&gt;(<span class="literal">false</span>, comparator);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T, U&gt; Comparator&lt;T&gt; <span class="title function_">comparing</span><span class="params">(</span></span><br><span class="line"><span class="params">            Function&lt;? <span class="built_in">super</span> T, ? extends U&gt; keyExtractor,</span></span><br><span class="line"><span class="params">            Comparator&lt;? <span class="built_in">super</span> U&gt; keyComparator)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Objects.requireNonNull(keyExtractor);</span><br><span class="line">        Objects.requireNonNull(keyComparator);</span><br><span class="line">        <span class="keyword">return</span> (Comparator&lt;T&gt; &amp; Serializable)</span><br><span class="line">            (c1, c2) -&gt; keyComparator.compare(keyExtractor.apply(c1),</span><br><span class="line">                                              keyExtractor.apply(c2));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T, U <span class="keyword">extends</span> <span class="title class_">Comparable</span>&lt;? <span class="built_in">super</span> U&gt;&gt; Comparator&lt;T&gt; <span class="title function_">comparing</span><span class="params">(</span></span><br><span class="line"><span class="params">            Function&lt;? <span class="built_in">super</span> T, ? extends U&gt; keyExtractor)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Objects.requireNonNull(keyExtractor);</span><br><span class="line">        <span class="keyword">return</span> (Comparator&lt;T&gt; &amp; Serializable)</span><br><span class="line">            (c1, c2) -&gt; keyExtractor.apply(c1).compareTo(keyExtractor.apply(c2));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; Comparator&lt;T&gt; <span class="title function_">comparingInt</span><span class="params">(ToIntFunction&lt;? <span class="built_in">super</span> T&gt; keyExtractor)</span> &#123;</span><br><span class="line">        Objects.requireNonNull(keyExtractor);</span><br><span class="line">        <span class="keyword">return</span> (Comparator&lt;T&gt; &amp; Serializable)</span><br><span class="line">            (c1, c2) -&gt; Integer.compare(keyExtractor.applyAsInt(c1), keyExtractor.applyAsInt(c2));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; Comparator&lt;T&gt; <span class="title function_">comparingLong</span><span class="params">(ToLongFunction&lt;? <span class="built_in">super</span> T&gt; keyExtractor)</span> &#123;</span><br><span class="line">        Objects.requireNonNull(keyExtractor);</span><br><span class="line">        <span class="keyword">return</span> (Comparator&lt;T&gt; &amp; Serializable)</span><br><span class="line">            (c1, c2) -&gt; Long.compare(keyExtractor.applyAsLong(c1), keyExtractor.applyAsLong(c2));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span>&lt;T&gt; Comparator&lt;T&gt; <span class="title function_">comparingDouble</span><span class="params">(ToDoubleFunction&lt;? <span class="built_in">super</span> T&gt; keyExtractor)</span> &#123;</span><br><span class="line">        Objects.requireNonNull(keyExtractor);</span><br><span class="line">        <span class="keyword">return</span> (Comparator&lt;T&gt; &amp; Serializable)</span><br><span class="line">            (c1, c2) -&gt; Double.compare(keyExtractor.applyAsDouble(c1), keyExtractor.applyAsDouble(c2));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>int, long, double을 위한 메소드들이 추가적으로 보인다.</li>
+</ul>
+<h3 id="핵심-정리"><a href="#핵심-정리" class="headerlink" title="핵심 정리"></a>핵심 정리</h3><ul>
+<li>순서를 고려해야 하는 값 클래스를 작성한다면, 꼭 Comparable 인터페이스를 구현하자</li>
+<li>Comparable 인터페이스를 구현하면, 그 인스턴스들을 쉽게 정렬하고, 검색하고, 비교 기능을 제공하는 컬렉션과 어우지도록 해야 한다.</li>
+<li>compareTo 메서드는 박싱된 기본 타입 클래스가 제공하는 정적 compare 메서드나 Comparator 인터페이스가 제공하는 비교자 생성 메서드를 사용하자.</li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2021/07/04/effective_java/2021-07-04-item13/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2021-07-31 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/Effective-Java/" title="Effective_Java">
+                        <b>#</b> Effective_Java
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/java/" title="java">
+                        <b>#</b> java
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2021/08/01/effective_java/2021-08-01-item15/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#compareTo-%EB%A9%94%EC%84%9C%EB%93%9C%EC%9D%98-%EC%9D%BC%EB%B0%98-%EA%B7%9C%EC%95%BD"><span class="toc-text">compareTo 메서드의 일반 규약</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%9D%BC%EB%B0%98-%EA%B7%9C%EC%95%BD-%EC%9A%94%EC%95%BD"><span class="toc-text">일반 규약 요약</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%A3%BC%EC%9D%98%EC%A0%90"><span class="toc-text">주의점</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EB%B9%84%EA%B5%90%EC%9E%90%EA%B0%80-%ED%95%98%EB%82%98%EC%9D%B8-compareTo"><span class="toc-text">비교자가 하나인 compareTo</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%9E%90%EB%B0%947-%EC%9D%B4%ED%9B%84-%EB%B3%80%EA%B2%BD-%EC%83%81%ED%99%A9"><span class="toc-text">자바7 이후 변경 상황</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%9E%90%EB%B0%94-8%EC%97%90%EC%84%9C-%EA%B0%9D%EC%B2%B4%EB%A5%BC-%EB%B9%84%EA%B5%90%ED%95%98%EB%8A%94-%EB%B0%A9%EC%8B%9D"><span class="toc-text">자바 8에서 객체를 비교하는 방식</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EA%B0%9D%EC%B2%B4-%EC%B0%B8%EC%A1%B0%EC%9A%A9-%EB%B9%84%EA%B5%90%EC%9E%90-%EC%83%9D%EC%84%B1-%EB%A9%94%EC%84%9C%EB%93%9C%EB%8F%84-%EC%A4%80%EB%B9%84%EB%90%A8"><span class="toc-text">객체 참조용 비교자 생성 메서드도 준비됨</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%95%B5%EC%8B%AC-%EC%A0%95%EB%A6%AC"><span class="toc-text">핵심 정리</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/boring-km">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="kmjin@kakao.com">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="linkedin" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/">
+            <i class="iconfont icon-linkedin"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="TIL" target="_blank" rel="noopener" href="https://boring-km.github.io/TIL">
+            <i class="iconfont icon-emoji-friendly"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/boring-km">머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="내용 검색...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %EC%95%84%EC%9D%B4%ED%85%9C14.%20Comparable%EC%9D%84%20%EA%B5%AC%ED%98%84%ED%95%A0%EC%A7%80%20%EA%B3%A0%EB%A0%A4%ED%95%98%EB%9D%BC + '&url=' + http%3A%2F%2Fexample.com%2F2021%2F07%2F31%2Feffective_java%2F2021-07-31-item14%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2021/07/31/effective_java/2021-07-31-item14/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

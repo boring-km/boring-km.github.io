@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      아이템13. clone 재정의는 주의해서 진행하라 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">boring-km</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">아이템13. clone 재정의는 주의해서 진행하라</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2021-07-04 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/Effective-Java/" title="Effective_Java">
+                    <b>#</b> Effective_Java
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/java/" title="java">
+                    <b>#</b> java
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <ul>
+<li>널리 쓰이는 Cloneable 방식에 대해 clone 메서드를 잘 동작하게끔 해주는 구현 방법</li>
+<li>언제 그렇게 해야 하는지 알려주고,</li>
+<li>가능한 다른 선택지는 무엇이 있는지</li>
+</ul>
+<h3 id="Cloneable의-문제점"><a href="#Cloneable의-문제점" class="headerlink" title="Cloneable의 문제점"></a>Cloneable의 문제점</h3><ul>
+<li>clone 메서드가 선언된 곳이 Cloneable이 아닌 Object이고, protected로 선언되어 있다.</li>
+<li>그래서 Cloneable을 구현하는 것만으로 외부 객체에서 clone 메서드를 호출할 수 없다.</li>
+<li>리플렉션을 사용한다고 하더라도 해당 객체가 접근이 허용된 clone 메서드를 제공한다는 보장이 없다.</li>
+</ul>
+<h3 id="Cloneable의-역할"><a href="#Cloneable의-역할" class="headerlink" title="Cloneable의 역할"></a>Cloneable의 역할</h3><ul>
+<li><p>Object의 protected 메서드인 clone의 동작 방식을 결정한다.</p>
+</li>
+<li><p>Cloneable을 구현한 클래스의 인스턴스에서 clone을 호출하면 그 객체의 필드들을 하나하나 복사한 객체를 반환하며,<br>그렇지 않은 클래스의 인스턴스에서 호출하면 CloneNotSupportedException을 던진다. (이례적으로 인터페이스를 사용한 것이니 따라하지는 말기)</p>
+</li>
+<li><p><strong>실무에서 Cloneable을 구현한 클래스는 clone 메서드를 public으로 제공하며, 사용자는 당연히 복제가 제대로 이뤄지리라 기대한다.</strong></p>
+</li>
+<li><p>생성자를 호출하지 않고도 객체를 생성하게 되는 모순적인 메커니즘을 만든다.</p>
+</li>
+</ul>
+<h3 id="clone-메서드의-허술한-일반-규약"><a href="#clone-메서드의-허술한-일반-규약" class="headerlink" title="clone 메서드의 (허술한) 일반 규약"></a>clone 메서드의 (허술한) 일반 규약</h3><blockquote>
+<p>이 객체의 복사본을 생성해 반환한다. ‘복사’의 정확한 뜻은 그 객체를 구현한 클래스에 따라 다를 수 있다. 일반적인 의도는 다음과 같다. 어떤 객체 x에 대해 다음 식은 참이다.</p>
+<p>x.clone() !&#x3D; x</p>
+<p>또한 다음 식도 참이다.</p>
+<p>x.clone().getClass() &#x3D;&#x3D; x.getClass();</p>
+<p>하지만 이상의 요구를 반드시 만족해야 하는 것은 아니다.<br>한편 다음 식도 일반적으로 참이지만, 역시 필수는 아니다.</p>
+<p>x.clone().equals(x)</p>
+<p>관례상, 이 메서드가 반환하는 객체는 super.clone을 호출해 얻어야 한다. 이 클래스와 (Object를 제외한) 모든 상위 클래스가 이 관례를 따른다면 다음 식은 참이다.</p>
+<p>x.clone().getClass() &#x3D;&#x3D; x.getClass()</p>
+<p>관례상, 반환된 객체와 원본 객체는 독립적이어야 한다. 이를 만족하려면 super.clone으로 얻은 객체의 필드 중 하나 이상을 반환 전에 수정해야 할 수도 있다.</p>
+</blockquote>
+<ul>
+<li>clone 메서드가 super.clone이 아닌, 생성자를 호출해 얻은 인스턴스를 반환해도 컴파일러는 불평하지(차별하지) 않는다.</li>
+<li><strong>하지만 이 클래스의 하위 클래스에서 super.clone을 호출한다면 잘못된 클래스의 객체가 만들어져,</strong><br><strong>결국 하위 클래스의 clone 메서드가 제대로 동작하지 않게 된다.</strong><ul>
+<li>clone을 재정의한 클래스가 final이라면 걱정해야 할 하위 클래스가 없으니 이 관례는 무시해도 안전하다.</li>
+<li>하지만 final 클래스의 clone 메서드가 super.clone을 호출하지 않는다면 Cloneable을 구현할 이유도 없다.</li>
+<li>Object의 clone 구현의 동작 방식에 기댈 필요가 없으니까!</li>
+</ul>
+</li>
+</ul>
+<h3 id="제대로-동작하는-clone-메서드를-가진-상위-클래스를-상속해-Cloneable을-구현하려면…"><a href="#제대로-동작하는-clone-메서드를-가진-상위-클래스를-상속해-Cloneable을-구현하려면…" class="headerlink" title="제대로 동작하는 clone 메서드를 가진 상위 클래스를 상속해 Cloneable을 구현하려면…"></a>제대로 동작하는 clone 메서드를 가진 상위 클래스를 상속해 Cloneable을 구현하려면…</h3><ol>
+<li><strong>super.clone을 호출한다.</strong> (원본의 완벽한 복제본)</li>
+<li><strong>반환하려고 하는 객체의 타입으로 형변환하여 확실히 한다.</strong> (재정의한 메서드의 반환 타입은 상위 클래스의 메서드가 반환하는 타입의 하위 타입일 수 있다.)</li>
+<li><strong>clone은 원본 객체에 아무런 해를 끼치지 않는 동시에 복제된 객체의 불변식을 보장해야 한다.</strong></li>
+<li>final로 선언된 필드에 대해서는 재정의가 불가능하기 때문에 <strong>Cloneable 아키텍처는 ‘가변 객체를 참조하는 필드는 final로 선언하라’는 일반 용법과 충돌한다.</strong></li>
+<li><strong>public인 clone 메서드에서는 throws 절을 없애야 한다.</strong></li>
+<li>상속해서 쓰기 위한 상속용 클래스에서는 어떤 상속 방식이든 Cloneable을 구현해서는 안 된다.</li>
+<li>Cloneable을 구현한 스레드 안전 클래스를 작성할 때는 clone 메서드도 적절히 동기화해줘야 한다. <em>[아이템 78]</em></li>
+</ol>
+<h3 id="복잡한-가변-상태를-갖는-클래스용-재귀적-clone-메서드-코드-13-4-5"><a href="#복잡한-가변-상태를-갖는-클래스용-재귀적-clone-메서드-코드-13-4-5" class="headerlink" title="복잡한 가변 상태를 갖는 클래스용 재귀적 clone 메서드 (코드 13-4,5)"></a>복잡한 가변 상태를 갖는 클래스용 재귀적 clone 메서드 (코드 13-4,5)</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HashTable</span> <span class="keyword">implements</span> <span class="title class_">Cloneable</span> &#123;</span><br><span class="line">  <span class="keyword">private</span> Entry[] buckets = ...;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Entry</span> &#123;</span><br><span class="line">    <span class="keyword">final</span> Object key;</span><br><span class="line">    Object value;</span><br><span class="line">    Entry next;</span><br><span class="line">    </span><br><span class="line">    Entry(Object key, Object value, Entry next) &#123;</span><br><span class="line">      <span class="built_in">this</span>.key = key;</span><br><span class="line">      <span class="built_in">this</span>.value = value;</span><br><span class="line">      <span class="built_in">this</span>.next = next;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 엔트리 자신이 가리키는 연결 리스트를 반복적으로 복사한다.</span></span><br><span class="line">    Entry <span class="title function_">deepCopy</span><span class="params">()</span> &#123;</span><br><span class="line">      <span class="type">Entry</span> <span class="variable">result</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Entry</span>(key, value, next);</span><br><span class="line">      <span class="keyword">for</span> (<span class="type">Entry</span> <span class="variable">p</span> <span class="operator">=</span> result; p.next != <span class="literal">null</span>; p = p.next)</span><br><span class="line">        p.next = <span class="keyword">new</span> <span class="title class_">Entry</span>(p.next.key, p.next.value, p.next.next);</span><br><span class="line">      <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> HashTable <span class="title function_">clone</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="type">HashTable</span> <span class="variable">result</span> <span class="operator">=</span> (HashTable) <span class="built_in">super</span>.clone(); <span class="comment">// 형변환</span></span><br><span class="line">      result.buckets = <span class="keyword">new</span> <span class="title class_">Entry</span>[buckets.length];</span><br><span class="line">      <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; buckets.length; i++)</span><br><span class="line">        <span class="keyword">if</span> (buckets[i] != <span class="literal">null</span>)</span><br><span class="line">          result.buckets[i] = buckets[i].deepCopy(); <span class="comment">// deepCopy()를 지원하는 buckets</span></span><br><span class="line">      <span class="keyword">return</span> result;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (CloneNotSupportedException e) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">AssertionError</span>();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 나머지 생략</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="요약"><a href="#요약" class="headerlink" title="요약"></a>요약</h3><ul>
+<li>Cloneable을 구현하는 모든 클래스는 clone을 재정의해야 한다.</li>
+<li>이때 접근 제한자는 public으로, 반환 타입은 클래스 자신으로 변경한다. (형변환)</li>
+<li>이 메서드는 가장 먼저 super.clone을 호출한 후 필요한 필드를 전부 적절히 수정한다.</li>
+<li>일반적으로 이 말은 그 객체의 내부 ‘깊은 구조’에 숨어 있는 모든 가변 객체를 복사하고, 복제본이 가진 객체 참조 모두가 복사된 객체들을 가리키게 함을 뜻한다. <strong>(원래 객체를 가리키는 것이 아니라)</strong><ul>
+<li>내부 복사는 주로 clone을 재귀적으로 호출해 구현하지만, 항상 최선의 방법은 아니다.</li>
+</ul>
+</li>
+<li>기본 타입 필드와 불변 객체 참조만 갖는 클래스라면 아무 필드도 수정할 필요가 없다.</li>
+<li>단, 일련번호나 고유 ID는 비록 기본 타입이나 불변일지라도 수정해줘야겠지?</li>
+</ul>
+<h3 id="Cloneable을-구현한-클래스가-아니라면"><a href="#Cloneable을-구현한-클래스가-아니라면" class="headerlink" title="Cloneable을 구현한 클래스가 아니라면?"></a>Cloneable을 구현한 클래스가 아니라면?</h3><ul>
+<li><strong>복사 생성자와 복사 팩터리 방식</strong> (변환 생성자, 변환 팩터리) <em>[아이템 1]</em></li>
+<li>Cloneable 만큼 모순적이지도 않고, 해당 클래스가 구현한 ‘인터페이스’ 타입의 인스턴스를 인수로 받을 수도 있다.</li>
+<li>원본의 구현 타입에 얽매이지 않고 복제본의 타입을 직접 선택할 수 있다.<ul>
+<li>예) HashSet 객체 s를 TreeSet 타입으로 복제할 수 있다.</li>
+<li>clone으로는 불가능!!, 변환 생성자는 new TreeSet&lt;&gt;(s)으로 간단히 처리 가능</li>
+</ul>
+</li>
+</ul>
+<h3 id="핵심-정리"><a href="#핵심-정리" class="headerlink" title="핵심 정리"></a>핵심 정리</h3><ul>
+<li>새로운 인터페이스를 만들 때는 절대 Cloneable을 확장해서는 안 된다. 새로운 클래스도 이를 구현해서는 안 된다.</li>
+<li>final 클래스라면 Cloneable을 구현해도 위험이 크지 않지만, 성능 최적화 관점에서 검토한 후 별 문제가 없을 때만 드물게 허용해라</li>
+<li>기본 원칙은 <strong>복제 기능은 생성자와 팩터리를 이용하는 게 최고</strong>라는 것이다.</li>
+<li>단, <strong>배열</strong> 만큼은 clone 방식이 가장 깔끔한, 합당한 예외다.</li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2021/06/07/effective_java/2021-06-07-item12/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2021-07-04 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/Effective-Java/" title="Effective_Java">
+                        <b>#</b> Effective_Java
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/java/" title="java">
+                        <b>#</b> java
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2021/07/31/effective_java/2021-07-31-item14/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cloneable%EC%9D%98-%EB%AC%B8%EC%A0%9C%EC%A0%90"><span class="toc-text">Cloneable의 문제점</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cloneable%EC%9D%98-%EC%97%AD%ED%95%A0"><span class="toc-text">Cloneable의 역할</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#clone-%EB%A9%94%EC%84%9C%EB%93%9C%EC%9D%98-%ED%97%88%EC%88%A0%ED%95%9C-%EC%9D%BC%EB%B0%98-%EA%B7%9C%EC%95%BD"><span class="toc-text">clone 메서드의 (허술한) 일반 규약</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%A0%9C%EB%8C%80%EB%A1%9C-%EB%8F%99%EC%9E%91%ED%95%98%EB%8A%94-clone-%EB%A9%94%EC%84%9C%EB%93%9C%EB%A5%BC-%EA%B0%80%EC%A7%84-%EC%83%81%EC%9C%84-%ED%81%B4%EB%9E%98%EC%8A%A4%EB%A5%BC-%EC%83%81%EC%86%8D%ED%95%B4-Cloneable%EC%9D%84-%EA%B5%AC%ED%98%84%ED%95%98%EB%A0%A4%EB%A9%B4%E2%80%A6"><span class="toc-text">제대로 동작하는 clone 메서드를 가진 상위 클래스를 상속해 Cloneable을 구현하려면…</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%B3%B5%EC%9E%A1%ED%95%9C-%EA%B0%80%EB%B3%80-%EC%83%81%ED%83%9C%EB%A5%BC-%EA%B0%96%EB%8A%94-%ED%81%B4%EB%9E%98%EC%8A%A4%EC%9A%A9-%EC%9E%AC%EA%B7%80%EC%A0%81-clone-%EB%A9%94%EC%84%9C%EB%93%9C-%EC%BD%94%EB%93%9C-13-4-5"><span class="toc-text">복잡한 가변 상태를 갖는 클래스용 재귀적 clone 메서드 (코드 13-4,5)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%9A%94%EC%95%BD"><span class="toc-text">요약</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cloneable%EC%9D%84-%EA%B5%AC%ED%98%84%ED%95%9C-%ED%81%B4%EB%9E%98%EC%8A%A4%EA%B0%80-%EC%95%84%EB%8B%88%EB%9D%BC%EB%A9%B4"><span class="toc-text">Cloneable을 구현한 클래스가 아니라면?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%95%B5%EC%8B%AC-%EC%A0%95%EB%A6%AC"><span class="toc-text">핵심 정리</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/boring-km">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="kmjin@kakao.com">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="linkedin" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/">
+            <i class="iconfont icon-linkedin"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="TIL" target="_blank" rel="noopener" href="https://boring-km.github.io/TIL">
+            <i class="iconfont icon-emoji-friendly"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/boring-km">머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="내용 검색...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %EC%95%84%EC%9D%B4%ED%85%9C13.%20clone%20%EC%9E%AC%EC%A0%95%EC%9D%98%EB%8A%94%20%EC%A3%BC%EC%9D%98%ED%95%B4%EC%84%9C%20%EC%A7%84%ED%96%89%ED%95%98%EB%9D%BC + '&url=' + http%3A%2F%2Fexample.com%2F2021%2F07%2F04%2Feffective_java%2F2021-07-04-item13%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2021/07/04/effective_java/2021-07-04-item13/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
