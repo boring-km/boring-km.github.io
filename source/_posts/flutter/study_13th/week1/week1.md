@@ -72,8 +72,8 @@ Notion 이나 Velog를 통해 어느정도 정리된 진행상황 공유하고,
 - CustomPaint를 활용해 선택 영역만 Path로 잘라내서 Canvas, PictureRecorder 등을 활용해 이미지 파일로 만든다.
 - 정해진 도형 크기를 조절하거나, 직접 선택영역을 그려 그 부분만 Crop 할 수 있도록 한다.
 
-![1](1.png)
+![1](/images/flutter/study_13th/week1/1.png)
 
-![2](2.png)
+![2](/images/flutter/study_13th/week1/2.png)
 
-![3](3.png)
+![3](/images/flutter/study_13th/week1/3.png)

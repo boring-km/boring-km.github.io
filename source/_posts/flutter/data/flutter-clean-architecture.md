@@ -9,7 +9,7 @@ toc: true
 - 오준석님의 "Flutter 중급 - 클린 아키텍처" 강의 내용을 인용하여 작성합니다.
 - [강의 링크](https://www.inflearn.com/course/플러터-중급)
 
-![클린 아키텍처](img.png)
+![클린 아키텍처](/images/flutter/data/img.png)
 
 - 사람마다 프로젝트를 설계하는 방식에 차이는 있겠지만, 최근 Flutter로 프로젝트를 수행해보면서 위와 같은 MVVM 모델의 구조가 앱 개발을 위한 프로젝트 구조에 있어서 나름 괜찮다고 생각합니다.
 
