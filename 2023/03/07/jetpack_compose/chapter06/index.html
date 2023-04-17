@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      6장 조립 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">boring-km</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">6장 조립</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2023-03-07 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/jetpack-compose-study/" title="jetpack-compose-study">
+                    <b>#</b> jetpack-compose-study
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/android/" title="android">
+                    <b>#</b> android
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <p><a target="_blank" rel="noopener" href="https://github.com/Just-Android-Compose-Study/JetpackComposeStudy/tree/master/Chapter06">Source Code</a></p>
+<h2 id="컴포즈-앱-스타일링"><a href="#컴포즈-앱-스타일링" class="headerlink" title="컴포즈 앱 스타일링"></a>컴포즈 앱 스타일링</h2><p>Material You (Material 3) 사용하면서 변경사항이 좀 많은 것 같아 레퍼런스 참고</p>
+<blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://m3.material.io/">https://m3.material.io/</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.android.com/jetpack/compose/designsystems/material2-material3?hl=ko">Compose의 Material 2에서 Material 3으로 이전</a></li>
+</ul>
+</blockquote>
+<h3 id="색상-모양-텍스트-스타일-정의"><a href="#색상-모양-텍스트-스타일-정의" class="headerlink" title="색상, 모양, 텍스트 스타일 정의"></a>색상, 모양, 텍스트 스타일 정의</h3><p>예제코드 중 Material3이 반영되지 않은 코드는 변환해가며 작성해봤다.</p>
+<p>부모 테마를 재정의해 테마를 중첩할 수 있다.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="meta">@Preview</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">MaterialThemeDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    MaterialTheme(</span><br><span class="line">        typography = Typography.copy(	<span class="comment">// Typography 재사용</span></span><br><span class="line">            displayLarge = TextStyle(color = Color.Red)</span><br><span class="line">        )</span><br><span class="line">    ) &#123;</span><br><span class="line">        Row(</span><br><span class="line">            Modifier.fillMaxSize(),</span><br><span class="line">            verticalAlignment = Alignment.CenterVertically,</span><br><span class="line">            horizontalArrangement = Arrangement.Center</span><br><span class="line">        ) &#123;</span><br><span class="line">            Text(</span><br><span class="line">                text = <span class="string">&quot;Hello&quot;</span>,</span><br><span class="line">                style = MaterialTheme.typography.displayLarge	<span class="comment">// 수정된 MaterialTheme</span></span><br><span class="line">            )</span><br><span class="line">            Spacer(modifier = Modifier.width(<span class="number">2.</span>dp))</span><br><span class="line">            MaterialTheme(</span><br><span class="line">                typography = Typography.copy(	<span class="comment">// Typography 재사용</span></span><br><span class="line">                    displayLarge = TextStyle(color = Color.Blue)</span><br><span class="line">                )</span><br><span class="line">            ) &#123;</span><br><span class="line">                Text(</span><br><span class="line">                    text = <span class="string">&quot;Compose&quot;</span>,</span><br><span class="line">                    style = MaterialTheme.typography.displayLarge <span class="comment">// 수정된 MaterialTheme</span></span><br><span class="line">                )</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="리소스-기반의-테마-사용"><a href="#리소스-기반의-테마-사용" class="headerlink" title="리소스 기반의 테마 사용"></a>리소스 기반의 테마 사용</h3><p>테마 xml에도 컬러 값을 사용하고 컴포즈에서도 컬러 값을 또 선언하지 않으려면 <code>colorResource()</code>을 사용해 리소스 쪽에서만 컬러 값을 정리해두자.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> colorScheme = <span class="keyword">when</span> &#123;</span><br><span class="line">    dynamicColor &amp;&amp; Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.S -&gt; &#123;</span><br><span class="line">        <span class="keyword">val</span> context = LocalContext.current</span><br><span class="line">        <span class="comment">// Android 31 미만에서는 다크모드 X</span></span><br><span class="line">        <span class="keyword">if</span> (darkTheme) dynamicDarkColorScheme(context) <span class="keyword">else</span> dynamicLightColorScheme(context)</span><br><span class="line">    &#125;</span><br><span class="line">    darkTheme -&gt; DarkColorScheme</span><br><span class="line">    <span class="keyword">else</span> -&gt; LightColorScheme.copy(secondary = colorResource(id = R.color.orange_dark))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>SplashScreen을 안드로이드 12 이전에서도 사용할 수 있는 방법도 있다니 찾아보자.</p>
+<h4 id="values-x2F-themes-xml"><a href="#values-x2F-themes-xml" class="headerlink" title="values&#x2F;themes.xml"></a>values&#x2F;themes.xml</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">&quot;Theme.AnimatedSplashScreen&quot;</span> <span class="attr">parent</span>=<span class="string">&quot;android:Theme.Material.Light.NoActionBar&quot;</span>&gt;</span><span class="language-xml"></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">&quot;android:statusBarColor&quot;</span>&gt;</span>@color/black<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">&quot;android:windowBackground&quot;</span>&gt;</span>@color/black<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="values-31-x2F-themes-xml"><a href="#values-31-x2F-themes-xml" class="headerlink" title="values-31&#x2F;themes.xml"></a>values-31&#x2F;themes.xml</h4><?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<pre><code>&lt;style name=&quot;Theme.AnimatedSplashScreen&quot; parent=&quot;android:Theme.Material.Light.NoActionBar&quot;&gt;
+    &lt;item name=&quot;android:statusBarColor&quot;&gt;@color/black&lt;/item&gt;
+    &lt;item name=&quot;android:windowBackground&quot;&gt;@color/black&lt;/item&gt;
+    &lt;item name=&quot;android:windowSplashScreenAnimatedIcon&quot;&gt;@drawable/transparent_image&lt;/item&gt;
+&lt;/style&gt;
+</code></pre>
+</resources>
+
+<ul>
+<li>splash icon을 투명하게 만들고 SplashScreen이 제일 처음에 보이도록 한다. (이렇게 안하면 SplashScreen 앞에 앱 아이콘이 잠시 보임)</li>
+</ul>
+<h2 id="툴바와-메뉴-통합"><a href="#툴바와-메뉴-통합" class="headerlink" title="툴바와 메뉴 통합"></a>툴바와 메뉴 통합</h2><ul>
+<li>Scaffold()에서 topBar, bottomBar 정의</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@OptIn(ExperimentalMaterial3Api::class)</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">ComposeUnitConverter</span><span class="params">(factory: <span class="type">ViewModelFactory</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> navController = rememberNavController()	<span class="comment">// 화면을 이동하기 위한 NavHostController 생성</span></span><br><span class="line">    <span class="keyword">val</span> menuItems = listOf(<span class="string">&quot;Item #1&quot;</span>, <span class="string">&quot;Item #2&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Material3: ScaffoldState 사용 안하고 바로 snackbarHostState 선언</span></span><br><span class="line">    <span class="keyword">val</span> snackbarHostState = remember &#123; SnackbarHostState() &#125;</span><br><span class="line">    <span class="keyword">val</span> snackbarCoroutineScope = rememberCoroutineScope()</span><br><span class="line"></span><br><span class="line">    Chapter06Theme(dynamicColor = <span class="literal">false</span>) &#123;</span><br><span class="line">        Scaffold(topBar = &#123;</span><br><span class="line">            ComposeUnitConverterTopBar(menuItems) &#123; s -&gt;</span><br><span class="line">                snackbarCoroutineScope.launch &#123;</span><br><span class="line">                    snackbarHostState.showSnackbar(s)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, bottomBar = &#123;</span><br><span class="line">            ComposeUnitConverterBottomBar(navController)</span><br><span class="line">        &#125;) &#123;</span><br><span class="line">            ComposeUnitConverterNavHost(</span><br><span class="line">                navController = navController, factory = factory, modifier = Modifier.padding(it)</span><br><span class="line">            )</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="상단-앱-바-생성"><a href="#상단-앱-바-생성" class="headerlink" title="상단 앱 바 생성"></a>상단 앱 바 생성</h3><ul>
+<li>TopAppBar() 사용하면 된다.</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ExperimentalMaterial3Api</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">TopAppBar</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    title: @<span class="type">Composable</span> () -&gt; <span class="type">Unit</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    modifier: <span class="type">Modifier</span> = Modifier,</span></span></span><br><span class="line"><span class="params"><span class="function">    navigationIcon: @<span class="type">Composable</span> () -&gt; <span class="type">Unit</span> = &#123;&#125;,	<span class="comment">// 앱 바 좌측 아이콘</span></span></span></span><br><span class="line"><span class="params"><span class="function">    actions: @<span class="type">Composable</span> <span class="type">RowScope</span>.() -&gt; <span class="type">Unit</span> = &#123;&#125;,	<span class="comment">// 앱 바 우측에 들어가는 Row() </span></span></span></span><br><span class="line"><span class="params"><span class="function">    windowInsets: <span class="type">WindowInsets</span> = TopAppBarDefaults.windowInsets,</span></span></span><br><span class="line"><span class="params"><span class="function">    colors: <span class="type">TopAppBarColors</span> = TopAppBarDefaults.smallTopAppBarColors()</span></span>,</span><br><span class="line">    scrollBehavior: TopAppBarScrollBehavior? = <span class="literal">null</span>	<span class="comment">// 스크롤 상태에 따라 투명도를 조절하는 행동을 넣을 수 있겠다...</span></span><br><span class="line">) &#123;</span><br><span class="line">    SingleRowTopAppBar(</span><br><span class="line">        modifier = modifier,</span><br><span class="line">        title = title,</span><br><span class="line">        titleTextStyle = MaterialTheme.typography.fromToken(TopAppBarSmallTokens.HeadlineFont),</span><br><span class="line">        centeredTitle = <span class="literal">false</span>,</span><br><span class="line">        navigationIcon = navigationIcon,</span><br><span class="line">        actions = actions,</span><br><span class="line">        windowInsets = windowInsets,</span><br><span class="line">        colors = colors,</span><br><span class="line">        scrollBehavior = scrollBehavior</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>예제 코드에는 DropdownMenu까지 action에 추가해서 보여주고 있지만 여기서는 중요하진 않아서 기록하지는 않겠음.</p>
+<h2 id="네비게이션-추가"><a href="#네비게이션-추가" class="headerlink" title="네비게이션 추가"></a>네비게이션 추가</h2><p>Scaffold()에서 bottomBar로 추가한 BottomAppBar() 알아보기</p>
+<p>화면별로 라우팅을 하기 위한 객체가 하나 필요하다.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sealed</span> <span class="class"><span class="keyword">class</span> <span class="title">ComposeUnitConverterScreen</span></span>(</span><br><span class="line">    <span class="keyword">val</span> route: String,</span><br><span class="line">    <span class="meta">@StringRes</span> <span class="keyword">val</span> label: <span class="built_in">Int</span>,</span><br><span class="line">    <span class="meta">@DrawableRes</span> <span class="keyword">val</span> icon: <span class="built_in">Int</span></span><br><span class="line">) &#123;</span><br><span class="line">    <span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">        <span class="keyword">val</span> screens = listOf(</span><br><span class="line">            Temperature,</span><br><span class="line">            Distances</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">val</span> route_temperature = <span class="string">&quot;temperature&quot;</span></span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">val</span> route_distances = <span class="string">&quot;distances&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">object</span> Temperature : ComposeUnitConverterScreen(</span><br><span class="line">        route_temperature,</span><br><span class="line">        R.string.temperature,</span><br><span class="line">        R.drawable.baseline_thermostat_24</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">object</span> Distances : ComposeUnitConverterScreen(</span><br><span class="line">        route_distances,</span><br><span class="line">        R.string.distances,</span><br><span class="line">        R.drawable.baseline_square_foot_24</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>이제 이 ComposeUnitConverterScreen 안에 있는 screens 리스트에서 원하는 화면을 고르면 그 화면의 컴포저블 함수를 리턴해준다.</li>
+<li>아래는 <code>ComposeUnitConverterScreen</code>를 어떻게 사용하는지 나온다.</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">ComposeUnitConverterBottomBar</span><span class="params">(navController: <span class="type">NavHostController</span>)</span></span> &#123;</span><br><span class="line">    NavigationBar &#123;</span><br><span class="line">        <span class="keyword">val</span> navBackStackEntry <span class="keyword">by</span> navController.currentBackStackEntryAsState()</span><br><span class="line">        <span class="keyword">val</span> currentDestination = navBackStackEntry?.destination</span><br><span class="line">        <span class="comment">// 모든 스크린 forEach</span></span><br><span class="line">        ComposeUnitConverterScreen.screens.forEach &#123; screen -&gt;</span><br><span class="line">            NavigationBarItem(selected = currentDestination?.hierarchy?.any &#123; it.route == screen.route &#125; == <span class="literal">true</span>,</span><br><span class="line">                onClick = &#123;</span><br><span class="line">                    <span class="comment">// 일단 클릭하면 그 화면으로 이동하기</span></span><br><span class="line">                    navController.navigate(screen.route) &#123;</span><br><span class="line">                        launchSingleTop = <span class="literal">true</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                label = &#123;</span><br><span class="line">                    <span class="comment">// screen 객체에 이미 정의된 label</span></span><br><span class="line">                    Text(text = stringResource(id = screen.label))</span><br><span class="line">                &#125;,</span><br><span class="line">                icon = &#123;</span><br><span class="line">                    <span class="comment">// screen 객체에 이미 정의된 icon, label</span></span><br><span class="line">                    Icon(</span><br><span class="line">                        painter = painterResource(id = screen.icon),</span><br><span class="line">                        contentDescription = stringResource(id = screen.label)</span><br><span class="line">                    )</span><br><span class="line">                &#125;,</span><br><span class="line">                alwaysShowLabel = <span class="literal">false</span>	<span class="comment">// 선택되었을 때만 label 보여줌</span></span><br><span class="line">            )</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="NavHostController와-NavHost-사용"><a href="#NavHostController와-NavHost-사용" class="headerlink" title="NavHostController와 NavHost() 사용"></a>NavHostController와 NavHost() 사용</h3><p>교재는 <strong>섭씨&#x2F;화씨 변환 기능이 있는 화면</strong>과 <strong>미터&#x2F;마일 변환 기능이 있는 화면</strong>을 <code>NavHostController</code>와 <code>NavHost</code>를 이용해 전환하는 예제를 보여주고 있다.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">ComposeUnitConverterNavHost</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    navController: <span class="type">NavHostController</span>, factory: <span class="type">ViewModelProvider</span>.<span class="type">Factory</span>?, modifier: <span class="type">Modifier</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span> &#123;</span><br><span class="line">    NavHost(</span><br><span class="line">        navController = navController,</span><br><span class="line">        startDestination = ComposeUnitConverterScreen.route_temperature,</span><br><span class="line">        modifier = modifier</span><br><span class="line">    ) &#123;</span><br><span class="line">        composable(ComposeUnitConverterScreen.route_temperature) &#123;</span><br><span class="line">            TemperatureConverter(</span><br><span class="line">                viewModel = viewModel(factory = factory)</span><br><span class="line">            )</span><br><span class="line">        &#125;</span><br><span class="line">        composable(ComposeUnitConverterScreen.route_distances) &#123;</span><br><span class="line">            DistancesConverter(</span><br><span class="line">                viewModel = viewModel(factory = factory)</span><br><span class="line">            )</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>근데 아까 위에서 Splash 화면에서 홈화면으로 이동하기 위해서도 이러한 동작이 필요했었다.</p>
+<p>MainActivity부터 살펴보자</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span>: <span class="type">ComponentActivity</span></span>() &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onCreate</span><span class="params">(savedInstanceState: <span class="type">Bundle</span>?)</span></span> &#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState)</span><br><span class="line">        setContent &#123;</span><br><span class="line">            Chapter06Theme &#123;</span><br><span class="line">                <span class="keyword">val</span> navController = rememberNavController()</span><br><span class="line">                SetupNavGraph(navController = navController)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>이 Activity에서 이동할 화면들은 모두 NavHostController로 제어한다.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">SetupNavGraph</span><span class="params">(navController: <span class="type">NavHostController</span>)</span></span> &#123;</span><br><span class="line">    NavHost(navController = navController, startDestination = Screen.Splash.route) &#123;</span><br><span class="line">        composable(route = Screen.Splash.route) &#123;</span><br><span class="line">            SplashScreen(navController = navController)</span><br><span class="line">        &#125;</span><br><span class="line">        composable(route = Screen.Home.route) &#123;</span><br><span class="line">            HomeScreen()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>여기서는 화면이동 단위를 SplashScreen과 HomeScreen으로 나눴다.<br>이 HomeScreen 안에서는 아까 위에서 섭씨&#x2F;화씨, 미터&#x2F;마일 변환하는 화면이 나올 것이다.<br>그 화면들을 여기서 전부 통합해 정의하면 어떻게 될까…?</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">SetupNavGraph</span><span class="params">(navController: <span class="type">NavHostController</span>)</span></span> &#123;</span><br><span class="line">    NavHost(navController = navController, startDestination = ComposeUnitConverterScreen.splash) &#123;</span><br><span class="line">        composable(ComposeUnitConverterScreen.splash) &#123;</span><br><span class="line">            SplashScreen(navController = navController)</span><br><span class="line">        &#125;</span><br><span class="line">        composable(ComposeUnitConverterScreen.temperature) &#123;</span><br><span class="line">            HomeScreen(navController = navController)</span><br><span class="line">        &#125;</span><br><span class="line">        composable(ComposeUnitConverterScreen.distances) &#123;</span><br><span class="line">            HomeScreen(navController = navController)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>이렇게 구성했더니 HomeScreen에서 화면을 이동할 때마다 깜빡거린다. 확실히 이건 잘못된 방법이었다. ㅠㅠ</p>
+<p>이 예제는 Navigation 기능을 사용해 화면을 이동하는 예제다 보니 화면 전환했던 기록이 전부 쌓여있어서 Back 버튼을 누르면 이전 화면으로 되돌아가는게 보인다. (데이터도 이전 화면의 데이터가 남아있음)</p>
+<p>그리고 ViewModelFactory를 사용하다보니 화면을 새로 만들면서도 이전 값이 유지 되면서 생성된다는 점도 같이 확인하면 되겠다.</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2023/02/27/jetpack_compose/chapter05/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2023-03-07 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/jetpack-compose-study/" title="jetpack-compose-study">
+                        <b>#</b> jetpack-compose-study
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/android/" title="android">
+                        <b>#</b> android
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2023/03/13/jetpack_compose/chapter07/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%BB%B4%ED%8F%AC%EC%A6%88-%EC%95%B1-%EC%8A%A4%ED%83%80%EC%9D%BC%EB%A7%81"><span class="toc-text">컴포즈 앱 스타일링</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%83%89%EC%83%81-%EB%AA%A8%EC%96%91-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EC%8A%A4%ED%83%80%EC%9D%BC-%EC%A0%95%EC%9D%98"><span class="toc-text">색상, 모양, 텍스트 스타일 정의</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%A6%AC%EC%86%8C%EC%8A%A4-%EA%B8%B0%EB%B0%98%EC%9D%98-%ED%85%8C%EB%A7%88-%EC%82%AC%EC%9A%A9"><span class="toc-text">리소스 기반의 테마 사용</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#values-x2F-themes-xml"><span class="toc-text">values&#x2F;themes.xml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#values-31-x2F-themes-xml"><span class="toc-text">values-31&#x2F;themes.xml</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%ED%88%B4%EB%B0%94%EC%99%80-%EB%A9%94%EB%89%B4-%ED%86%B5%ED%95%A9"><span class="toc-text">툴바와 메뉴 통합</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%83%81%EB%8B%A8-%EC%95%B1-%EB%B0%94-%EC%83%9D%EC%84%B1"><span class="toc-text">상단 앱 바 생성</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EB%84%A4%EB%B9%84%EA%B2%8C%EC%9D%B4%EC%85%98-%EC%B6%94%EA%B0%80"><span class="toc-text">네비게이션 추가</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NavHostController%EC%99%80-NavHost-%EC%82%AC%EC%9A%A9"><span class="toc-text">NavHostController와 NavHost() 사용</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/boring-km">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="kmjin@kakao.com">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="linkedin" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/">
+            <i class="iconfont icon-linkedin"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="TIL" target="_blank" rel="noopener" href="https://boring-km.github.io/TIL">
+            <i class="iconfont icon-emoji-friendly"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/boring-km">머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="내용 검색...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + 6%EC%9E%A5%20%EC%A1%B0%EB%A6%BD + '&url=' + http%3A%2F%2Fexample.com%2F2023%2F03%2F07%2Fjetpack_compose%2Fchapter06%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2023/03/07/jetpack_compose/chapter06/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      5장 Composable 함수 상태 관리 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">boring-km</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">5장 Composable 함수 상태 관리</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2023-02-27 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/jetpack-compose-study/" title="jetpack-compose-study">
+                    <b>#</b> jetpack-compose-study
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/android/" title="android">
+                    <b>#</b> android
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <p><a target="_blank" rel="noopener" href="https://github.com/Just-Android-Compose-Study/JetpackComposeStudy/tree/master/Chapter05">Source Code</a></p>
+<h2 id="상태를-갖거나-갖지-않는-Composable-함수-이해"><a href="#상태를-갖거나-갖지-않는-Composable-함수-이해" class="headerlink" title="상태를 갖거나 갖지 않는 Composable 함수 이해"></a>상태를 갖거나 갖지 않는 Composable 함수 이해</h2><p><strong>UI는 항상 현재 데이터를 보여줘야만 한다는 것이 중요하다. 따라서 값이 변경되면 반드시 UI에 알려야 한다.</strong><br>이를 위해 <code>observable</code> 타입을 사용한다.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// kotlin에서 사용되는 예시</span></span><br><span class="line"><span class="keyword">var</span> counter <span class="keyword">by</span> observable(-<span class="number">1</span>) &#123; _, oldValue, newValue -&gt;</span><br><span class="line">	println(<span class="string">&quot;<span class="variable">$oldValue</span> -&gt; <span class="variable">$newValue</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">0.</span><span class="number">.3</span>) counter = i</span><br></pre></td></tr></table></figure>
+
+<p>Jetpack Compose에서는 이러한 콜백 함수 없이도 상태가 변경되면 자동으로 관련된 UI 요소를 재구성하도록 동작한다.</p>
+<h3 id="Composable-함수에서-상태-사용"><a href="#Composable-함수에서-상태-사용" class="headerlink" title="Composable 함수에서 상태 사용"></a>Composable 함수에서 상태 사용</h3><p>stateful: Composable 함수가 값을 유지(remember)하고 있으면 stateful 함수다</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="meta">@Preview</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">SimpleStateDemo1</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> num = remember &#123; mutableStateOf(Random.nextInt(<span class="number">0</span>, <span class="number">10</span>)) &#125;</span><br><span class="line">    Text(text = <span class="string">&quot;값: <span class="subst">$&#123;num.value&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    LaunchedEffect(<span class="literal">true</span>) &#123;</span><br><span class="line">        delay(<span class="number">3000</span>)</span><br><span class="line">        num.value = <span class="number">9999</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="meta">@Preview</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">SimpleStateDemo2</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> num <span class="keyword">by</span> remember &#123; mutableStateOf(Random.nextInt(<span class="number">0</span>, <span class="number">10</span>)) &#125;</span><br><span class="line">    <span class="comment">// num 값을 직접 변경할 수는 없어졌다.</span></span><br><span class="line">    <span class="comment">// num 자체에서는 state 가지지 않음</span></span><br><span class="line">    Text(text = num.toString())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// caculation은 기억할 값을 생성하는 lambda 표현식</span></span><br><span class="line"><span class="comment">// 구성되는 동안 단 한 번만 평가되고 다시는 평가되지 않는다.</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> <span class="title">remember</span><span class="params">(<span class="keyword">crossinline</span> calculation: @<span class="type">DisallowComposableCalls</span> () -&gt; <span class="type">T</span>)</span></span>: T =</span><br><span class="line">    currentComposer.cache(<span class="literal">false</span>, calculation)</span><br><span class="line"></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> <span class="title">remember</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    key1: <span class="type">Any</span>?,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="keyword">crossinline</span> calculation: @<span class="type">DisallowComposableCalls</span> () -&gt; <span class="type">T</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>: T &#123;</span><br><span class="line">	<span class="comment">// key1으로 들어오는 값이 변경되었는지 체크</span></span><br><span class="line">    <span class="keyword">return</span> currentComposer.cache(currentComposer.changed(key1), calculation)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>changed 내용</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * A Compose compiler plugin API. DO NOT call directly.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Check [value] is different than the value used in the previous composition. This is used,</span></span><br><span class="line"><span class="comment"> * for example, to check parameter values to determine if they have changed.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> value the value to check</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> `true` if the value if [equals] of the previous value returns `false` when passed</span></span><br><span class="line"><span class="comment"> * [value].</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@ComposeCompilerApi</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">changed</span><span class="params">(value: <span class="type">Any</span>?)</span></span>: <span class="built_in">Boolean</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Composer.cache()</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// invalid 값이 위에 있는 check에서 값이 변경되었을 때 true로 들어오면서 값이 변경된다. (block 람다식 재실행)</span></span><br><span class="line"><span class="meta">@ComposeCompilerApi</span></span><br><span class="line"><span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> Composer.<span class="title">cache</span><span class="params">(invalid: <span class="type">Boolean</span>, block: @<span class="type">DisallowComposableCalls</span> () -&gt; <span class="type">T</span>)</span></span>: T &#123;</span><br><span class="line">    <span class="meta">@Suppress(<span class="string">&quot;UNCHECKED_CAST&quot;</span>)</span></span><br><span class="line">    <span class="keyword">return</span> rememberedValue().let &#123;</span><br><span class="line">        <span class="keyword">if</span> (invalid || it === Composer.Empty) &#123;</span><br><span class="line">            <span class="keyword">val</span> value = block()</span><br><span class="line">            updateRememberedValue(value)</span><br><span class="line">            value</span><br><span class="line">        &#125; <span class="keyword">else</span> it</span><br><span class="line">    &#125; <span class="keyword">as</span> T</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">RememberWithKeyDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> key <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="literal">false</span>) &#125;</span><br><span class="line">    <span class="comment">// key의 상태를 지켜보는 date, 변경시 람다식이 재실행 될 것임</span></span><br><span class="line">    <span class="keyword">val</span> date <span class="keyword">by</span> remember(key) &#123; mutableStateOf(Date()) &#125;</span><br><span class="line">    Column(</span><br><span class="line">        horizontalAlignment = Alignment.CenterHorizontally,</span><br><span class="line">        verticalArrangement = Arrangement.Center,</span><br><span class="line">        modifier = Modifier.fillMaxSize()</span><br><span class="line">    ) &#123;</span><br><span class="line">        Text(text = date.toString())</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        remember로 설정한 값이 이전 구성과 같다면 재평가되지 않고,</span></span><br><span class="line"><span class="comment">        동일하지 않은 경우에 새로운 값으로 계산하고, 이 값을 기억하고 반환한다.</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        Button(onClick = &#123; key = !key &#125;) &#123;</span><br><span class="line">            Text(text = stringResource(id = R.string.click))</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="상태를-갖지-않는-Composable-함수-작성"><a href="#상태를-갖지-않는-Composable-함수-작성" class="headerlink" title="상태를 갖지 않는 Composable 함수 작성"></a>상태를 갖지 않는 Composable 함수 작성</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">SimpleStatelessComposable2</span><span class="params">(text: <span class="type">State</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    Text(text = text.value)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>이 함수는 파라미터로 상태를 받지만 저장하지 않고 다른 상태를 기억하지도 않는다.<br><strong>멱등성(idempotent)</strong>: 연산을 여러 번 적용하더라도 결과가 달라지지 않는 성질을 의미</p>
+<h4 id="Composable-함수의-준수사항"><a href="#Composable-함수의-준수사항" class="headerlink" title="Composable 함수의 준수사항"></a>Composable 함수의 준수사항</h4><ul>
+<li><p>빠름: Composable은 무거운 연산을 하지 말아야 한다. 웹 서비스나 어떠한 I&#x2F;O도 호출해서는 안 된다. Composable에서 사용하는 데이터는 전달받는 형식이 돼야 한다.</p>
+</li>
+<li><p>부수 효과에서 자유로움: 전역 프로퍼티를 수정하거나 의도치 않은 observable 효과를 생산하지 말아야 한다.</p>
+</li>
+<li><p>멱등성: <code>remember &#123; &#125;</code>를 사용하지 않고(1) 전역 프로퍼티에도 접근하지 않으며(2) <strong>예측 불가능한 코드를 호출하지 말아야 한다.(3)</strong></p>
+</li>
+</ul>
+<h4 id="상태를-갖는-Composable-상태를-갖지-않는-Composable"><a href="#상태를-갖는-Composable-상태를-갖지-않는-Composable" class="headerlink" title="상태를 갖는 Composable, 상태를 갖지 않는 Composable"></a>상태를 갖는 Composable, 상태를 갖지 않는 Composable</h4><p><strong>상태를 갖는 Composable에서 상태를 갖지 않는 Composable을 호출하자.</strong></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// stateless</span></span><br><span class="line"><span class="meta">@ExperimentalMaterial3Api</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">TextFieldDemo</span><span class="params">(state: <span class="type">MutableState</span>&lt;<span class="type">TextFieldValue</span>&gt;)</span></span> &#123;</span><br><span class="line">    TextField(</span><br><span class="line">        value = state.value,</span><br><span class="line">        onValueChange = &#123; state.value = it &#125;,</span><br><span class="line">        placeholder = &#123; Text(<span class="string">&quot;Hello&quot;</span>) &#125;,</span><br><span class="line">        modifier = Modifier.fillMaxWidth()</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// stateful</span></span><br><span class="line"><span class="meta">@ExperimentalMaterial3Api</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="meta">@Preview</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">TextFieldDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> state = remember &#123;</span><br><span class="line">        mutableStateOf(TextFieldValue(<span class="string">&quot;&quot;</span>))</span><br><span class="line">    &#125;</span><br><span class="line">    TextFieldDemo(state)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="상태-호이스팅과-이벤트-전달"><a href="#상태-호이스팅과-이벤트-전달" class="headerlink" title="상태 호이스팅과 이벤트 전달"></a>상태 호이스팅과 이벤트 전달</h2><blockquote>
+<ul>
+<li>상태를 갖지 않는 Composable로 만들기 위해 상태를 상위로 이동시키는 패턴이다.</li>
+<li>Composable을 좀 더 재사용하기 쉽고 테스트에 용이하게 하는 것 외에도 하나 이상의 Composable 함수에서 상태를 사용하려면 상태를 상위로 올리게 할 필요가 있다.</li>
+</ul>
+</blockquote>
+<h3 id="섭씨-x2F-화씨-변경-예제"><a href="#섭씨-x2F-화씨-변경-예제" class="headerlink" title="섭씨&#x2F;화씨 변경 예제"></a>섭씨&#x2F;화씨 변경 예제</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">TemperatureTextField</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    temperature: <span class="type">MutableState</span>&lt;<span class="type">String</span>&gt;,  <span class="comment">// 파라미터로 상태를 전달 받으며</span></span></span></span><br><span class="line"><span class="params"><span class="function">    modifier: <span class="type">Modifier</span> = Modifier,</span></span></span><br><span class="line"><span class="params"><span class="function">    callback: () -&gt; <span class="type">Unit</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span> &#123;</span><br><span class="line">    TextField(</span><br><span class="line">        value = temperature.value,</span><br><span class="line">        onValueChange = &#123;</span><br><span class="line">            temperature.value = it  <span class="comment">// 변경 사항을 상태에 다시 저장한다.</span></span><br><span class="line">        &#125;,</span><br><span class="line">        placeholder = &#123;</span><br><span class="line">            Text(text = stringResource(id = R.string.placeholder))</span><br><span class="line">        &#125;,</span><br><span class="line">        modifier = modifier,</span><br><span class="line">        keyboardActions = KeyboardActions(onAny = &#123;</span><br><span class="line">            callback()</span><br><span class="line">        &#125;),</span><br><span class="line">        keyboardOptions = KeyboardOptions(</span><br><span class="line">            keyboardType = KeyboardType.Number,</span><br><span class="line">            imeAction = ImeAction.Done</span><br><span class="line">        ),</span><br><span class="line">        singleLine = <span class="literal">true</span></span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">TemperatureRadioButton</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    selected: <span class="type">Boolean</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    resId: <span class="type">Int</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    onClick: (<span class="type">Int</span>) -&gt; <span class="type">Unit</span>, <span class="comment">// 파라미터를 받는 콜백함수를 파라미터로 설정</span></span></span></span><br><span class="line"><span class="params"><span class="function">    modifier: <span class="type">Modifier</span> = Modifier</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span> &#123;</span><br><span class="line">    Row(</span><br><span class="line">        verticalAlignment = Alignment.CenterVertically,</span><br><span class="line">        modifier = modifier</span><br><span class="line">    ) &#123;</span><br><span class="line">        RadioButton(</span><br><span class="line">            selected = selected,</span><br><span class="line">            onClick = &#123;</span><br><span class="line">                onClick(resId)  <span class="comment">// onClick 콜백함수 호출</span></span><br><span class="line">            &#125;</span><br><span class="line">        )</span><br><span class="line">        Text(</span><br><span class="line">            text = stringResource(resId),</span><br><span class="line">            modifier = Modifier</span><br><span class="line">                .padding(start = <span class="number">8.</span>dp)</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">TemperatureScaleButtonGroup</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    selected: <span class="type">MutableState</span>&lt;<span class="type">Int</span>&gt;,    <span class="comment">// 상태를 받음</span></span></span></span><br><span class="line"><span class="params"><span class="function">    modifier: <span class="type">Modifier</span> = Modifier</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> sel = selected.value</span><br><span class="line">    <span class="keyword">val</span> onClick = &#123; resId: <span class="built_in">Int</span> -&gt; selected.value = resId &#125;  <span class="comment">// 3: 새로운 상태 값으로 지정한다.</span></span><br><span class="line">    Row(modifier = modifier) &#123;</span><br><span class="line">        TemperatureRadioButton(</span><br><span class="line">            selected = sel == R.string.celsius,</span><br><span class="line">            resId = R.string.celsius,   <span class="comment">// 2: redId 값을</span></span><br><span class="line">            onClick = onClick   <span class="comment">// 1: 라디오 버튼을 클릭하면, (버블업, bubble up)</span></span><br><span class="line">        )</span><br><span class="line">        TemperatureRadioButton(</span><br><span class="line">            selected = sel == R.string.fahrenheit,</span><br><span class="line">            resId = R.string.fahrenheit,</span><br><span class="line">            onClick = onClick,</span><br><span class="line">            modifier = Modifier.padding(start = <span class="number">16.</span>dp)</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Convert</span></span><br><span class="line"><span class="comment">// 부모(stateful)에서 상태를 생성하고,</span></span><br><span class="line"><span class="comment">// 자식(stateless)은 부모의 상태를 받아서만 동작하는 수동적 Composable 함수다. </span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="meta">@Preview</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">FlowOfEventsDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> strCelsius = stringResource(id = R.string.celsius)</span><br><span class="line">    <span class="keyword">val</span> strFahrenheit = stringResource(id = R.string.fahrenheit)</span><br><span class="line">    <span class="keyword">val</span> temperature = remember &#123; mutableStateOf(<span class="string">&quot;&quot;</span>) &#125;</span><br><span class="line">    <span class="keyword">val</span> scale = remember &#123; mutableStateOf(R.string.celsius) &#125;</span><br><span class="line">    <span class="keyword">var</span> convertedTemperature <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="built_in">Float</span>.NaN) &#125;</span><br><span class="line">    <span class="keyword">val</span> calc = &#123;</span><br><span class="line">        <span class="keyword">val</span> temp = temperature.value.toFloat()</span><br><span class="line">        convertedTemperature = <span class="keyword">if</span> (scale.value == R.string.celsius)</span><br><span class="line">            (temp * <span class="number">1.8F</span>) + <span class="number">32F</span> <span class="comment">// 섭씨 * 1.8 + 32</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            (temp - <span class="number">32F</span>) / <span class="number">1.8F</span> <span class="comment">// (화씨 - 32) / 1.8</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 섭씨면 화씨로, 화씨면 섭씨로 표현</span></span><br><span class="line">    <span class="keyword">val</span> result = remember(convertedTemperature) &#123;</span><br><span class="line">        <span class="keyword">if</span> (convertedTemperature.isNaN())</span><br><span class="line">            <span class="string">&quot;&quot;</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="string">&quot;<span class="subst">$&#123;convertedTemperature&#125;</span><span class="subst">$&#123;</span></span></span><br><span class="line"><span class="subst"><span class="string">                if (scale.value == R.string.celsius)</span></span></span><br><span class="line"><span class="subst"><span class="string">                    strFahrenheit</span></span></span><br><span class="line"><span class="subst"><span class="string">                else strCelsius</span></span></span><br><span class="line"><span class="subst"><span class="string">            &#125;</span>&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> enabled = temperature.value.isNotBlank()    <span class="comment">//  비어 있지 않으면 모두 활성화</span></span><br><span class="line">    Column(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">            .fillMaxSize()</span><br><span class="line">            .padding(<span class="number">16.</span>dp),</span><br><span class="line">        horizontalAlignment = Alignment.CenterHorizontally,</span><br><span class="line">        verticalArrangement = Arrangement.Center</span><br><span class="line">    ) &#123;</span><br><span class="line">        TemperatureTextField(</span><br><span class="line">            temperature = temperature,</span><br><span class="line">            modifier = Modifier.padding(bottom = <span class="number">16.</span>dp),</span><br><span class="line">            callback = calc     <span class="comment">// 키보드 액션에서 완료 눌렀을 때</span></span><br><span class="line">        )</span><br><span class="line">        TemperatureScaleButtonGroup(</span><br><span class="line">            selected = scale,</span><br><span class="line">            modifier = Modifier.padding(bottom = <span class="number">16.</span>dp)</span><br><span class="line">        )</span><br><span class="line">        Button(</span><br><span class="line">            onClick = calc,     <span class="comment">// 직접 변환</span></span><br><span class="line">            enabled = enabled</span><br><span class="line">        ) &#123;</span><br><span class="line">            Text(text = stringResource(id = R.string.convert))</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (result.isNotEmpty()) &#123;  <span class="comment">// 결과가 있을 때만 보이는 Text</span></span><br><span class="line">            Text(</span><br><span class="line">                text = result,</span><br><span class="line">                style = MaterialTheme.typography.bodyMedium</span><br><span class="line">            )</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>전환 후 표시되는 텍스트는 기억되었다가 result에 할당된다.</li>
+<li>convertedTemperature가 변경되면 result는 재평가된다. (정말?)</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ...</span></span><br><span class="line">	<span class="comment">// 섭씨면 화씨로, 화씨면 섭씨로 표현</span></span><br><span class="line">    <span class="keyword">val</span> result = remember(convertedTemperature) &#123;</span><br><span class="line">    	<span class="comment">// 여기서 출력을 찍어봤다.</span></span><br><span class="line">        println(<span class="string">&quot;converted?: <span class="variable">$convertedTemperature</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> (convertedTemperature.isNaN())</span><br><span class="line">            <span class="string">&quot;&quot;</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="string">&quot;<span class="subst">$&#123;convertedTemperature&#125;</span><span class="subst">$&#123;</span></span></span><br><span class="line"><span class="subst"><span class="string">                if (scale.value == R.string.celsius)</span></span></span><br><span class="line"><span class="subst"><span class="string">                    strFahrenheit</span></span></span><br><span class="line"><span class="subst"><span class="string">                else strCelsius</span></span></span><br><span class="line"><span class="subst"><span class="string">            &#125;</span>&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/jetpack_compose/chapter05/log.png"></p>
+<p>예상대로 remember 대상 상태값인 convertedTemperature 바뀌지 않으면 재평가(Recomposition&#x2F;재구성)되지 않음을 알 수 있었다.</p>
+<h2 id="환경설정-변경에도-데이터-유지"><a href="#환경설정-변경에도-데이터-유지" class="headerlink" title="환경설정 변경에도 데이터 유지"></a>환경설정 변경에도 데이터 유지</h2><p>Jetpack Compose는 임시로 상태를 저장하기 위해 <code>rememberSaveable &#123; &#125;</code> 사용한다.</p>
+<h3 id="ViewModel-사용해보기"><a href="#ViewModel-사용해보기" class="headerlink" title="ViewModel 사용해보기"></a>ViewModel 사용해보기</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyViewModel</span> : <span class="type">ViewModel</span></span>() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// observable 변수</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> _text: MutableLiveData&lt;String&gt; =</span><br><span class="line">        MutableLiveData&lt;String&gt;(<span class="string">&quot;Hello #3&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> text: LiveData&lt;String&gt;</span><br><span class="line">        <span class="keyword">get</span>() = _text</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">setText</span><span class="params">(value: <span class="type">String</span>)</span></span> &#123;</span><br><span class="line">        _text.value = value</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ViewModelDemoActivity</span> : <span class="type">ComponentActivity</span></span>() &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onCreate</span><span class="params">(savedInstanceState: <span class="type">Bundle</span>?)</span></span> &#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState)</span><br><span class="line">        setContent &#123;</span><br><span class="line">            ViewModelDemo()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="meta">@Preview</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">ViewModelDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> viewModel: MyViewModel = viewModel()</span><br><span class="line">    <span class="comment">// 상태를 임시로 기억함</span></span><br><span class="line">    <span class="keyword">val</span> state1 = remember &#123;</span><br><span class="line">        mutableStateOf(<span class="string">&quot;Hello #1&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    It behaves similarly to remember,</span></span><br><span class="line"><span class="comment">     but the stored value will survive the activity or process recreation</span></span><br><span class="line"><span class="comment">      using the saved instance state mechanism</span></span><br><span class="line"><span class="comment">     (for example it happens when the screen is rotated in the Android application).</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">val</span> state2 = rememberSaveable &#123;</span><br><span class="line">        mutableStateOf(<span class="string">&quot;Hello #2&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> testState = rememberSaveable(saver = Saver(</span><br><span class="line">        save = &#123;</span><br><span class="line">            println(<span class="string">&quot;save&quot;</span>)</span><br><span class="line">            mutableStateOf(<span class="string">&quot;Hello #tester2&quot;</span>)</span><br><span class="line">        &#125;,</span><br><span class="line">        restore = &#123;</span><br><span class="line">            println(<span class="string">&quot;restore&quot;</span>)</span><br><span class="line">            mutableStateOf(<span class="string">&quot;Restored&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    )) &#123;</span><br><span class="line">        println(<span class="string">&quot;initial&quot;</span>)</span><br><span class="line">        mutableStateOf(<span class="string">&quot;initial&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> state3 = viewModel.text.observeAsState()    <span class="comment">// 변경 가능한 상태를 리턴함, Nullable State를 리턴함</span></span><br><span class="line">    state3.value?.let &#123;</span><br><span class="line">        Column(modifier = Modifier.fillMaxWidth()) &#123;</span><br><span class="line">            <span class="keyword">val</span> context = LocalContext.current <span class="keyword">as</span> Activity</span><br><span class="line"></span><br><span class="line">            MyTextField(state1) &#123; state1.value = it &#125;</span><br><span class="line">            MyTextField(state2) &#123; state2.value = it &#125;</span><br><span class="line">            MyTextField(state3) &#123;</span><br><span class="line">                viewModel.setText(it)</span><br><span class="line">            &#125;</span><br><span class="line">            MyTextField(testState) &#123;</span><br><span class="line">                testState.value = it</span><br><span class="line">            &#125;</span><br><span class="line">            Button(onClick = &#123;</span><br><span class="line">                context.startActivity(Intent(context, ViewModelDemoActivity::<span class="keyword">class</span>.java))</span><br><span class="line">                context.finish()</span><br><span class="line"></span><br><span class="line">            &#125;) &#123;</span><br><span class="line">                Text(text = <span class="string">&quot;재시작&quot;</span>)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">MyTextField</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    value: <span class="type">State</span>&lt;<span class="type">String</span>?&gt;,  <span class="comment">// Nullable State</span></span></span></span><br><span class="line"><span class="params"><span class="function">    onValueChange: (<span class="type">String</span>) -&gt; <span class="type">Unit</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span> &#123;</span><br><span class="line">    value.value?.let &#123;</span><br><span class="line">        TextField(</span><br><span class="line">            value = it,</span><br><span class="line">            onValueChange = onValueChange,</span><br><span class="line">            modifier = Modifier.fillMaxWidth()</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>rememberSaveable &#123; &#125;</code> 으로도 간단하게 상태를 저장하고 불러올 수 있겠지만, 하나의 화면 안에서 모든 로직이 끝나는 것이 아니라 데이터를 외부에서 의존적인 형태로 받아올 때는 Saver 구현체나 ViewModel 클래스를 사용하는 것이 좋겠다.</p>
+<h2 id="요약"><a href="#요약" class="headerlink" title="요약"></a>요약</h2><ul>
+<li>상태 호이스팅은 상태를 갖지 않는 Composable 함수를 만들기 위한 일종의 도구다.</li>
+<li><code>remember &#123; &#125;</code>, <code>rememberSaveable &#123; &#125;</code>, <code>ViewModel</code>에 대해 알아보았다.</li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2023/02/21/jetpack_compose/chapter04/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2023-02-27 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/jetpack-compose-study/" title="jetpack-compose-study">
+                        <b>#</b> jetpack-compose-study
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/android/" title="android">
+                        <b>#</b> android
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2023/03/07/jetpack_compose/chapter06/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%83%81%ED%83%9C%EB%A5%BC-%EA%B0%96%EA%B1%B0%EB%82%98-%EA%B0%96%EC%A7%80-%EC%95%8A%EB%8A%94-Composable-%ED%95%A8%EC%88%98-%EC%9D%B4%ED%95%B4"><span class="toc-text">상태를 갖거나 갖지 않는 Composable 함수 이해</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Composable-%ED%95%A8%EC%88%98%EC%97%90%EC%84%9C-%EC%83%81%ED%83%9C-%EC%82%AC%EC%9A%A9"><span class="toc-text">Composable 함수에서 상태 사용</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%83%81%ED%83%9C%EB%A5%BC-%EA%B0%96%EC%A7%80-%EC%95%8A%EB%8A%94-Composable-%ED%95%A8%EC%88%98-%EC%9E%91%EC%84%B1"><span class="toc-text">상태를 갖지 않는 Composable 함수 작성</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Composable-%ED%95%A8%EC%88%98%EC%9D%98-%EC%A4%80%EC%88%98%EC%82%AC%ED%95%AD"><span class="toc-text">Composable 함수의 준수사항</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EC%83%81%ED%83%9C%EB%A5%BC-%EA%B0%96%EB%8A%94-Composable-%EC%83%81%ED%83%9C%EB%A5%BC-%EA%B0%96%EC%A7%80-%EC%95%8A%EB%8A%94-Composable"><span class="toc-text">상태를 갖는 Composable, 상태를 갖지 않는 Composable</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%83%81%ED%83%9C-%ED%98%B8%EC%9D%B4%EC%8A%A4%ED%8C%85%EA%B3%BC-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%A0%84%EB%8B%AC"><span class="toc-text">상태 호이스팅과 이벤트 전달</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%84%AD%EC%94%A8-x2F-%ED%99%94%EC%94%A8-%EB%B3%80%EA%B2%BD-%EC%98%88%EC%A0%9C"><span class="toc-text">섭씨&#x2F;화씨 변경 예제</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%ED%99%98%EA%B2%BD%EC%84%A4%EC%A0%95-%EB%B3%80%EA%B2%BD%EC%97%90%EB%8F%84-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%9C%A0%EC%A7%80"><span class="toc-text">환경설정 변경에도 데이터 유지</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ViewModel-%EC%82%AC%EC%9A%A9%ED%95%B4%EB%B3%B4%EA%B8%B0"><span class="toc-text">ViewModel 사용해보기</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%9A%94%EC%95%BD"><span class="toc-text">요약</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/boring-km">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="kmjin@kakao.com">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="linkedin" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/">
+            <i class="iconfont icon-linkedin"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="TIL" target="_blank" rel="noopener" href="https://boring-km.github.io/TIL">
+            <i class="iconfont icon-emoji-friendly"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/boring-km">머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="내용 검색...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + 5%EC%9E%A5%20Composable%20%ED%95%A8%EC%88%98%20%EC%83%81%ED%83%9C%20%EA%B4%80%EB%A6%AC + '&url=' + http%3A%2F%2Fexample.com%2F2023%2F02%2F27%2Fjetpack_compose%2Fchapter05%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2023/02/27/jetpack_compose/chapter05/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

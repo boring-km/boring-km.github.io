@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      3장 컴포즈 핵심 원칙 자세히 알아보기 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">boring-km</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">3장 컴포즈 핵심 원칙 자세히 알아보기</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2023-02-14 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/jetpack-compose-study/" title="jetpack-compose-study">
+                    <b>#</b> jetpack-compose-study
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/android/" title="android">
+                    <b>#</b> android
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <p><a target="_blank" rel="noopener" href="https://github.com/Just-Android-Compose-Study/JetpackComposeStudy/tree/master/Chapter03">Source Code</a></p>
+<h2 id="컴포저블-함수-자세히-살펴보기"><a href="#컴포저블-함수-자세히-살펴보기" class="headerlink" title="컴포저블 함수 자세히 살펴보기"></a>컴포저블 함수 자세히 살펴보기</h2><h3 id="컴포저블-함수의-구성-요소"><a href="#컴포저블-함수의-구성-요소" class="headerlink" title="컴포저블 함수의 구성 요소"></a>컴포저블 함수의 구성 요소</h3><ul>
+<li>가시성 변경자: 용도에 따라 접근 범위를 정하면 되겠다.</li>
+<li>fun</li>
+<li>함수명: <strong>파스칼 표기법</strong>으로 작성</li>
+<li>매개변수: 선택적</li>
+<li>반환 타입: 선택적 -&gt; 값을 리턴하지 않아도 Composable 함수가 화면에 표현된다.</li>
+<li>코드 블록</li>
+</ul>
+<h3 id="UI-요소-내보내기"><a href="#UI-요소-내보내기" class="headerlink" title="UI 요소 내보내기"></a>UI 요소 내보내기</h3><ul>
+<li>IDE를 이용해 직접 확인해보기</li>
+</ul>
+<h4 id="androidx-compose-material-Text"><a href="#androidx-compose-material-Text" class="headerlink" title="androidx.compose.material.Text()"></a>androidx.compose.material.Text()</h4><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> textColor = color.takeOrElse &#123;</span><br><span class="line">  style.color.takeOrElse &#123;</span><br><span class="line">    LocalContentColor.current</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// NOTE(text-perf-review): It might be worthwhile writing a bespoke merge implementation that</span></span><br><span class="line"><span class="comment">// will avoid reallocating if all of the options here are the defaults</span></span><br><span class="line"><span class="keyword">val</span> mergedStyle = style.merge(</span><br><span class="line">  TextStyle(</span><br><span class="line">    color = textColor,</span><br><span class="line">    fontSize = fontSize,</span><br><span class="line">    fontWeight = fontWeight,</span><br><span class="line">    textAlign = textAlign,</span><br><span class="line">    lineHeight = lineHeight,</span><br><span class="line">    fontFamily = fontFamily,</span><br><span class="line">    textDecoration = textDecoration,</span><br><span class="line">    fontStyle = fontStyle,</span><br><span class="line">    letterSpacing = letterSpacing</span><br><span class="line">  )</span><br><span class="line">)</span><br><span class="line">BasicText(</span><br><span class="line">  text,</span><br><span class="line">  modifier,</span><br><span class="line">  mergedStyle,</span><br><span class="line">  onTextLayout,</span><br><span class="line">  overflow,</span><br><span class="line">  softWrap,</span><br><span class="line">  maxLines,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h4 id="BasicText"><a href="#BasicText" class="headerlink" title="BasicText()"></a>BasicText()</h4><blockquote>
+<p><strong>BasicText</strong>에서 찾은 CoreText 관련 주석</p>
+<p>The ID used to identify this CoreText. If this CoreText is removed from the composition tree and then added back, this ID should stay the same.</p>
+<p>Notice that we need to update selectable ID when the input text or selectionRegistrar has been updated.</p>
+<p>When text is updated, the selection on this CoreText becomes invalid. It can be treated as a brand new CoreText.</p>
+<p>When SelectionRegistrar is updated, CoreText have to request a new ID to avoid ID collision.</p>
+</blockquote>
+<p><img src="/images/jetpack_compose/chapter03/CoreText.png" alt="CoreText"></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://developer.android.com/jetpack/androidx/releases/compose-foundation#1.0.0-alpha12">https://developer.android.com/jetpack/androidx/releases/compose-foundation#1.0.0-alpha12</a></li>
+<li>CoreText는 public API에서 사용 불가</li>
+<li>BasicText() 하단부에서 Layout()을 호출하고 있다.</li>
+</ul>
+<h4 id="Layout"><a href="#Layout" class="headerlink" title="Layout()"></a>Layout()</h4><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Suppress(<span class="string">&quot;NOTHING_TO_INLINE&quot;</span>)</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="meta">@UiComposable</span></span><br><span class="line"><span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="title">Layout</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    modifier: <span class="type">Modifier</span> = Modifier,</span></span></span><br><span class="line"><span class="params"><span class="function">    measurePolicy: <span class="type">MeasurePolicy</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> density = LocalDensity.current</span><br><span class="line">    <span class="keyword">val</span> layoutDirection = LocalLayoutDirection.current</span><br><span class="line">    <span class="keyword">val</span> viewConfiguration = LocalViewConfiguration.current</span><br><span class="line">    <span class="keyword">val</span> materialized = currentComposer.materialize(modifier)</span><br><span class="line">    ReusableComposeNode&lt;ComposeUiNode, Applier&lt;Any&gt;&gt;(</span><br><span class="line">        factory = ComposeUiNode.Constructor,</span><br><span class="line">        update = &#123;</span><br><span class="line">            <span class="keyword">set</span>(measurePolicy, ComposeUiNode.SetMeasurePolicy)</span><br><span class="line">            <span class="keyword">set</span>(density, ComposeUiNode.SetDensity)</span><br><span class="line">            <span class="keyword">set</span>(layoutDirection, ComposeUiNode.SetLayoutDirection)</span><br><span class="line">            <span class="keyword">set</span>(viewConfiguration, ComposeUiNode.SetViewConfiguration)</span><br><span class="line">            <span class="keyword">set</span>(materialized, ComposeUiNode.SetModifier)</span><br><span class="line">        &#125;,</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>ReusableComposeNode()</code>를 호출한다.</li>
+<li>Node라고 하는 UI 요소 계층 구조를 내보낸다.</li>
+<li>노드는 factory를 통해 생성된다.</li>
+<li><code>update</code>: 업데이트를 수행하는 코드 작성</li>
+<li><code>skippableUpdate</code>: 변경자를 조작하는 코드 작성 -&gt; <code>materialized</code>로 바뀜</li>
+</ul>
+<h4 id="ReusableComposeNode"><a href="#ReusableComposeNode" class="headerlink" title="ReusableComposeNode()"></a>ReusableComposeNode()</h4><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Emits a recyclable node into the composition of type [T].</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * This function will throw a runtime exception if [E] is not a subtype of the applier of the</span></span><br><span class="line"><span class="comment"> * [currentComposer].</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@sample</span> androidx.compose.runtime.samples.CustomTreeComposition</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> factory A function which will create a new instance of [T]. This function is NOT</span></span><br><span class="line"><span class="comment"> * guaranteed to be called in place.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> update A function to perform updates on the node. This will run every time emit is</span></span><br><span class="line"><span class="comment"> * executed. This function is called in place and will be inlined.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> Updater</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> Applier</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> Composition</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">// ComposeNode is a special case of readonly composable and handles creating its own groups, so</span></span><br><span class="line"><span class="comment">// it is okay to use.</span></span><br><span class="line"><span class="meta">@Suppress(<span class="string">&quot;NONREADONLY_CALL_IN_READONLY_COMPOSABLE&quot;</span>, <span class="string">&quot;UnnecessaryLambdaCreation&quot;</span>)</span></span><br><span class="line"><span class="meta">@Composable</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T : Any, <span class="keyword">reified</span> E : Applier&lt;*&gt;</span>&gt; <span class="title">ReusableComposeNode</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="keyword">noinline</span> factory: () -&gt; <span class="type">T</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    update: @<span class="type">DisallowComposableCalls</span> <span class="type">Updater</span>&lt;<span class="type">T</span>&gt;.() -&gt; <span class="type">Unit</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (currentComposer.applier !<span class="keyword">is</span> E) invalidApplier()</span><br><span class="line">    currentComposer.startReusableNode()</span><br><span class="line">    <span class="keyword">if</span> (currentComposer.inserting) &#123;</span><br><span class="line">        currentComposer.createNode &#123; factory() &#125;    <span class="comment">// 여기서 노드를 생성한다.</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        currentComposer.useNode()   <span class="comment">// 기존 노드 사용</span></span><br><span class="line">    &#125;</span><br><span class="line">    currentComposer.disableReusing()</span><br><span class="line">    Updater&lt;T&gt;(currentComposer).update()</span><br><span class="line">    currentComposer.enableReusing()</span><br><span class="line">    currentComposer.endNode()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>ReusableComposeNode</code>는 <strong>새로운 노드가 생성돼야 할지 또는 기존 노드를 재사용해야 할지를 결정한다.</strong></li>
+<li><code>currentComposer</code>는 androidx.compose.runtime.Composables.kt에 있는 최상위 Composer 변수</li>
+</ul>
+<h4 id="ComposableUiNode"><a href="#ComposableUiNode" class="headerlink" title="ComposableUiNode"></a>ComposableUiNode</h4><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Interface extracted from LayoutNode to not mark the whole LayoutNode class as <span class="doctag">@PublishedApi</span>.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@PublishedApi</span></span><br><span class="line"><span class="keyword">internal</span> <span class="class"><span class="keyword">interface</span> <span class="title">ComposeUiNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> measurePolicy: MeasurePolicy</span><br><span class="line">    <span class="keyword">var</span> layoutDirection: LayoutDirection</span><br><span class="line">    <span class="keyword">var</span> density: Density</span><br><span class="line">    <span class="keyword">var</span> modifier: Modifier</span><br><span class="line">    <span class="keyword">var</span> viewConfiguration: ViewConfiguration</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Object of pre-allocated lambdas used to make use with ComposeNode allocation-less.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">        <span class="keyword">val</span> Constructor: () -&gt; ComposeUiNode = LayoutNode.Constructor</span><br><span class="line">        <span class="keyword">val</span> VirtualConstructor: () -&gt; ComposeUiNode = &#123; LayoutNode(isVirtual = <span class="literal">true</span>) &#125;</span><br><span class="line">        <span class="keyword">val</span> SetModifier: ComposeUiNode.(Modifier) -&gt; <span class="built_in">Unit</span> = &#123; <span class="keyword">this</span>.modifier = it &#125;</span><br><span class="line">        <span class="keyword">val</span> SetDensity: ComposeUiNode.(Density) -&gt; <span class="built_in">Unit</span> = &#123; <span class="keyword">this</span>.density = it &#125;</span><br><span class="line">        <span class="keyword">val</span> SetMeasurePolicy: ComposeUiNode.(MeasurePolicy) -&gt; <span class="built_in">Unit</span> =</span><br><span class="line">            &#123; <span class="keyword">this</span>.measurePolicy = it &#125;</span><br><span class="line">        <span class="keyword">val</span> SetLayoutDirection: ComposeUiNode.(LayoutDirection) -&gt; <span class="built_in">Unit</span> =</span><br><span class="line">            &#123; <span class="keyword">this</span>.layoutDirection = it &#125;</span><br><span class="line">        <span class="keyword">val</span> SetViewConfiguration: ComposeUiNode.(ViewConfiguration) -&gt; <span class="built_in">Unit</span> =</span><br><span class="line">            &#123; <span class="keyword">this</span>.viewConfiguration = it &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Modifier</li>
+<li>Density</li>
+<li>MeasurePolicy</li>
+<li>LayoutDirection</li>
+<li>VirtualConstructor (새로 생김)</li>
+<li>ViewConfiguration (새로 생김)</li>
+</ul>
+<h3 id="값-반환"><a href="#값-반환" class="headerlink" title="값 반환"></a>값 반환</h3><ul>
+<li>Composable 함수의 주목적은 UI 구성이기 때문에 대부분 반환 타입을 명시하지 않는다.</li>
+<li>Composition이나 Recomposition의 일부인 무언가를 반환해야 한다면 반드시 Composable 함수여야 한다.</li>
+<li>반환된 데이터가 Compose와 아무 관련이 없더 상태를 유지하기 위한 값으로 사용한다면 Composable 함수로 만들어야 한다.<ul>
+<li><strong>이런 경우에는 함수명을 CamelCase로 작성</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="UI-구성과-재구성"><a href="#UI-구성과-재구성" class="headerlink" title="UI 구성과 재구성"></a>UI 구성과 재구성</h2><ul>
+<li>Jetpack Compose는 앱 데이터가 변경되어 UI가 변경되어야 하는 경우 개발자가 선제적으로 컴포넌트 트리를 변경하는 행위에 의존하지 않는다.</li>
+<li>대신 이러한 변화를 자체적으로 감지하고 영향을 받는 부분만 갱신한다.</li>
+</ul>
+<h3 id="Composable-함수-간-상태-공유"><a href="#Composable-함수-간-상태-공유" class="headerlink" title="Composable 함수 간 상태 공유"></a>Composable 함수 간 상태 공유</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">ColorPicker</span><span class="params">(color: <span class="type">MutableState</span>&lt;<span class="type">Color</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> red = color.value.red</span><br><span class="line">    <span class="keyword">val</span> green = color.value.green</span><br><span class="line">    <span class="keyword">val</span> blue = color.value.blue</span><br><span class="line">    Column &#123;</span><br><span class="line">        Slider(</span><br><span class="line">            value = red,</span><br><span class="line">            onValueChange = &#123; color.value = Color(it, green, blue) &#125;)</span><br><span class="line">        Slider(</span><br><span class="line">            value = green,</span><br><span class="line">            onValueChange = &#123; color.value = Color(red, it, blue) &#125;)</span><br><span class="line">        Slider(</span><br><span class="line">            value = blue,</span><br><span class="line">            onValueChange = &#123; color.value = Color(red, green, it) &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>ColorPicker()</code> 함수가 <code>Color</code>가 아닌 <code>MutableState&lt;Color&gt;</code> 를 파라미터로 받는 이유</p>
+<ul>
+<li>color의 값이 ColorPicker 안에서만 변경될 것이기 때문에 상위 Composable 함수에서 해당 변화에 대해 알 수 있어야 한다.</li>
+</ul>
+</li>
+<li><p>전역 프로퍼티를 사용하는 방식도 있겠지만 이는 권고하지 않는 방식이며, 되도록 Composable 함수의 모습과 행위에 영향을 주는 모든 데이터는 매개변수(parameter)로 전달하는 것이 좋다.</p>
+</li>
+<li><p>state hoisting(상태 호이스팅): 상태를 전달받아 Composable 함수를 호출한 곳으로 상태를 옮기는 것</p>
+</li>
+</ul>
+<blockquote>
+<h3 id="중요-사항"><a href="#중요-사항" class="headerlink" title="중요 사항"></a>중요 사항</h3><p>Composable을 SideEffect가 없게 만들자. (동일한 인자로 함수를 반복적으로 호출해도 항상 동일한 결과를 생산함)</p>
+<p>호출자로부터 모든 관련 데이터를 얻는 것 이외에도 전역프로퍼티에 의존하거나 예측 불가능한 값을 반환하는 함수 호출하는 것도 금지된다. -&gt; 보통 IDE에서 경고해주는 것 같다.</p>
+</blockquote>
+<ul>
+<li>Compose UI는 Composable 함수의 중첩 호출로 정의된다.</li>
+<li>Composable 함수는 UI 요소 또는 UI 요소 계층 구조를 발행한다.</li>
+<li>UI를 처음 구성하는 것을 Composition이라고 부른다.</li>
+<li>앱 데이터 변경 시 UI를 재구성하는 것을 Recomposition이라 부른다.</li>
+<li>Recomposition은 자동으로 발생한다.</li>
+</ul>
+<h3 id="크기-제어"><a href="#크기-제어" class="headerlink" title="크기 제어"></a>크기 제어</h3><ul>
+<li><code>fillMaxSize()</code>, <code>fillMAxWidth()</code>, <code>BoxWidthConstraints()</code> 등을 잘 활용해보기</li>
+</ul>
+<h3 id="액티비티-내에서-Composable-계층-구조-나타내기"><a href="#액티비티-내에서-Composable-계층-구조-나타내기" class="headerlink" title="액티비티 내에서 Composable 계층 구조 나타내기"></a>액티비티 내에서 Composable 계층 구조 나타내기</h3><blockquote>
+<h4 id="setContent"><a href="#setContent" class="headerlink" title="setContent"></a>setContent</h4><p><strong>parent</strong>: null 값이 가능한 CompositionContext<br><strong>content</strong>: 선언하는 UI를 위한 Composable function</p>
+</blockquote>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ComponentActivity.kt</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">fun</span> ComponentActivity.<span class="title">setContent</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    parent: <span class="type">CompositionContext</span>? = <span class="literal">null</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    content: @<span class="type">Composable</span> () -&gt; <span class="type">Unit</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 액티비티가 이미 ComposeView의 인스턴스를 포함하는지 알아내기 위해 사용된다.</span></span><br><span class="line">    <span class="keyword">val</span> existingComposeView = window.decorView</span><br><span class="line">        .findViewById&lt;ViewGroup&gt;(android.R.id.content)</span><br><span class="line">        .getChildAt(<span class="number">0</span>) <span class="keyword">as</span>? ComposeView</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (existingComposeView != <span class="literal">null</span>) with(existingComposeView) &#123;</span><br><span class="line">        setParentCompositionContext(parent)</span><br><span class="line">        setContent(content)</span><br><span class="line">    &#125; <span class="keyword">else</span> ComposeView(<span class="keyword">this</span>).apply &#123; <span class="comment">// findViewById 실패 시 새로운 인스턴스 생성: ComposeView</span></span><br><span class="line">        <span class="comment">// Set content and parent **before** setContentView</span></span><br><span class="line">        <span class="comment">// to have ComposeView create the composition on attach</span></span><br><span class="line">        setParentCompositionContext(parent)</span><br><span class="line">        setContent(content)</span><br><span class="line">        <span class="comment">// Set the view tree owners before setting the content view so that the inflation process</span></span><br><span class="line">        <span class="comment">// and attach listeners will see them already present</span></span><br><span class="line">        setOwners()</span><br><span class="line">        setContentView(<span class="keyword">this</span>, DefaultActivityContentLayoutParams)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ComposeView.android.kt AbstractComposeView</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">var</span> parentContext: CompositionContext? = <span class="literal">null</span></span><br><span class="line">    <span class="keyword">set</span>(value) &#123;</span><br><span class="line">        <span class="keyword">if</span> (field !== value) &#123;</span><br><span class="line">            field = value</span><br><span class="line">            <span class="keyword">if</span> (value != <span class="literal">null</span>) &#123;</span><br><span class="line">                cachedViewTreeCompositionContext = <span class="literal">null</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">val</span> old = composition</span><br><span class="line">            <span class="keyword">if</span> (old !== <span class="literal">null</span>) &#123;</span><br><span class="line">                old.dispose()</span><br><span class="line">                composition = <span class="literal">null</span></span><br><span class="line">                <span class="comment">// Recreate the composition now if we are attached.</span></span><br><span class="line">                <span class="keyword">if</span> (isAttachedToWindow) &#123;</span><br><span class="line">                    ensureCompositionCreated()</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ComposeView.android.kt</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// parentContext 대체재 찾기 </span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">resolveParentCompositionContext</span><span class="params">()</span></span> = parentContext</span><br><span class="line">    ?: findViewTreeCompositionContext()?.cacheIfAlive()</span><br><span class="line">    ?: cachedViewTreeCompositionContext?.<span class="keyword">get</span>()?.takeIf &#123; it.isAlive &#125;</span><br><span class="line">    ?: windowRecomposer.cacheIfAlive()</span><br><span class="line"></span><br><span class="line"><span class="meta">@Suppress(<span class="string">&quot;DEPRECATION&quot;</span>)</span> <span class="comment">// Still using ViewGroup.setContent for now</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">ensureCompositionCreated</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (composition == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            creatingComposition = <span class="literal">true</span></span><br><span class="line">            composition = setContent(resolveParentCompositionContext()) &#123;</span><br><span class="line">                Content()</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            creatingComposition = <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Composable-함수의-행위-수정"><a href="#Composable-함수의-행위-수정" class="headerlink" title="Composable 함수의 행위 수정"></a>Composable 함수의 행위 수정</h2><ul>
+<li><p>컴포넌트의 프로퍼티와 달리 Modifier는 전적으로 개발자의 판단에 따라 사용될 수 있다.</p>
+</li>
+<li><p>Modifier는 행동이나 정렬, 그리기와 같은 여러 범주 중 하나에 할당될 수 있다. <a target="_blank" rel="noopener" href="https://developer.android.com/jetpack/compose/modifiers-list">Modifier 목록 링크</a></p>
+</li>
+<li><p>Modifier Chaining: 빌더 패턴처럼 Modifier의 속성을 정의</p>
+</li>
+</ul>
+<h3 id="Modifier-동작-이해"><a href="#Modifier-동작-이해" class="headerlink" title="Modifier 동작 이해"></a>Modifier 동작 이해</h3><p>Modifier를 올바르게 사용하지 않으면, IDE에서는 다음과 같은 안내를 해준다.</p>
+<p><img src="/images/jetpack_compose/chapter03/modifier.png" alt="Modifier parameter shouble be the first optional parameter"></p>
+<p>어떤 경우에 이런 경고가 나오는 지 예시 코드를 보자</p>
+<ul>
+<li>modifier는 첫 번째로 오는 nullable parameter가 되어야 한다. 말이 어려우니까 예시를 보자</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">TextWithWarning1</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    name: <span class="type">String</span> = <span class="string">&quot;Default&quot;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    modifier: <span class="type">Modifier</span> = Modifier,</span></span></span><br><span class="line"><span class="params"><span class="function">    callback: () -&gt; <span class="type">Unit</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span> &#123;</span><br><span class="line">    Text(text = <span class="string">&quot;TextWithWarning1 <span class="variable">$name</span>!&quot;</span>, modifier = modifier</span><br><span class="line">        .background(Color.Yellow)</span><br><span class="line">        .clickable &#123; callback.invoke() &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">TextWithWarning2</span><span class="params">(test: <span class="type">Modifier</span> = Modifier, name: <span class="type">String</span> = <span class="string">&quot;&quot;</span>, callback: () -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">    Text(text = <span class="string">&quot;TextWithWarning2 <span class="variable">$name</span>!&quot;</span>, modifier = test</span><br><span class="line">        .background(Color.Yellow)</span><br><span class="line">        .clickable &#123; callback.invoke() &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">TextWithoutWarning</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    modifier: <span class="type">Modifier</span> = Modifier,</span></span></span><br><span class="line"><span class="params"><span class="function">    buttonModifier: <span class="type">Modifier</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    name: <span class="type">String</span> = <span class="string">&quot;&quot;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    callback: () -&gt; <span class="type">Unit</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span> &#123;</span><br><span class="line">    Column(horizontalAlignment = Alignment.CenterHorizontally) &#123;</span><br><span class="line">        Text(text = <span class="string">&quot;TextWithoutWarning <span class="variable">$name</span>!&quot;</span>, modifier = modifier</span><br><span class="line">            .padding(<span class="number">10.</span>dp) <span class="comment">// margin concept</span></span><br><span class="line">            .background(Color.Yellow)</span><br><span class="line">            .padding(<span class="number">10.</span>dp) <span class="comment">// real padding</span></span><br><span class="line">            .clickable &#123; callback.invoke() &#125;)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> context = LocalContext.current</span><br><span class="line">        Button(</span><br><span class="line">            modifier = buttonModifier.clickable &#123;</span><br><span class="line">                Toast.makeText(context, <span class="string">&quot;버튼에 clickable을 넣으면?&quot;</span>, Toast.LENGTH_SHORT).show()</span><br><span class="line">            &#125;,</span><br><span class="line">            onClick = &#123; Toast.makeText(context, <span class="string">&quot;버튼 클릭됨&quot;</span>, Toast.LENGTH_SHORT).show() &#125;) &#123;</span><br><span class="line">            Text(<span class="string">&quot;버튼&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>위의 예시 코드에서 보듯이 nullable한 parameter가 먼저 오게 되면, Composable 함수를 사용할 때 굳이 정의하지 않아도 되는 parameter값의 초기화를 강제받게 된다.</li>
+<li>부모 Composable 함수에서 정의한 Modifier를 자식 Composable 함수에서 추가로 설정하기 위해 Modifier를 반드시 받는 구조이기 때문에 NonNull인 Modifier를 맨 앞으로 가져오는 것이 경제적이라고 보면 되겠다.</li>
+<li>그리고 잘 보면 변수의 naming도 modifier 이거나 modifier를 사용할 Composable 함수의 이름을 접두사로 사용하면서 camelCase형식으로 적혀있기를 원한다.</li>
+<li>그리고 Modifier는 <strong>Modifier 요소의 순서가 있고</strong> 한번 정의하면 재정의할 수 없는 <strong>변경 불가능한 컬렉션</strong>이다.</li>
+</ul>
+<h4 id="Modifier-then"><a href="#Modifier-then" class="headerlink" title="Modifier.then()"></a>Modifier.then()</h4><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Background.kt</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> Modifier.<span class="title">background</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    color: <span class="type">Color</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    shape: <span class="type">Shape</span> = RectangleShape</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span> = <span class="keyword">this</span>.then(	<span class="comment">// other parameter에 Background 인스턴스가 들어감</span></span><br><span class="line">    Background(</span><br><span class="line">        color = color,</span><br><span class="line">        shape = shape,</span><br><span class="line">        inspectorInfo = debugInspectorInfo &#123;</span><br><span class="line">            name = <span class="string">&quot;background&quot;</span></span><br><span class="line">            value = color</span><br><span class="line">            properties[<span class="string">&quot;color&quot;</span>] = color</span><br><span class="line">            properties[<span class="string">&quot;shape&quot;</span>] = shape</span><br><span class="line">        &#125;</span><br><span class="line">    )</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Modifier.kt</span></span><br><span class="line"><span class="keyword">infix</span> <span class="function"><span class="keyword">fun</span> <span class="title">then</span><span class="params">(other: <span class="type">Modifier</span>)</span></span>: Modifier =</span><br><span class="line">    <span class="keyword">if</span> (other === Modifier) <span class="keyword">this</span> <span class="keyword">else</span> CombinedModifier(<span class="keyword">this</span>, other)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Background 클래스를 내부적으로 사용하고 있고, 최종적으로 Modifier.Element라는 인터페이스를 implement하고 있다.</li>
+<li>이 Modifier.Element 구현체로 UI요소의 공간에 그림을 그릴 수 있다.</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Background.kt</span></span><br><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Background</span> <span class="keyword">constructor</span></span>(</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> color: Color? = <span class="literal">null</span>,</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> brush: Brush? = <span class="literal">null</span>,</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> alpha: <span class="built_in">Float</span> = <span class="number">1.0f</span>,</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> shape: Shape,</span><br><span class="line">    inspectorInfo: InspectorInfo.() -&gt; <span class="built_in">Unit</span></span><br><span class="line">) : DrawModifier, InspectorValueInfo(inspectorInfo) &#123;</span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// DrawModifier.kt</span></span><br><span class="line"><span class="meta">@JvmDefaultWithCompatibility</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">DrawModifier</span> : <span class="type">Modifier.Element &#123;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> ContentDrawScope.<span class="title">draw</span><span class="params">()</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="커스텀-Modifier-구현"><a href="#커스텀-Modifier-구현" class="headerlink" title="커스텀 Modifier 구현"></a>커스텀 Modifier 구현</h3><ul>
+<li>kotlin 문법을 사용해 쉽게 Extension을 구현할 수 있었다.</li>
+<li>위에서 봤던 then() 함수에 DrawModifier만 잘 만들면 된다. (마치 View를 확장해서 만들었던 Custom View와 유사해 보인다.)</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> Modifier.<span class="title">drawWhiteCross</span><span class="params">()</span></span> = then(</span><br><span class="line">    <span class="keyword">object</span> : DrawModifier &#123;</span><br><span class="line">        <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> ContentDrawScope.<span class="title">draw</span><span class="params">()</span></span> &#123;</span><br><span class="line">            drawLine(</span><br><span class="line">                color = Color.White,</span><br><span class="line">                start = Offset(<span class="number">0F</span>, <span class="number">0F</span>),</span><br><span class="line">                end = Offset(size.width - <span class="number">1</span>, size.height - <span class="number">1</span>),</span><br><span class="line">                strokeWidth = <span class="number">10F</span></span><br><span class="line">            )</span><br><span class="line">            drawLine(</span><br><span class="line">                color = Color.White,</span><br><span class="line">                start = Offset(<span class="number">0F</span>, size.height - <span class="number">1</span>),</span><br><span class="line">                end = Offset(size.width - <span class="number">1</span>, <span class="number">0F</span>),</span><br><span class="line">                strokeWidth = <span class="number">10F</span></span><br><span class="line">            )</span><br><span class="line">            drawContent()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> Modifier.<span class="title">drawHiddenCross</span><span class="params">()</span></span> = then(</span><br><span class="line">    <span class="keyword">object</span> : DrawModifier &#123;</span><br><span class="line">        <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> ContentDrawScope.<span class="title">draw</span><span class="params">()</span></span> &#123;</span><br><span class="line">            drawContent()</span><br><span class="line">            drawBehind &#123;</span><br><span class="line">                drawLine(</span><br><span class="line">                    color = Color.Blue,</span><br><span class="line">                    start = Offset(<span class="number">0F</span>, <span class="number">0F</span>),</span><br><span class="line">                    end = Offset(size.width - <span class="number">1</span>, size.height - <span class="number">1</span>),</span><br><span class="line">                    strokeWidth = <span class="number">10F</span></span><br><span class="line">                )</span><br><span class="line">                drawLine(</span><br><span class="line">                    color = Color.Blue,</span><br><span class="line">                    start = Offset(<span class="number">0F</span>, size.height - <span class="number">1</span>),</span><br><span class="line">                    end = Offset(size.width - <span class="number">1</span>, <span class="number">0F</span>),</span><br><span class="line">                    strokeWidth = <span class="number">10F</span></span><br><span class="line">                )</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h2 id="요약"><a href="#요약" class="headerlink" title="요약"></a>요약</h2><ul>
+<li>Composable 함수가 어떻게 작성되었고, UI를 그리고 사용되었는지 배웠다.</li>
+<li>Modifier가 무엇이고 어떻게 사용하는 것인지 알아보았다.</li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2023/02/08/jetpack_compose/chapter02/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2023-02-14 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/jetpack-compose-study/" title="jetpack-compose-study">
+                        <b>#</b> jetpack-compose-study
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/android/" title="android">
+                        <b>#</b> android
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2023/02/21/jetpack_compose/chapter04/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%BB%B4%ED%8F%AC%EC%A0%80%EB%B8%94-%ED%95%A8%EC%88%98-%EC%9E%90%EC%84%B8%ED%9E%88-%EC%82%B4%ED%8E%B4%EB%B3%B4%EA%B8%B0"><span class="toc-text">컴포저블 함수 자세히 살펴보기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%BB%B4%ED%8F%AC%EC%A0%80%EB%B8%94-%ED%95%A8%EC%88%98%EC%9D%98-%EA%B5%AC%EC%84%B1-%EC%9A%94%EC%86%8C"><span class="toc-text">컴포저블 함수의 구성 요소</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UI-%EC%9A%94%EC%86%8C-%EB%82%B4%EB%B3%B4%EB%82%B4%EA%B8%B0"><span class="toc-text">UI 요소 내보내기</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#androidx-compose-material-Text"><span class="toc-text">androidx.compose.material.Text()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BasicText"><span class="toc-text">BasicText()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Layout"><span class="toc-text">Layout()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ReusableComposeNode"><span class="toc-text">ReusableComposeNode()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ComposableUiNode"><span class="toc-text">ComposableUiNode</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EA%B0%92-%EB%B0%98%ED%99%98"><span class="toc-text">값 반환</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UI-%EA%B5%AC%EC%84%B1%EA%B3%BC-%EC%9E%AC%EA%B5%AC%EC%84%B1"><span class="toc-text">UI 구성과 재구성</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Composable-%ED%95%A8%EC%88%98-%EA%B0%84-%EC%83%81%ED%83%9C-%EA%B3%B5%EC%9C%A0"><span class="toc-text">Composable 함수 간 상태 공유</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%A4%91%EC%9A%94-%EC%82%AC%ED%95%AD"><span class="toc-text">중요 사항</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%81%AC%EA%B8%B0-%EC%A0%9C%EC%96%B4"><span class="toc-text">크기 제어</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%95%A1%ED%8B%B0%EB%B9%84%ED%8B%B0-%EB%82%B4%EC%97%90%EC%84%9C-Composable-%EA%B3%84%EC%B8%B5-%EA%B5%AC%EC%A1%B0-%EB%82%98%ED%83%80%EB%82%B4%EA%B8%B0"><span class="toc-text">액티비티 내에서 Composable 계층 구조 나타내기</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#setContent"><span class="toc-text">setContent</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Composable-%ED%95%A8%EC%88%98%EC%9D%98-%ED%96%89%EC%9C%84-%EC%88%98%EC%A0%95"><span class="toc-text">Composable 함수의 행위 수정</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Modifier-%EB%8F%99%EC%9E%91-%EC%9D%B4%ED%95%B4"><span class="toc-text">Modifier 동작 이해</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Modifier-then"><span class="toc-text">Modifier.then()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%BB%A4%EC%8A%A4%ED%85%80-Modifier-%EA%B5%AC%ED%98%84"><span class="toc-text">커스텀 Modifier 구현</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%9A%94%EC%95%BD"><span class="toc-text">요약</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/boring-km">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="kmjin@kakao.com">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="linkedin" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/">
+            <i class="iconfont icon-linkedin"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="TIL" target="_blank" rel="noopener" href="https://boring-km.github.io/TIL">
+            <i class="iconfont icon-emoji-friendly"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/boring-km">머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="내용 검색...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + 3%EC%9E%A5%20%EC%BB%B4%ED%8F%AC%EC%A6%88%20%ED%95%B5%EC%8B%AC%20%EC%9B%90%EC%B9%99%20%EC%9E%90%EC%84%B8%ED%9E%88%20%EC%95%8C%EC%95%84%EB%B3%B4%EA%B8%B0 + '&url=' + http%3A%2F%2Fexample.com%2F2023%2F02%2F14%2Fjetpack_compose%2Fchapter03%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2023/02/14/jetpack_compose/chapter03/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

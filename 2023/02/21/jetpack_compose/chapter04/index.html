@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      4장 요소 배치 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">boring-km</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">4장 요소 배치</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2023-02-21 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/jetpack-compose-study/" title="jetpack-compose-study">
+                    <b>#</b> jetpack-compose-study
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/android/" title="android">
+                    <b>#</b> android
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <p><a target="_blank" rel="noopener" href="https://github.com/Just-Android-Compose-Study/JetpackComposeStudy/tree/master/Chapter04">Source Code</a></p>
+<h2 id="미리-정의된-레이아웃-사용"><a href="#미리-정의된-레이아웃-사용" class="headerlink" title="미리 정의된 레이아웃 사용"></a>미리 정의된 레이아웃 사용</h2><p>Jetpack Compose는 기준이 되는 축을 따라 컨텐츠를 배열하는 기본적인 레이아웃을 제공한다.</p>
+<ul>
+<li>Horizontal: Row()</li>
+<li>Vertical: Column()</li>
+<li>Stacked: Box(), BoxWithConstraints()</li>
+</ul>
+<h3 id="기본-구성-요소-조합"><a href="#기본-구성-요소-조합" class="headerlink" title="기본 구성 요소 조합"></a>기본 구성 요소 조합</h3><ul>
+<li>가운데 정렬하기</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">CheckboxWithLabel</span><span class="params">(label: <span class="type">String</span>, state: <span class="type">MutableState</span>&lt;<span class="type">Boolean</span>&gt;)</span></span> &#123;</span><br><span class="line">  Row(</span><br><span class="line">    modifier = Modifier.clickable &#123;</span><br><span class="line">      state.value = !state.value</span><br><span class="line">    &#125;, verticalAlignment = Alignment.CenterVertically   <span class="comment">// 수직 가운데 정렬</span></span><br><span class="line">  ) &#123;</span><br><span class="line">    Checkbox(</span><br><span class="line">      checked = state.value,</span><br><span class="line">      onCheckedChange = &#123;</span><br><span class="line">        state.value = it</span><br><span class="line">      &#125;</span><br><span class="line">    )</span><br><span class="line">    Text(</span><br><span class="line">      text = label,</span><br><span class="line">      modifier = Modifier.padding(start = <span class="number">8.</span>dp)</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Box() 내에서 먼저 작성한 뷰부터 뒤에서 겹쳐 쌓인다.</li>
+<li>먼저 Column과 Box를 사용한 예제부터 확인</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="meta">@Preview</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">PredefinedLayoutsDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="keyword">val</span> red = remember &#123; mutableStateOf(<span class="literal">true</span>) &#125;</span><br><span class="line">  <span class="keyword">val</span> green = remember &#123; mutableStateOf(<span class="literal">true</span>) &#125;</span><br><span class="line">  <span class="keyword">val</span> blue = remember &#123; mutableStateOf(<span class="literal">true</span>) &#125;</span><br><span class="line">  Column(</span><br><span class="line">    modifier = Modifier</span><br><span class="line">      .fillMaxSize()</span><br><span class="line">      .padding(<span class="number">16.</span>dp)</span><br><span class="line">  ) &#123;</span><br><span class="line">    CheckboxWithLabel(</span><br><span class="line">      label = stringResource(id = R.string.red),</span><br><span class="line">      state = red</span><br><span class="line">    )</span><br><span class="line">    CheckboxWithLabel(</span><br><span class="line">      label = stringResource(id = R.string.green),</span><br><span class="line">      state = green</span><br><span class="line">    )</span><br><span class="line">    CheckboxWithLabel(</span><br><span class="line">      label = stringResource(id = R.string.blue),</span><br><span class="line">      state = blue</span><br><span class="line">    )</span><br><span class="line">    Box(</span><br><span class="line">      modifier = Modifier</span><br><span class="line">        .fillMaxSize()</span><br><span class="line">        .padding(top = <span class="number">16.</span>dp)</span><br><span class="line">    ) &#123;</span><br><span class="line">      <span class="keyword">if</span> (red.value) &#123;</span><br><span class="line">        Box(</span><br><span class="line">          modifier = Modifier</span><br><span class="line">            .fillMaxSize()</span><br><span class="line">            .background(Color.Red)</span><br><span class="line">        )</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (green.value) &#123;</span><br><span class="line">        Box(</span><br><span class="line">          modifier = Modifier</span><br><span class="line">            .fillMaxSize()</span><br><span class="line">            .padding(<span class="number">32.</span>dp)</span><br><span class="line">            .background(Color.Green)</span><br><span class="line">        )</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (blue.value) &#123;</span><br><span class="line">        Box(</span><br><span class="line">          modifier = Modifier</span><br><span class="line">            .fillMaxSize()</span><br><span class="line">            .padding(<span class="number">64.</span>dp)</span><br><span class="line">            .background(Color.Blue)</span><br><span class="line">        )</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="제약-조건을-기반으로-하는-레이아웃-생성"><a href="#제약-조건을-기반으로-하는-레이아웃-생성" class="headerlink" title="제약 조건을 기반으로 하는 레이아웃 생성"></a>제약 조건을 기반으로 하는 레이아웃 생성</h3><p>안드로이드의 전통적인 View기반 세계에서 ConstraintLayout으로 View 계층 구조를 평탄화한 것처럼 Box(), Row(), Column()을 중첩하는 행위를<br>제한하기 위한 방법</p>
+<p>Compose에서는 기본 제공은 아니고 gradle 추가 필요함</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">implementation <span class="string">&#x27;androidx.constraintlayout:constraintlayout-compose:1.0.1&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Domain-Specific Language(DSL, 도메인 특화 언어)를 사용해 다른 요소와 연관이 있는 UI 요소의 위치와 크기를 정의한다.</li>
+<li>그래서 내부에 있는 각각의 Composable 함수는 자신과 관련된 참조를 갖고 있어야 하며, 이 참조는 createRefs()를 사용해 생성된다.</li>
+<li>제약조건은 modifier에서 constrainAs()를 사용하면 된다.</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Stable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> Modifier.<span class="title">constrainAs</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">  ref: <span class="type">ConstrainedLayoutReference</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">  constrainBlock: <span class="type">ConstrainScope</span>.() -&gt; <span class="type">Unit</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span> = <span class="keyword">this</span>.then(ConstrainAsModifier(ref, constrainBlock))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>constrainAs() 파라미터에서 후행 람다 표현식은 ConstrainScope를<br>받는다. <a target="_blank" rel="noopener" href="https://developer.android.com/reference/kotlin/androidx/constraintlayout/compose/ConstrainScope">ConstrainScope 문서</a></li>
+<li>이렇게 다른 컴포저블의 위치와 연결되는 위치를 정의하기 때문에 이런 프로퍼티를 anchors(앵커)라고 부른다.</li>
+<li>ConstraintLayout() 예제 확인해보자</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ExperimentalComposeUiApi</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="meta">@Preview</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">ConstraintLayoutDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="keyword">val</span> red = remember &#123; mutableStateOf(<span class="literal">true</span>) &#125;</span><br><span class="line">  <span class="keyword">val</span> green = remember &#123; mutableStateOf(<span class="literal">true</span>) &#125;</span><br><span class="line">  <span class="keyword">val</span> blue = remember &#123; mutableStateOf(<span class="literal">true</span>) &#125;</span><br><span class="line">  ConstraintLayout(</span><br><span class="line">    modifier = Modifier</span><br><span class="line">      .fillMaxSize()</span><br><span class="line">      .padding(<span class="number">16.</span>dp)</span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="keyword">val</span> (cbRed, cbGreen, cbBlue, boxRed, boxGreen, boxBlue) = createRefs()  <span class="comment">// 여기서 제약조건의 참조가 될 값들을 선언/초기화 </span></span><br><span class="line">    CheckboxWithLabel(</span><br><span class="line">      label = stringResource(id = R.string.red),</span><br><span class="line">      state = red,</span><br><span class="line">      modifier = Modifier.constrainAs(cbRed) &#123;</span><br><span class="line">        top.linkTo(parent.top)  <span class="comment">// 맨 위에 위치</span></span><br><span class="line">      &#125;</span><br><span class="line">    )</span><br><span class="line">    CheckboxWithLabel(</span><br><span class="line">      label = stringResource(id = R.string.green),</span><br><span class="line">      state = green,</span><br><span class="line">      modifier = Modifier.constrainAs(cbGreen) &#123;</span><br><span class="line">        top.linkTo(cbRed.bottom)    <span class="comment">// cbRed의 아래에 위치</span></span><br><span class="line">      &#125;</span><br><span class="line">    )</span><br><span class="line">    CheckboxWithLabel(</span><br><span class="line">      label = stringResource(id = R.string.blue),</span><br><span class="line">      state = blue,</span><br><span class="line">      modifier = Modifier.constrainAs(cbBlue) &#123;</span><br><span class="line">        top.linkTo(cbGreen.bottom)  <span class="comment">// cbGreen의 아래에 위치</span></span><br><span class="line">      &#125;</span><br><span class="line">    )</span><br><span class="line">    <span class="comment">// Dimension.fillToConstraints</span></span><br><span class="line">    <span class="keyword">if</span> (red.value) &#123;</span><br><span class="line">      Box(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">          .background(Color.Red)</span><br><span class="line">          .constrainAs(boxRed) &#123;</span><br><span class="line">            start.linkTo(parent.start)</span><br><span class="line">            end.linkTo(parent.end)</span><br><span class="line">            top.linkTo(cbBlue.bottom, margin = <span class="number">16.</span>dp)</span><br><span class="line">            bottom.linkTo(parent.bottom)</span><br><span class="line">            width = Dimension.fillToConstraints</span><br><span class="line">            height = Dimension.fillToConstraints</span><br><span class="line">          &#125;</span><br><span class="line">      )</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (green.value) &#123;</span><br><span class="line">      Box(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">          .background(Color.Green)</span><br><span class="line">          .constrainAs(boxGreen) &#123;</span><br><span class="line">            start.linkTo(parent.start, margin = <span class="number">32.</span>dp)</span><br><span class="line">            end.linkTo(parent.end, margin = <span class="number">32.</span>dp)</span><br><span class="line">            top.linkTo(cbBlue.bottom, margin = (<span class="number">16</span> + <span class="number">32</span>).dp)</span><br><span class="line">            bottom.linkTo(parent.bottom, margin = <span class="number">32.</span>dp)</span><br><span class="line">            width = Dimension.fillToConstraints</span><br><span class="line">            height = Dimension.fillToConstraints</span><br><span class="line">          &#125;</span><br><span class="line">      )</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (blue.value) &#123;</span><br><span class="line">      Box(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">          .background(Color.Blue)</span><br><span class="line">          .constrainAs(boxBlue) &#123;</span><br><span class="line">            start.linkTo(parent.start, margin = <span class="number">64.</span>dp)</span><br><span class="line">            end.linkTo(parent.end, margin = <span class="number">64.</span>dp)</span><br><span class="line">            top.linkTo(cbBlue.bottom, margin = (<span class="number">16</span> + <span class="number">64</span>).dp)</span><br><span class="line">            bottom.linkTo(parent.bottom, margin = <span class="number">64.</span>dp)</span><br><span class="line">            width = Dimension.fillToConstraints</span><br><span class="line">            height = Dimension.fillToConstraints</span><br><span class="line">          &#125;</span><br><span class="line">      )</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="단일-측정-단계의-이해"><a href="#단일-측정-단계의-이해" class="headerlink" title="단일 측정 단계의 이해"></a>단일 측정 단계의 이해</h2><p>Column()에서 2개의 Text를 넣으면, 첫 번째 Text의 길이에 따라 Column의 최대 길이가 달라지는 영향이 생긴다. -&gt; <strong>제약조건</strong></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="title">Column</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">  modifier: <span class="type">Modifier</span> = Modifier,</span></span></span><br><span class="line"><span class="params"><span class="function">  verticalArrangement: <span class="type">Arrangement</span>.<span class="type">Vertical</span> = Arrangement.Top,</span></span></span><br><span class="line"><span class="params"><span class="function">  horizontalAlignment: <span class="type">Alignment</span>.<span class="type">Horizontal</span> = Alignment.Start,</span></span></span><br><span class="line"><span class="params"><span class="function">  content: @<span class="type">Composable</span> <span class="type">ColumnScope</span>.() -&gt; <span class="type">Unit</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span> &#123;</span><br><span class="line">  <span class="keyword">val</span> measurePolicy = columnMeasurePolicy(verticalArrangement, horizontalAlignment)</span><br><span class="line">  Layout(</span><br><span class="line">    content = &#123; ColumnScopeInstance.content() &#125;,</span><br><span class="line">    measurePolicy = measurePolicy,</span><br><span class="line">    modifier = modifier</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>여기서 measurePolicy 변수의 값에 따라 길이가 바뀐다.</li>
+</ul>
+<h3 id="측정-정책-정의"><a href="#측정-정책-정의" class="headerlink" title="측정 정책 정의"></a>측정 정책 정의</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PublishedApi</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="keyword">internal</span> <span class="function"><span class="keyword">fun</span> <span class="title">columnMeasurePolicy</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">  verticalArrangement: <span class="type">Arrangement</span>.<span class="type">Vertical</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">  horizontalAlignment: <span class="type">Alignment</span>.<span class="type">Horizontal</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span> = remember(verticalArrangement, horizontalAlignment) &#123;</span><br><span class="line">  <span class="comment">// DefaultColumnMeasurePolicy 혹은 rowColumnMeasurePolicy</span></span><br><span class="line">  <span class="keyword">if</span> (verticalArrangement == Arrangement.Top &amp;&amp; horizontalAlignment == Alignment.Start) &#123;</span><br><span class="line">    DefaultColumnMeasurePolicy</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    rowColumnMeasurePolicy(</span><br><span class="line">      orientation = LayoutOrientation.Vertical,</span><br><span class="line">      arrangement = &#123; totalSize, size, _, density, outPosition -&gt;</span><br><span class="line">        with(verticalArrangement) &#123; density.arrange(totalSize, size, outPosition) &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      arrangementSpacing = verticalArrangement.spacing,</span><br><span class="line">      crossAxisAlignment = CrossAxisAlignment.horizontal(horizontalAlignment),</span><br><span class="line">      crossAxisSize = SizeMode.Wrap</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>여기서 MeasurePolicy 인터페이스가 레이아웃을 어떻게 측정하고 배치할지 정의하기 때문에<br>미리 정의된 레이아웃(Row, Column, Box)과 커스텀 레이아웃의 기본 구성 요소가 된다.</p>
+<figure class="highlight plaintext"><figcaption><span>```MeasureResult``` 인스턴스를 반환한다.</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 레이아웃의 크기 (width, height)</span><br><span class="line">- 정렬선 (alignmentLines)</span><br><span class="line">- 자식 요소를 배치하기 위한 로직 (placeChildren())</span><br><span class="line"></span><br><span class="line">기존 Android View 시스템에서는 자식 레이아웃을 다시 측정하면 성능 저하 때문에 한 번만 측정하고 있었다.</span><br><span class="line"></span><br><span class="line">하지만 Compose에서 Layout은 자식 Layout의 intrinsic size(고유 크기)를 query(질의)할 수 있으며, 이를 사용해 크기나 위치를 지정한다.</span><br><span class="line"></span><br><span class="line">- minIntrinsicWidth()</span><br><span class="line">- maxIntrinsicWidth()</span><br><span class="line">- minIntrinsicHeight()</span><br><span class="line">- maxIntrinsicHeight()</span><br><span class="line"></span><br><span class="line">```kotlin</span><br><span class="line">fun IntrinsicMeasureScope.minIntrinsicWidth(</span><br><span class="line">  measurables: List&lt;IntrinsicMeasurable&gt;,</span><br><span class="line">  height: Int</span><br><span class="line">): Int &#123;</span><br><span class="line">  // measurables에서 DefaultIntrinsicMeasurable() 값에 해당되는 값들로 변경 List&lt;Measurable&gt;</span><br><span class="line">  val mapped = measurables.fastMap &#123;</span><br><span class="line">    DefaultIntrinsicMeasurable(it, IntrinsicMinMax.Min, IntrinsicWidthHeight.Width)</span><br><span class="line">  &#125;</span><br><span class="line">  val constraints = Constraints(maxHeight = height)</span><br><span class="line">  val layoutReceiver = IntrinsicsMeasureScope(this, layoutDirection)  // 크기 측정</span><br><span class="line">  val layoutResult = layoutReceiver.measure(mapped, constraints)</span><br><span class="line">  return layoutResult.width</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Layout.kt</span></span><br><span class="line"><span class="keyword">internal</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultIntrinsicMeasurable</span></span>(</span><br><span class="line">  <span class="keyword">val</span> measurable: IntrinsicMeasurable,</span><br><span class="line">  <span class="keyword">val</span> minMax: IntrinsicMinMax,</span><br><span class="line">  <span class="keyword">val</span> widthHeight: IntrinsicWidthHeight</span><br><span class="line">) : Measurable &#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="keyword">val</span> parentData: Any?</span><br><span class="line">    <span class="keyword">get</span>() = measurable.parentData</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">measure</span><span class="params">(constraints: <span class="type">Constraints</span>)</span></span>: Placeable &#123; <span class="comment">// Constraints에서 minWidth, minHeight, maxWidth, maxHeight</span></span><br><span class="line">    <span class="keyword">if</span> (widthHeight == IntrinsicWidthHeight.Width) &#123;</span><br><span class="line">      <span class="keyword">val</span> width = <span class="keyword">if</span> (minMax == IntrinsicMinMax.Max) &#123;</span><br><span class="line">        measurable.maxIntrinsicWidth(constraints.maxHeight)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        measurable.minIntrinsicWidth(constraints.maxHeight)</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> FixedSizeIntrinsicsPlaceable(width, constraints.maxHeight)   <span class="comment">// 가장 작은 너비 제공</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> height = <span class="keyword">if</span> (minMax == IntrinsicMinMax.Max) &#123;</span><br><span class="line">      measurable.maxIntrinsicHeight(constraints.maxWidth)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      measurable.minIntrinsicHeight(constraints.maxWidth)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> FixedSizeIntrinsicsPlaceable(constraints.maxWidth, height) <span class="comment">// 가장 작은 너비 제공</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">minIntrinsicWidth</span><span class="params">(height: <span class="type">Int</span>)</span></span>: <span class="built_in">Int</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> measurable.minIntrinsicWidth(height)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">maxIntrinsicWidth</span><span class="params">(height: <span class="type">Int</span>)</span></span>: <span class="built_in">Int</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> measurable.maxIntrinsicWidth(height)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">minIntrinsicHeight</span><span class="params">(width: <span class="type">Int</span>)</span></span>: <span class="built_in">Int</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> measurable.minIntrinsicHeight(width)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">maxIntrinsicHeight</span><span class="params">(width: <span class="type">Int</span>)</span></span>: <span class="built_in">Int</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> measurable.maxIntrinsicHeight(width)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Layout() Composable 함수는 컨텐츠, MeasurePolicy, Modifier 이 3개의 parameter를 받는다.</li>
+<li>MeasurePolicy는 Layout을 어떻게 측정(measure)하고 위치시킬지 정의한다.</li>
+<li>Layout의 고유 크기는 해당 입력값의 최소 또는 최대 크기를 결정한다.</li>
+<li><strong>Jetpack Compose에서는 자식 뷰를 화면에 배치하기 전에 딱 한 번만 측정되기를 요구한다. 이는 측정성을 향상하는 결과를 불러온다.</strong></li>
+</ul>
+<h2 id="커스텀-레이아웃-작성"><a href="#커스텀-레이아웃-작성" class="headerlink" title="커스텀 레이아웃 작성"></a>커스텀 레이아웃 작성</h2><ul>
+<li>커스텀 레이아웃은 적어도 2개의 매개변수를 받는데, content와 Modifier를 기본값으로 갖는 modifier다.</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="meta">@Preview</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">CustomLayoutDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    SimpleFlexBox &#123;</span><br><span class="line">        <span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">0.</span><span class="number">.42</span>) &#123;</span><br><span class="line">            ColoredBox()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">ColoredBox</span><span class="params">()</span></span> &#123;</span><br><span class="line">    Box(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">            .border(</span><br><span class="line">                width = <span class="number">2.</span>dp,</span><br><span class="line">                color = Color.Black</span><br><span class="line">            )</span><br><span class="line">            .background(randomColor())</span><br><span class="line">            .width((<span class="number">40</span> * randomInt123()).dp)</span><br><span class="line">            .height((<span class="number">10</span> * randomInt123()).dp)</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Layout()을 만드는데 modifier, content 필요</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">SimpleFlexBox</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    modifier: <span class="type">Modifier</span> = Modifier,</span></span></span><br><span class="line"><span class="params"><span class="function">    content: @<span class="type">Composable</span> () -&gt; <span class="type">Unit</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span> &#123;</span><br><span class="line">    Layout(</span><br><span class="line">        modifier = modifier,</span><br><span class="line">        content = content,</span><br><span class="line">        measurePolicy = simpleFlexboxMeasurePolicy()</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="커스텀-측정-정책-구현"><a href="#커스텀-측정-정책-구현" class="headerlink" title="커스텀 측정 정책 구현"></a>커스텀 측정 정책 구현</h3><figure class="highlight plaintext"><figcaption><span>구현체는 MeasureScope.measure() 구현체를 제공해야만 한다.</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">이유는 MeasurePolicy interface 안에 MeasureScope.measure()가 선언되어 있으니까</span><br><span class="line"></span><br><span class="line">```kotlin</span><br><span class="line">// MeasurePolicy.kt</span><br><span class="line">fun MeasureScope.measure(</span><br><span class="line">    measurables: List&lt;Measurable&gt;,</span><br><span class="line">    constraints: Constraints</span><br><span class="line">): MeasureResult</span><br><span class="line">````</span><br><span class="line"></span><br><span class="line">```kotlin</span><br><span class="line">private fun simpleFlexboxMeasurePolicy(): MeasurePolicy =</span><br><span class="line">    MeasurePolicy &#123; measurables, constraints -&gt;</span><br><span class="line">        val placeables = measurables.map &#123; measurable -&gt;</span><br><span class="line">            measurable.measure(constraints)</span><br><span class="line">        &#125;</span><br><span class="line">		// MeasureScope.measure() 구현체를 제공하는 대신 layout() 호출 -&gt; MeasurePolicy 인터페이스의 구현체함수 호출 -&gt; MeasureResult 리턴함</span><br><span class="line">        layout(</span><br><span class="line">            constraints.maxWidth,</span><br><span class="line">            constraints.maxHeight</span><br><span class="line">        ) &#123;</span><br><span class="line">        	// placementBlock: Placeable.PlacementScope.() -&gt; Unit</span><br><span class="line">            var yPos = 0</span><br><span class="line">            var xPos = 0</span><br><span class="line">            var maxY = 0</span><br><span class="line">            // placementBlock은 placeables를 반복하면서 xPos와 yPos를 증가시켜 placeable의 위치를 계산한다.</span><br><span class="line">            placeables.forEach &#123; placeable -&gt;</span><br><span class="line">            	// placeable이 현재 열에 완벽히 맞는지 판단 및 xPos, yPos 값 조절</span><br><span class="line">                if (xPos + placeable.width &gt;</span><br><span class="line">                    constraints.maxWidth</span><br><span class="line">                ) &#123;</span><br><span class="line">                    xPos = 0</span><br><span class="line">                    yPos += maxY</span><br><span class="line">                    maxY = 0</span><br><span class="line">                &#125;</span><br><span class="line">                placeable.placeRelative(</span><br><span class="line">                    x = xPos,</span><br><span class="line">                    y = yPos</span><br><span class="line">                )</span><br><span class="line">                xPos += placeable.width</span><br><span class="line">                if (maxY &lt; placeable.height) &#123;</span><br><span class="line">                    maxY = placeable.height</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>placementBlock 람다식 안에서 Placeable.PlacementScope 클래스 내 선언된 함수들을 사용 가능하다.</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> Placeable.<span class="title">placeRelative</span><span class="params">(x: <span class="type">Int</span>, y: <span class="type">Int</span>, zIndex: <span class="type">Float</span> = <span class="number">0</span>f)</span></span> =</span><br><span class="line">            placeAutoMirrored(IntOffset(x, y), zIndex, <span class="literal">null</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>코드에서 layout을 잠시 지우면 이런 에러가 뜬다.</li>
+</ul>
+<p><img src="/images/jetpack_compose/chapter04/MeasureResult.png" alt="layout"></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">layout</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    width: <span class="type">Int</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    height: <span class="type">Int</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    alignmentLines: <span class="type">Map</span>&lt;<span class="type">AlignmentLine</span>, <span class="built_in">Int</span>&gt; = emptyMap()</span></span>,</span><br><span class="line">    placementBlock: Placeable.PlacementScope.() -&gt; <span class="built_in">Unit</span></span><br><span class="line">) = <span class="keyword">object</span> : MeasureResult &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">val</span> width = width</span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">val</span> height = height</span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">val</span> alignmentLines = alignmentLines</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">placeChildren</span><span class="params">()</span></span> &#123;</span><br><span class="line">        Placeable.PlacementScope.executeWithRtlMirroringValues(</span><br><span class="line">            width,</span><br><span class="line">            layoutDirection,</span><br><span class="line">            <span class="keyword">this</span><span class="symbol">@MeasureScope</span> <span class="keyword">as</span>? LookaheadCapablePlaceable,</span><br><span class="line">            placementBlock</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>MeasureScope.measure()에서 리턴해야할 MeasureResult 구현체를 리턴함을 알 수 있다.</li>
+</ul>
+<h2 id="요약"><a href="#요약" class="headerlink" title="요약"></a>요약</h2><ul>
+<li>미리 정의되어 있는 레이아웃 Row(), Column(), Box() 살펴보기</li>
+<li>ConstraintLayout UI 요소 계층 구조 평탄화</li>
+<li>Jetpack Compose에서 Layout</li>
+<li>커스텀 레이아웃으로 자식 레이아웃의 렌더링을 정밀하게 제어하는 방법 알아보기</li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2023/02/14/jetpack_compose/chapter03/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2023-02-21 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/jetpack-compose-study/" title="jetpack-compose-study">
+                        <b>#</b> jetpack-compose-study
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/android/" title="android">
+                        <b>#</b> android
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2023/02/27/jetpack_compose/chapter05/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%EB%AF%B8%EB%A6%AC-%EC%A0%95%EC%9D%98%EB%90%9C-%EB%A0%88%EC%9D%B4%EC%95%84%EC%9B%83-%EC%82%AC%EC%9A%A9"><span class="toc-text">미리 정의된 레이아웃 사용</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EA%B8%B0%EB%B3%B8-%EA%B5%AC%EC%84%B1-%EC%9A%94%EC%86%8C-%EC%A1%B0%ED%95%A9"><span class="toc-text">기본 구성 요소 조합</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%A0%9C%EC%95%BD-%EC%A1%B0%EA%B1%B4%EC%9D%84-%EA%B8%B0%EB%B0%98%EC%9C%BC%EB%A1%9C-%ED%95%98%EB%8A%94-%EB%A0%88%EC%9D%B4%EC%95%84%EC%9B%83-%EC%83%9D%EC%84%B1"><span class="toc-text">제약 조건을 기반으로 하는 레이아웃 생성</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EB%8B%A8%EC%9D%BC-%EC%B8%A1%EC%A0%95-%EB%8B%A8%EA%B3%84%EC%9D%98-%EC%9D%B4%ED%95%B4"><span class="toc-text">단일 측정 단계의 이해</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%B8%A1%EC%A0%95-%EC%A0%95%EC%B1%85-%EC%A0%95%EC%9D%98"><span class="toc-text">측정 정책 정의</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%BB%A4%EC%8A%A4%ED%85%80-%EB%A0%88%EC%9D%B4%EC%95%84%EC%9B%83-%EC%9E%91%EC%84%B1"><span class="toc-text">커스텀 레이아웃 작성</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%BB%A4%EC%8A%A4%ED%85%80-%EC%B8%A1%EC%A0%95-%EC%A0%95%EC%B1%85-%EA%B5%AC%ED%98%84"><span class="toc-text">커스텀 측정 정책 구현</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%9A%94%EC%95%BD"><span class="toc-text">요약</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/boring-km">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="kmjin@kakao.com">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="linkedin" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/">
+            <i class="iconfont icon-linkedin"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="TIL" target="_blank" rel="noopener" href="https://boring-km.github.io/TIL">
+            <i class="iconfont icon-emoji-friendly"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/boring-km">머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="내용 검색...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + 4%EC%9E%A5%20%EC%9A%94%EC%86%8C%20%EB%B0%B0%EC%B9%98 + '&url=' + http%3A%2F%2Fexample.com%2F2023%2F02%2F21%2Fjetpack_compose%2Fchapter04%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2023/02/21/jetpack_compose/chapter04/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

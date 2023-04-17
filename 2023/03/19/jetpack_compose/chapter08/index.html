@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      8장 애니메이션 적용 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">boring-km</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">8장 애니메이션 적용</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2023-03-19 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/jetpack-compose-study/" title="jetpack-compose-study">
+                    <b>#</b> jetpack-compose-study
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/android/" title="android">
+                    <b>#</b> android
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <p><a target="_blank" rel="noopener" href="https://github.com/Just-Android-Compose-Study/JetpackComposeStudy/tree/master/Chapter08">Source Code</a></p>
+<h2 id="애니메이션을-사용한-상태-변화-시각화"><a href="#애니메이션을-사용한-상태-변화-시각화" class="headerlink" title="애니메이션을 사용한 상태 변화 시각화"></a>애니메이션을 사용한 상태 변화 시각화</h2><p>버튼을 클릭하면 상태를 변화시켜 박스의 색상을 빨간색과 파란색으로 전환하는 예제</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Preview</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">StateChangeDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> toggled <span class="keyword">by</span> remember &#123;</span><br><span class="line">        mutableStateOf(<span class="literal">false</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> color = <span class="keyword">if</span> (toggled)</span><br><span class="line">        Color.Blue</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        Color.Red</span><br><span class="line">    Column(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">            .fillMaxSize()</span><br><span class="line">            .padding(<span class="number">16.</span>dp),</span><br><span class="line">        horizontalAlignment = Alignment.CenterHorizontally</span><br><span class="line">    ) &#123;</span><br><span class="line">        Button(onClick = &#123;</span><br><span class="line">            toggled = !toggled</span><br><span class="line">        &#125;) &#123;</span><br><span class="line">            Text(</span><br><span class="line">                stringResource(R.string.toggle)</span><br><span class="line">            )</span><br><span class="line">        &#125;</span><br><span class="line">        Box(</span><br><span class="line">            modifier = Modifier</span><br><span class="line">                .padding(top = <span class="number">32.</span>dp)</span><br><span class="line">                .background(color = color)</span><br><span class="line">                .size(<span class="number">128.</span>dp)</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="한-가지-값을-변경하는-애니메이션"><a href="#한-가지-값을-변경하는-애니메이션" class="headerlink" title="한 가지 값을 변경하는 애니메이션"></a>한 가지 값을 변경하는 애니메이션</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> color <span class="keyword">by</span> animateColorAsState(</span><br><span class="line">    targetValue = <span class="keyword">if</span> (toggled)</span><br><span class="line">        Color.Blue</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        Color.Red,</span><br><span class="line">    animationSpec = tween(durationMillis = <span class="number">500</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>animateColorAsState()</code>을 통해 색 변경 부분을 애니메이션으로 부드럽게 전환한다.</li>
+<li>tween 애니메이션을 사용해봤다.</li>
+</ul>
+<h3 id="여러-값을-변경하는-애니메이션"><a href="#여러-값을-변경하는-애니메이션" class="headerlink" title="여러 값을 변경하는 애니메이션"></a>여러 값을 변경하는 애니메이션</h3><p>상태가 변경됐을 때 한번에 여러 값에 애니메이션 적용하기</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="meta">@Preview</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">MultipleValuesAnimationDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> toggled <span class="keyword">by</span> remember &#123;</span><br><span class="line">        mutableStateOf(<span class="literal">false</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> transition = updateTransition(</span><br><span class="line">        targetState = toggled,  <span class="comment">// 이 상태값이 변하면 transition 작동</span></span><br><span class="line">        label = <span class="string">&quot;toggledTransition&quot;</span></span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">val</span> borderWidth <span class="keyword">by</span> transition.animateDp(label = <span class="string">&quot;borderWidthTransition&quot;</span>) &#123; state -&gt;</span><br><span class="line">        <span class="keyword">if</span> (state)</span><br><span class="line">            <span class="number">10.</span>dp</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="number">1.</span>dp</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 상태 값에 따라 animate</span></span><br><span class="line">    <span class="keyword">val</span> degrees <span class="keyword">by</span> transition.animateFloat(label = <span class="string">&quot;degreesTransition&quot;</span>) &#123; state -&gt;</span><br><span class="line">        <span class="keyword">if</span> (state) -<span class="number">360F</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="number">0F</span></span><br><span class="line">    &#125;</span><br><span class="line">    Column(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">            .fillMaxSize()</span><br><span class="line">            .padding(<span class="number">16.</span>dp),</span><br><span class="line">        horizontalAlignment = Alignment.CenterHorizontally</span><br><span class="line">    ) &#123;</span><br><span class="line">        Button(onClick = &#123;</span><br><span class="line">            toggled = !toggled  <span class="comment">// 상태 변경</span></span><br><span class="line">        &#125;) &#123;</span><br><span class="line">            Text(</span><br><span class="line">                stringResource(R.string.toggle)</span><br><span class="line">            )</span><br><span class="line">        &#125;</span><br><span class="line">        Box(</span><br><span class="line">            contentAlignment = Alignment.Center,</span><br><span class="line">            modifier = Modifier</span><br><span class="line">                .padding(top = <span class="number">32.</span>dp)</span><br><span class="line">                .border(</span><br><span class="line">                    width = borderWidth,</span><br><span class="line">                    color = Color.Black</span><br><span class="line">                )</span><br><span class="line">                .size(<span class="number">128.</span>dp)</span><br><span class="line">        ) &#123;</span><br><span class="line">            Text(</span><br><span class="line">                text = stringResource(id = R.string.app_name),</span><br><span class="line">                modifier = Modifier.rotate(degrees = degrees)</span><br><span class="line">            )</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="애니메이션을-사용해-UI-요소를-노출하거나-숨기기"><a href="#애니메이션을-사용해-UI-요소를-노출하거나-숨기기" class="headerlink" title="애니메이션을 사용해 UI 요소를 노출하거나 숨기기"></a>애니메이션을 사용해 UI 요소를 노출하거나 숨기기</h2><ul>
+<li>필요한 데이터만 보여주고 가리기</li>
+</ul>
+<h3 id="AnimatedVisibility-의-이해"><a href="#AnimatedVisibility-의-이해" class="headerlink" title="AnimatedVisibility()의 이해"></a>AnimatedVisibility()의 이해</h3><ul>
+<li>좌측에서 <code>slideInHorizontally()</code>으로 부드럽게 이동하면서 나오다가 <code>fadeOut()</code>으로 투명도 올리면서 사라지기</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="meta">@Preview</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">AnimatedVisibilityDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> visible <span class="keyword">by</span> remember &#123;</span><br><span class="line">        mutableStateOf(<span class="literal">false</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    Column(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">            .fillMaxSize()</span><br><span class="line">            .padding(<span class="number">16.</span>dp),</span><br><span class="line">        horizontalAlignment = Alignment.CenterHorizontally</span><br><span class="line">    ) &#123;</span><br><span class="line">        Button(onClick = &#123;</span><br><span class="line">            visible = !visible</span><br><span class="line">        &#125;) &#123;</span><br><span class="line">            Text(</span><br><span class="line">                stringResource(</span><br><span class="line">                    id = <span class="keyword">if</span> (visible)</span><br><span class="line">                        R.string.hide</span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                        R.string.show</span><br><span class="line">                )</span><br><span class="line">            )</span><br><span class="line">        &#125;</span><br><span class="line">        AnimatedVisibility(</span><br><span class="line">            visible = visible,</span><br><span class="line">            enter = slideInHorizontally(initialOffsetX = &#123; -it &#125;),</span><br><span class="line">            exit = fadeOut(animationSpec = tween(durationMillis = <span class="number">300</span>))</span><br><span class="line">        ) &#123;</span><br><span class="line">            Box(</span><br><span class="line">                modifier = Modifier</span><br><span class="line">                    .padding(top = <span class="number">32.</span>dp)</span><br><span class="line">                    .background(color = Color.Red)</span><br><span class="line">                    .size(<span class="number">128.</span>dp)</span><br><span class="line">            )</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="크기-변경-애니메이션"><a href="#크기-변경-애니메이션" class="headerlink" title="크기 변경 애니메이션"></a>크기 변경 애니메이션</h3><ul>
+<li><code>Slider()</code> 값에 따라 <code>Text()</code>의 maxLine 값과 fontSize가 동적으로 변하는 예제 (교재보다 좀더 부드럽게 해봄)</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Preview</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">SizeChangeAnimationDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> size <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="number">1F</span>) &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> transition = updateTransition(</span><br><span class="line">        targetState = size,  <span class="comment">// 이 상태값이 변하면 transition 작동</span></span><br><span class="line">        label = <span class="string">&quot;sizeTransition&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> fontSize <span class="keyword">by</span> transition.animateFloat(label = <span class="string">&quot;text&quot;</span>) &#123; state -&gt;</span><br><span class="line">        state</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Column(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">            .fillMaxSize()</span><br><span class="line">            .padding(<span class="number">16.</span>dp)</span><br><span class="line">    ) &#123;</span><br><span class="line">        Slider(</span><br><span class="line">            value = size,</span><br><span class="line">            valueRange = (<span class="number">1F</span>.<span class="number">.4F</span>),</span><br><span class="line">            steps = <span class="number">3</span>,</span><br><span class="line">            onValueChange = &#123;</span><br><span class="line">                size = it</span><br><span class="line">            &#125;,</span><br><span class="line">            modifier = Modifier.padding(bottom = <span class="number">8.</span>dp)</span><br><span class="line">        )</span><br><span class="line">        Text(</span><br><span class="line">            text = stringResource(id = R.string.lines),</span><br><span class="line">            modifier = Modifier</span><br><span class="line">                .fillMaxWidth()</span><br><span class="line">                .background(Color.White)</span><br><span class="line">                .animateContentSize(tween(durationMillis = <span class="number">300</span>)),</span><br><span class="line">            maxLines = fontSize.toInt(), color = Color.Blue</span><br><span class="line">        )</span><br><span class="line">        Text(</span><br><span class="line">            text = stringResource(id = R.string.app_name),</span><br><span class="line">            fontSize = (fontSize * <span class="number">8</span>).sp</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="시각-효과를-통한-트랜지션-향상"><a href="#시각-효과를-통한-트랜지션-향상" class="headerlink" title="시각 효과를 통한 트랜지션 향상"></a>시각 효과를 통한 트랜지션 향상</h2><ul>
+<li>UI 일부를 전환하고 싶을 때는 <code>Crossfade()</code>를 사용하자</li>
+</ul>
+<h3 id="Crossfade-Composable-function"><a href="#Crossfade-Composable-function" class="headerlink" title="Crossfade Composable function"></a>Crossfade Composable function</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Preview</span></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">CrossfadeAnimationDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> isFirstScreen <span class="keyword">by</span> remember &#123; mutableStateOf(<span class="literal">true</span>) &#125;</span><br><span class="line">    Column(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">            .fillMaxSize(),</span><br><span class="line">        horizontalAlignment = Alignment.CenterHorizontally</span><br><span class="line">    ) &#123;</span><br><span class="line">        Switch(</span><br><span class="line">            checked = isFirstScreen,</span><br><span class="line">            onCheckedChange = &#123;</span><br><span class="line">                isFirstScreen = !isFirstScreen</span><br><span class="line">            &#125;,</span><br><span class="line">            modifier = Modifier.padding(top = <span class="number">16.</span>dp, bottom = <span class="number">16.</span>dp)</span><br><span class="line">        )</span><br><span class="line">        Crossfade(targetState = isFirstScreen, animationSpec = spring(stiffness = Spring.StiffnessVeryLow)) &#123;</span><br><span class="line">            <span class="keyword">if</span> (it) &#123;</span><br><span class="line">                Screen(</span><br><span class="line">                    text = stringResource(id = R.string.letter_w),</span><br><span class="line">                    backgroundColor = Color.Gray</span><br><span class="line">                )</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                Screen(</span><br><span class="line">                    text = stringResource(id = R.string.letter_i),</span><br><span class="line">                    backgroundColor = Color.LightGray</span><br><span class="line">                )</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">Screen</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    text: <span class="type">String</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    backgroundColor: <span class="type">Color</span> = Color.White</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span> &#123;</span><br><span class="line">    Box(</span><br><span class="line">        modifier = Modifier</span><br><span class="line">            .fillMaxSize()</span><br><span class="line">            .background(color = backgroundColor),</span><br><span class="line">        contentAlignment = Alignment.Center</span><br><span class="line">    ) &#123;</span><br><span class="line">        Text(</span><br><span class="line">            text = text,</span><br><span class="line">            style = MaterialTheme.typography.displayLarge</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>교재에서는 <code>Crossfade()</code> 내부에서 사용된 <code>tween()</code> 애니메이션에 대해 설명해주고 있지만 패스</p>
+<h3 id="AnimationSpec-이해"><a href="#AnimationSpec-이해" class="headerlink" title="AnimationSpec 이해"></a>AnimationSpec 이해</h3><ul>
+<li>애니메이션 사양을 정의하기 위한 기본 인터페이스</li>
+<li>애니메이션을 수행할 데이터 타입과 애니메이션 환경설정을 저장한다.</li>
+<li>애니메이션 시스템은 AnimatorVector 인스턴스에서 동작한다.</li>
+<li>여러가지 AnimationSpec의 확장 인터페이스들이 있으니 필요에 따라 사용하면 되겠다.</li>
+<li>무한으로 실행되는 애니메이션 보여주고 끝내기</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="meta">@Preview</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">InfiniteRepeatableDemo</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> infiniteTransition = rememberInfiniteTransition()</span><br><span class="line">    <span class="keyword">val</span> degrees <span class="keyword">by</span> infiniteTransition.animateFloat(</span><br><span class="line">        initialValue = <span class="number">0F</span>,</span><br><span class="line">        targetValue = <span class="number">0F</span>,</span><br><span class="line">        animationSpec = infiniteRepeatable(animation = keyframes &#123;</span><br><span class="line">            durationMillis = <span class="number">3000</span></span><br><span class="line">            <span class="number">0F</span> at <span class="number">0</span></span><br><span class="line">            <span class="number">180F</span> at <span class="number">750</span></span><br><span class="line">            <span class="number">359F</span> at <span class="number">750</span> + <span class="number">750</span></span><br><span class="line">            <span class="number">180F</span> at <span class="number">750</span> + <span class="number">750</span> + <span class="number">750</span></span><br><span class="line">            <span class="number">0F</span> at <span class="number">750</span> + <span class="number">750</span> + <span class="number">750</span> + <span class="number">750</span></span><br><span class="line">        &#125;)</span><br><span class="line">    )</span><br><span class="line">    Box(</span><br><span class="line">        modifier = Modifier.fillMaxSize(),</span><br><span class="line">        contentAlignment = Alignment.Center</span><br><span class="line">    ) &#123;</span><br><span class="line">        Text(</span><br><span class="line">            text = stringResource(id = R.string.app_name),</span><br><span class="line">            modifier = Modifier.rotate(degrees = degrees),</span><br><span class="line">            fontSize = (degrees / <span class="number">6</span>).sp</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2023/03/13/jetpack_compose/chapter07/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2023-03-19 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/jetpack-compose-study/" title="jetpack-compose-study">
+                        <b>#</b> jetpack-compose-study
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/android/" title="android">
+                        <b>#</b> android
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2023/03/28/jetpack_compose/chapter09/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%EC%85%98%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%9C-%EC%83%81%ED%83%9C-%EB%B3%80%ED%99%94-%EC%8B%9C%EA%B0%81%ED%99%94"><span class="toc-text">애니메이션을 사용한 상태 변화 시각화</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%95%9C-%EA%B0%80%EC%A7%80-%EA%B0%92%EC%9D%84-%EB%B3%80%EA%B2%BD%ED%95%98%EB%8A%94-%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%EC%85%98"><span class="toc-text">한 가지 값을 변경하는 애니메이션</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%97%AC%EB%9F%AC-%EA%B0%92%EC%9D%84-%EB%B3%80%EA%B2%BD%ED%95%98%EB%8A%94-%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%EC%85%98"><span class="toc-text">여러 값을 변경하는 애니메이션</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%EC%85%98%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%B4-UI-%EC%9A%94%EC%86%8C%EB%A5%BC-%EB%85%B8%EC%B6%9C%ED%95%98%EA%B1%B0%EB%82%98-%EC%88%A8%EA%B8%B0%EA%B8%B0"><span class="toc-text">애니메이션을 사용해 UI 요소를 노출하거나 숨기기</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#AnimatedVisibility-%EC%9D%98-%EC%9D%B4%ED%95%B4"><span class="toc-text">AnimatedVisibility()의 이해</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%81%AC%EA%B8%B0-%EB%B3%80%EA%B2%BD-%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%EC%85%98"><span class="toc-text">크기 변경 애니메이션</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%8B%9C%EA%B0%81-%ED%9A%A8%EA%B3%BC%EB%A5%BC-%ED%86%B5%ED%95%9C-%ED%8A%B8%EB%9E%9C%EC%A7%80%EC%85%98-%ED%96%A5%EC%83%81"><span class="toc-text">시각 효과를 통한 트랜지션 향상</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Crossfade-Composable-function"><span class="toc-text">Crossfade Composable function</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AnimationSpec-%EC%9D%B4%ED%95%B4"><span class="toc-text">AnimationSpec 이해</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/boring-km">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="kmjin@kakao.com">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="linkedin" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/">
+            <i class="iconfont icon-linkedin"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="TIL" target="_blank" rel="noopener" href="https://boring-km.github.io/TIL">
+            <i class="iconfont icon-emoji-friendly"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/boring-km">머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="내용 검색...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + 8%EC%9E%A5%20%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%EC%85%98%20%EC%A0%81%EC%9A%A9 + '&url=' + http%3A%2F%2Fexample.com%2F2023%2F03%2F19%2Fjetpack_compose%2Fchapter08%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2023/03/19/jetpack_compose/chapter08/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
