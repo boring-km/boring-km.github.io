@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Flutter pubspec.yaml"
-categories: flutter-data
+categories: flutter
 tags: [dev, flutter]
 toc: true
 ---

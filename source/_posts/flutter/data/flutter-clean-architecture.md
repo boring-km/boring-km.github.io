@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Flutter Clean Architecture"
-categories: flutter-data
+categories: flutter
 tags: [dev, flutter]
 toc: true
 ---

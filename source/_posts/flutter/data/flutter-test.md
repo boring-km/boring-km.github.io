@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Flutter 단위 테스트 작성"
-categories: flutter-data
+categories: flutter
 tags: [dev, flutter]
 toc: true
 ---

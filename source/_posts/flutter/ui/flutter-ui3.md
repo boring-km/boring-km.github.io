@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Flutter의 다양한 Widget(3)"
-categories: flutter-ui
+categories: flutter
 tags: [dev, flutter]
 toc: true
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Flutter 위젯 에러"
-categories: flutter-ui
+categories: flutter
 tags: [dev, flutter]
 toc: true
 ---
