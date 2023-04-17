@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Flutter 의존성 주입 - provider"
-categories: flutter-data
+categories: flutter
 tags: [dev, flutter]
 toc: true
 ---

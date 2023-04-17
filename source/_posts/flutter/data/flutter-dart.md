@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Dart 문법 사용 시 주의사항"
-categories: flutter-data
+categories: flutter
 tags: [dev, flutter]
 toc: true
 ---
