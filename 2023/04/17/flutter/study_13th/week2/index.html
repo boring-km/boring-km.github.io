@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      Flutter 중급반 스터디 13기 2주차 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">boring-km</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Flutter 중급반 스터디 13기 2주차</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2023-04-17 13:09:12
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/flutter-study-13th/" title="flutter-study-13th">
+                    <b>#</b> flutter-study-13th
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/flutter/" title="flutter">
+                    <b>#</b> flutter
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="13기-2주차-강민"><a href="#13기-2주차-강민" class="headerlink" title="13기 2주차 강민"></a>13기 2주차 강민</h1><ul>
+<li><input checked="" disabled="" type="checkbox"> 1주차: 프로젝트 및 자기 소개</li>
+<li><input checked="" disabled="" type="checkbox"> 2주차: 프로필 소개 화면 Flutter Web으로 만들어보기</li>
+<li><input disabled="" type="checkbox"> 3주차: 링크풀 테스트 코드 작성 및 리팩토링 ← 프로필 소개 화면 Flutter Web으로 만들어보기</li>
+<li><input disabled="" type="checkbox"> 4주차: 링크풀 테스트 코드 작성 및 리팩토링</li>
+<li><input disabled="" type="checkbox"> 5주차: 링크풀 테스트 코드 작성 및 리팩토링</li>
+<li><input disabled="" type="checkbox"> 6주차: 이미지 Custom Crop Plugin 개발</li>
+<li><input disabled="" type="checkbox"> 7주차: 이미지 Custom Crop Plugin 개발</li>
+<li><input disabled="" type="checkbox"> 8주차: 이미지 Custom Crop Plugin 개발</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://boring-km.github.io/2023/04/10/flutter/study_13th/week1/">13기 1주차 강민</a></p>
+<h2 id="일정-변경사항"><a href="#일정-변경사항" class="headerlink" title="일정 변경사항"></a>일정 변경사항</h2><p>2주 연속으로 개발 기간으로 잡기에 아깝기도 해서 프로필 내용은 천천히 검토하면서 채우도록 하고, 다음주부터 링크풀 리팩토링 시작하기로 함.</p>
+<h2 id="소스코드"><a href="#소스코드" class="headerlink" title="소스코드"></a>소스코드</h2><p><a target="_blank" rel="noopener" href="https://github.com/boring-km/profile">https://github.com/boring-km/profile</a></p>
+<ul>
+<li>Flutter Web 프로젝트</li>
+<li>상세 내역은 markdown으로 작성해서 파일 내용만 바꿔도 업데이트 될 수 있도록 구현</li>
+<li>github page로 배포 (아래는 github workflow)</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/boring-km/profile/blob/master/.github/workflows/workflow.yml">profile&#x2F;workflow.yml at master · boring-km&#x2F;profile</a></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">Profile</span> <span class="string">Web</span></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">master</span></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">Build</span> <span class="string">Web</span></span><br><span class="line">    <span class="attr">env:</span></span><br><span class="line">      <span class="attr">my_secret:</span> <span class="string">$</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v3</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">subosito/flutter-action@v2</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">flutter-version:</span> <span class="string">&#x27;3.7.11&#x27;</span></span><br><span class="line">          <span class="attr">channel:</span> <span class="string">&#x27;stable&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">flutter</span> <span class="string">--version</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">flutter</span> <span class="string">config</span> <span class="string">--enable-web</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">flutter</span> <span class="string">pub</span> <span class="string">get</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">flutter</span> <span class="string">build</span> <span class="string">web</span> <span class="string">--release</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          # 2. change path to [existed lib/main.dart path]/build/web</span></span><br><span class="line"><span class="string">          cd ./build/web</span></span><br><span class="line"><span class="string">          pwd</span></span><br><span class="line"><span class="string">          git init</span></span><br><span class="line"><span class="string">          git config --global user.email kms0644804@naver.com</span></span><br><span class="line"><span class="string">          git config --global user.name boring-km</span></span><br><span class="line"><span class="string">          git status</span></span><br><span class="line"><span class="string">          git remote add origin https://$&#123;&#123;secrets.commit_secret&#125;&#125;@github.com/boring-km/profile.git </span></span><br><span class="line"><span class="string">          git checkout -b gh-pages</span></span><br><span class="line"><span class="string">          git add --all</span></span><br><span class="line"><span class="string">          git commit -m &quot;update&quot;</span></span><br><span class="line"><span class="string">          git push origin gh-pages -f</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="known-issue-Flutter-Web-amp-SEO-Accessibility"><a href="#known-issue-Flutter-Web-amp-SEO-Accessibility" class="headerlink" title="known issue? - Flutter Web &amp; SEO (Accessibility)"></a>known issue? - Flutter Web &amp; SEO (Accessibility)</h2><ul>
+<li>flutter web에서 SEO(검색 엔진 최적화) 이슈가 가장 흔한 이슈로 알고 있는데, flutter도 많이 발전한 만큼 방법이 생겼지 않을까 해서 찾아봤다.</li>
+<li>이전 Flutter에서는 Semantics 위젯으로 감싸야만 접근이 가능했던 것 같은데, <strong>지금은 굳이 Semantics 위젯을 작성하지 않아도 가능했다.</strong></li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://medium.com/flutter/going-deeper-with-flutters-web-support-66d7ad95eb52">Going deeper with Flutter’s web support</a></p>
+<ul>
+<li>참고 글 - html처럼 inspecting 가능했음</li>
+</ul>
+<p><img src="/images/flutter/study_13th/week2/example.png" alt="Untitled"></p>
+<h3 id="How-to-2가지-방법"><a href="#How-to-2가지-방법" class="headerlink" title="How to? (2가지 방법)"></a>How to? (2가지 방법)</h3><ul>
+<li>우선 flutter web 빌드 할 때 web-render 옵션을 html로 설정해야 한다!</li>
+<li>명령어로 실행&#x2F;빌드할 때 설정하는 옵션과 Runtime에서 설정하는 옵션이 있다.</li>
+<li>실행 옵션을 간편하게 하기 위해 런타임 옵션으로 설정하고 진행한다. (index.html에서 아래 내용처럼 수정하면 된다.)</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> useHtml = <span class="comment">// ...</span></span><br><span class="line">_flutter.<span class="property">loader</span>.<span class="title function_">loadEntrypoint</span>(&#123;</span><br><span class="line">  <span class="attr">onEntrypointLoaded</span>: <span class="keyword">async</span> <span class="keyword">function</span>(<span class="params">engineInitializer</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> config = &#123;</span><br><span class="line">      <span class="attr">renderer</span>: <span class="string">&quot;html&quot;</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> appRunner = <span class="keyword">await</span> engineInitializer.<span class="title function_">initializeEngine</span>(config);</span><br><span class="line">    <span class="keyword">await</span> appRunner.<span class="title function_">runApp</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://docs.flutter.dev/development/platform-integration/web/renderers">Web renderers</a></p>
+<ul>
+<li>그리고 여기서 상황에 맞게 변경하면 될 것 같다.</li>
+<li>이왕이면 공식문서에서 제공하는 2번의 방식을 사용하는 게 낫겠다.</li>
+</ul>
+<ol>
+<li>JavaScript 함수 호출, Console에서 입력해서 활성화 가능</li>
+</ol>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">setDebuggable</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;flt-glass-pane&#x27;</span>).<span class="property">shadowRoot</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;flt-semantics-placeholder&#x27;</span>).<span class="title function_">click</span>(&#123;<span class="attr">force</span>: <span class="literal">true</span>&#125;);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>flutter에서 semantic enable 하기 (<a target="_blank" rel="noopener" href="https://docs.flutter.dev/development/accessibility-and-localization/accessibility?tab=browsers#screen-readers">관련문서</a>)</li>
+</ol>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RendererBinding.instance.setSemanticsEnabled(<span class="keyword">true</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="사소한-이슈"><a href="#사소한-이슈" class="headerlink" title="사소한 이슈"></a>사소한 이슈</h2><p>Flutter Web으로 로컬에서 Chrome으로 Run 하면 문제없이 화면이 보이는데, github page로 배포하면 화면이 안보이는 현상 있음</p>
+<ul>
+<li>Inspector를 통해 오류를 확인하면 _flutter 객체를 javascript에서 찾지 못해서 발생.</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/72833719/getting-flutter-is-undefined-in-flutter-web-only-in-production">Getting _flutter is undefined in flutter web, only in production</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/flutter/flutter/issues/107448">https://github.com/flutter/flutter/issues/107448</a></p>
+<base *href*="$FLUTTER_BASE_HREF"> → <base *href*="/profile/">
+
+<h2 id="배포된-Web-Url"><a href="#배포된-Web-Url" class="headerlink" title="배포된 Web Url"></a>배포된 Web Url</h2><p><a target="_blank" rel="noopener" href="https://boring-km.github.io/profile">boring-km profile</a></p>
+<h2 id="회고"><a href="#회고" class="headerlink" title="회고"></a>회고</h2><ul>
+<li>지난 과거를 되돌아보면서 이력서 비스무레한 내용을 적다보니 후회가 많이 남았습니다. 더 열심히 살아야겠어요.</li>
+<li>Web으로 화면 크기를 큰 간격으로 조절하다보니 앱으로 개발하면서는 생각지못한 영역에서 Overflow가 발생하는 걸 볼 수 있었어요.</li>
+<li>Flutter Web에서 모바일 웹인지 데스크탑 웹인지 구별하는 방법도 있을까 해서 찾아보니까 방법이 있네요</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/flutter/flutter/issues/80505#issuecomment-821817704">Detect whether flutter web app is running on desktop or mobile · Issue #80505 · flutter&#x2F;flutter</a></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:flutter/foundation.dart&#x27;</span>;</span><br><span class="line"><span class="keyword">final</span> isWebMobile = kIsWeb &amp;&amp;</span><br><span class="line"> (defaultTargetPlatform == TargetPlatform.iOS ||</span><br><span class="line">	 defaultTargetPlatform == TargetPlatform.android);</span><br></pre></td></tr></table></figure>
+
+<h2 id="질문"><a href="#질문" class="headerlink" title="질문"></a>질문</h2><ul>
+<li>처음에 화면 로딩할 때 Text 값이 잠깐동안 X 모양으로 보였다가 글자가 나타나는데 이유를 아시는 분 계실까요?</li>
+<li>flutter web으로 개발하시면서 모바일 웹 따로 데스크탑 따로 UI 구성하시나요..?</li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2023/04/10/flutter/study_13th/week1/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2023-04-17 13:09:12
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/flutter-study-13th/" title="flutter-study-13th">
+                        <b>#</b> flutter-study-13th
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/flutter/" title="flutter">
+                        <b>#</b> flutter
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#13%EA%B8%B0-2%EC%A3%BC%EC%B0%A8-%EA%B0%95%EB%AF%BC"><span class="toc-text">13기 2주차 강민</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%9D%BC%EC%A0%95-%EB%B3%80%EA%B2%BD%EC%82%AC%ED%95%AD"><span class="toc-text">일정 변경사항</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%86%8C%EC%8A%A4%EC%BD%94%EB%93%9C"><span class="toc-text">소스코드</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#known-issue-Flutter-Web-amp-SEO-Accessibility"><span class="toc-text">known issue? - Flutter Web &amp; SEO (Accessibility)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#How-to-2%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95"><span class="toc-text">How to? (2가지 방법)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%82%AC%EC%86%8C%ED%95%9C-%EC%9D%B4%EC%8A%88"><span class="toc-text">사소한 이슈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EB%B0%B0%ED%8F%AC%EB%90%9C-Web-Url"><span class="toc-text">배포된 Web Url</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%ED%9A%8C%EA%B3%A0"><span class="toc-text">회고</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%A7%88%EB%AC%B8"><span class="toc-text">질문</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/boring-km">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="kmjin@kakao.com">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="linkedin" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/">
+            <i class="iconfont icon-linkedin"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="TIL" target="_blank" rel="noopener" href="https://boring-km.github.io/TIL">
+            <i class="iconfont icon-emoji-friendly"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/boring-km">머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="내용 검색...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Flutter%20%EC%A4%91%EA%B8%89%EB%B0%98%20%EC%8A%A4%ED%84%B0%EB%94%94%2013%EA%B8%B0%202%EC%A3%BC%EC%B0%A8 + '&url=' + http%3A%2F%2Fexample.com%2F2023%2F04%2F17%2Fflutter%2Fstudy_13th%2Fweek2%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2023/04/17/flutter/study_13th/week2/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
