@@ -11,8 +11,8 @@
   
   <title>
     
-      Tag 
-       : flutter
+      Flutter InAppWebView iOS 16.4 Inspecting 안되는 이슈 
+      
       
       |
     
@@ -105,113 +105,146 @@
 
 
       <div class="flex-container">
-        <!-- 标签详情页，展示某个标签下的文章列表，url形式：https://yoursite/tags/某个标签/ -->
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
 
-<div class="container tag-details">
-  <div class="content-title">
-    <h2>
-      <span>flutter</span>
-    </h2>
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Flutter InAppWebView iOS 16.4 Inspecting 안되는 이슈</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2023-04-26 15:25:56
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/flutter/" title="flutter">
+                    <b>#</b> flutter
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/flutter/" title="flutter">
+                    <b>#</b> flutter
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <ul>
+<li>원문 링크: <a target="_blank" rel="noopener" href="https://github.com/pichillilorenzo/flutter_inappwebview/issues/1629">https://github.com/pichillilorenzo/flutter_inappwebview/issues/1629</a></li>
+</ul>
+<p>iOS 버전이 16.4로 업데이트 되면서 WKWebView.isInspectable 값을 true로 설정해야만 Safari를 통해 웹뷰 디버깅이 가능하다.</p>
+<p>근데 아직 InAppWebView 베타버전 라이브러리에서도 작업이 안되어 있어서 이슈를 적어봤다.</p>
+<p>일단은 임시로 Pod 폴더에서 InAppWebView.swift 파일을 직접 수정해서 옵션을 넣어주는 수 밖에 없을 것 같다.</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2023/04/24/flutter/study_13th/week3/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2023-04-26 15:25:56
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/flutter/" title="flutter">
+                        <b>#</b> flutter
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/flutter/" title="flutter">
+                        <b>#</b> flutter
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
   </div>
-  
-    <div class="post-list">
-      <div class="post-item" title="Flutter Hot Reload, Hot Restart">
-        <span class="time-m-d">2022-03-18</span>
-        <a href="/2022/03/18/flutter/ui/flutter-fast-rerun/">
-          <span>Flutter Hot Reload, Hot Restart</span>
-        </a>
-      </div>
-    </div>
-  
-    <div class="post-list">
-      <div class="post-item" title="StatefulWidget vs StatelessWidget">
-        <span class="time-m-d">2022-03-18</span>
-        <a href="/2022/03/18/flutter/ui/flutter-stateful-stateless/">
-          <span>StatefulWidget vs StatelessWidget</span>
-        </a>
-      </div>
-    </div>
-  
-    <div class="post-list">
-      <div class="post-item" title="Flutter 위젯 에러">
-        <span class="time-m-d">2022-03-18</span>
-        <a href="/2022/03/18/flutter/ui/flutter-ui-error/">
-          <span>Flutter 위젯 에러</span>
-        </a>
-      </div>
-    </div>
-  
-    <div class="post-list">
-      <div class="post-item" title="Flutter의 다양한 Widget(3)">
-        <span class="time-m-d">2022-03-18</span>
-        <a href="/2022/03/18/flutter/ui/flutter-ui3/">
-          <span>Flutter의 다양한 Widget(3)</span>
-        </a>
-      </div>
-    </div>
-  
-    <div class="post-list">
-      <div class="post-item" title="Flutter tear-off">
-        <span class="time-m-d">2022-03-18</span>
-        <a href="/2022/03/18/flutter/data/flutter_tear-off/">
-          <span>Flutter tear-off</span>
-        </a>
-      </div>
-    </div>
-  
-    <div class="post-list">
-      <div class="post-item" title="Flutter 반응형 UI">
-        <span class="time-m-d">2022-02-18</span>
-        <a href="/2022/02/18/flutter/ui/flutter-reactive-ui/">
-          <span>Flutter 반응형 UI</span>
-        </a>
-      </div>
-    </div>
-  
-    <div class="post-list">
-      <div class="post-item" title="Flutter의 다양한 Widget(2)">
-        <span class="time-m-d">2022-02-09</span>
-        <a href="/2022/02/09/flutter/ui/flutter-ui2/">
-          <span>Flutter의 다양한 Widget(2)</span>
-        </a>
-      </div>
-    </div>
-  
-    <div class="post-list">
-      <div class="post-item" title="Flutter의 다양한 Widget(1)">
-        <span class="time-m-d">2022-02-08</span>
-        <a href="/2022/02/08/flutter/ui/flutter-ui1/">
-          <span>Flutter의 다양한 Widget(1)</span>
-        </a>
-      </div>
-    </div>
-  
-    <div class="post-list">
-      <div class="post-item" title="Flutter에서 안드로이드 함수 사용하기">
-        <span class="time-m-d">2021-12-21</span>
-        <a href="/2021/12/21/flutter/flutter_android_method/">
-          <span>Flutter에서 안드로이드 함수 사용하기</span>
-        </a>
-      </div>
-    </div>
-  
-    <div class="post-list">
-      <div class="post-item" title="PhotoSchool App">
-        <span class="time-m-d">2021-12-20</span>
-        <a href="/2021/12/20/flutter/photoschool/">
-          <span>PhotoSchool App</span>
-        </a>
-      </div>
-    </div>
-  
-  <nav class="post-navigation">
-    
-      <a href="/tags/flutter/"><i class="iconfont icon-angleleft"></i></a>
-    
-    <span class="page-num">2 / 2</span>
-    
-  </nav>
-</div>
+
 
         <div class="footer">
   <div class="social">
@@ -480,6 +513,24 @@
 
 
         
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Flutter%20InAppWebView%20iOS%2016.4%20Inspecting%20%EC%95%88%EB%90%98%EB%8A%94%20%EC%9D%B4%EC%8A%88 + '&url=' + http%3A%2F%2Fexample.com%2F2023%2F04%2F26%2Fflutter%2Fflutter_inappwebview_ios_debugging%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2023/04/26/flutter/flutter_inappwebview_ios_debugging/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
   
   
 <script src="/js/shares.js"></script>
