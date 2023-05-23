@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>Flutter 중급반 스터디 13기 6주차</title>
+      <link href="/2023/05/23/flutter/study_13th/week6/"/>
+      <url>/2023/05/23/flutter/study_13th/week6/</url>
+      
+        <content type="html"><![CDATA[<h1 id="진행도"><a href="#진행도" class="headerlink" title="진행도"></a>진행도</h1><ul><li><input checked="" disabled="" type="checkbox"> 1주차: 프로젝트 및 자기 소개</li><li><input checked="" disabled="" type="checkbox"> 2주차: 프로필 소개 화면 Flutter Web으로 만들어보기</li><li><input checked="" disabled="" type="checkbox"> 3주차: 링크풀 테스트 코드 작성 및 리팩토링</li><li><input checked="" disabled="" type="checkbox"> 4주차: 링크풀 테스트 코드 작성 및 리팩토링</li><li><input checked="" disabled="" type="checkbox"> 5주차: 링크풀 테스트 코드 작성 및 리팩토링</li><li><input checked="" disabled="" type="checkbox"> 6주차: 이미지 Custom Crop Plugin 개발</li><li><input disabled="" type="checkbox"> 7주차: 이미지 Custom Crop Plugin 개발</li><li><input disabled="" type="checkbox"> 8주차: 이미지 Custom Crop Plugin 개발</li></ul><h1 id="프로젝트-소개"><a href="#프로젝트-소개" class="headerlink" title="프로젝트 소개"></a>프로젝트 소개</h1><ul><li>목적: Flutter에서 다양한 모형으로 이미지를 crop 하는 라이브러리</li></ul><h2 id="기존-이미지-Crop-관련-패키지-조사"><a href="#기존-이미지-Crop-관련-패키지-조사" class="headerlink" title="기존 이미지 Crop 관련 패키지 조사"></a>기존 이미지 Crop 관련 패키지 조사</h2><h3 id="image-cropper"><a href="#image-cropper" class="headerlink" title="image_cropper"></a>image_cropper</h3><p><a href="https://pub.dev/packages/image_cropper">image_cropper | Flutter Package</a></p><ul><li>Native 영역에서 편집을 하고 있어 Flutter 소스로 커스터마이징 하기가 어려움</li></ul><h3 id="crop"><a href="#crop" class="headerlink" title="crop"></a>crop</h3><p><a href="https://pub.dev/packages/crop">crop | Flutter Package</a></p><ul><li>crop할 특정 영역을 직접 정하지 못함</li></ul><p><img src="/images/flutter/study_13th/week6/img.png" alt="img.png"></p><h3 id="crop-your-image"><a href="#crop-your-image" class="headerlink" title="crop_your_image"></a>crop_your_image</h3><p><a href="https://pub.dev/packages/crop_your_image">crop_your_image | Flutter Package</a></p><ul><li>위의 crop 패키지와 마찬가지로 이미지의 특정 영역을 선택해서 crop 하는 방식이 아닌 뒤에 있는 이미지를 움직여서 crop 영역에 맞추는 느낌</li></ul><p><img src="/images/flutter/study_13th/week6/img_1.png" alt="img_1.png"></p><h3 id="crop-image"><a href="#crop-image" class="headerlink" title="crop_image"></a>crop_image</h3><p><a href="https://pub.dev/packages/crop_image">crop_image | Flutter Package</a></p><p><img src="/images/flutter/study_13th/week6/img_2.png" alt="img_2.png"></p><ul><li>영역을 지정해서 사각형 crop까지는 가능</li><li>카카오톡에 있는 이미지 자르기랑 비슷</li></ul><p><img src="/images/flutter/study_13th/week6/img_3.png" alt="img_3.png"></p><h3 id="custom-image-crop"><a href="#custom-image-crop" class="headerlink" title="custom_image_crop"></a>custom_image_crop</h3><p><a href="https://pub.dev/packages/custom_image_crop">custom_image_crop | Flutter Package</a></p><p><img src="/images/flutter/study_13th/week6/img_4.png" alt="img_4.png"></p><h2 id="새로-개발하려는-패키지의-차이점"><a href="#새로-개발하려는-패키지의-차이점" class="headerlink" title="새로 개발하려는 패키지의 차이점"></a>새로 개발하려는 패키지의 차이점</h2><p><img src="/images/flutter/study_13th/week6/img_5.png" alt="img_5.png"></p><p><img src="/images/flutter/study_13th/week6/img_6.png" alt="img_6.png"></p><p><img src="/images/flutter/study_13th/week6/img_7.png" alt="img_7.png"></p><p><img src="/images/flutter/study_13th/week6/img_8.png" alt="img_8.png"></p><ol><li>직접 crop 할 부분을 그려서 그 감싸지는 영역만 꺼내기</li><li>사각형&#x2F;원형 crop 사이즈 조절하면서 원하는 영역만 crop 할 수 있게 하기</li></ol><h2 id="최종-목표"><a href="#최종-목표" class="headerlink" title="최종 목표"></a>최종 목표</h2><ul><li>pub.dev에 배포해보기</li><li>핵심 기능만 압축해서 패키지화하기</li><li>ui test 적용하기 (픽셀 비교)</li></ul><h1 id="주간-회고"><a href="#주간-회고" class="headerlink" title="주간 회고"></a>주간 회고</h1><ul><li>사이드 프로젝트로 개발한 프로젝트 PlayStore 검토 중</li><li>이제 슬슬 이력서 작성할 때</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> flutter-study-13th </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> dev </tag>
+            
+            <tag> flutter </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Flutter 중급반 스터디 13기 5주차</title>
       <link href="/2023/05/15/flutter/study_13th/week5/"/>
       <url>/2023/05/15/flutter/study_13th/week5/</url>

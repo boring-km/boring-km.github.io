@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      Flutter 중급반 스터디 13기 6주차 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">boring-km</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Flutter 중급반 스터디 13기 6주차</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2023-05-23 21:37:47
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/flutter-study-13th/" title="flutter-study-13th">
+                    <b>#</b> flutter-study-13th
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/flutter/" title="flutter">
+                    <b>#</b> flutter
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="진행도"><a href="#진행도" class="headerlink" title="진행도"></a>진행도</h1><ul>
+<li><input checked="" disabled="" type="checkbox"> 1주차: 프로젝트 및 자기 소개</li>
+<li><input checked="" disabled="" type="checkbox"> 2주차: 프로필 소개 화면 Flutter Web으로 만들어보기</li>
+<li><input checked="" disabled="" type="checkbox"> 3주차: 링크풀 테스트 코드 작성 및 리팩토링</li>
+<li><input checked="" disabled="" type="checkbox"> 4주차: 링크풀 테스트 코드 작성 및 리팩토링</li>
+<li><input checked="" disabled="" type="checkbox"> 5주차: 링크풀 테스트 코드 작성 및 리팩토링</li>
+<li><input checked="" disabled="" type="checkbox"> 6주차: 이미지 Custom Crop Plugin 개발</li>
+<li><input disabled="" type="checkbox"> 7주차: 이미지 Custom Crop Plugin 개발</li>
+<li><input disabled="" type="checkbox"> 8주차: 이미지 Custom Crop Plugin 개발</li>
+</ul>
+<h1 id="프로젝트-소개"><a href="#프로젝트-소개" class="headerlink" title="프로젝트 소개"></a>프로젝트 소개</h1><ul>
+<li>목적: Flutter에서 다양한 모형으로 이미지를 crop 하는 라이브러리</li>
+</ul>
+<h2 id="기존-이미지-Crop-관련-패키지-조사"><a href="#기존-이미지-Crop-관련-패키지-조사" class="headerlink" title="기존 이미지 Crop 관련 패키지 조사"></a>기존 이미지 Crop 관련 패키지 조사</h2><h3 id="image-cropper"><a href="#image-cropper" class="headerlink" title="image_cropper"></a>image_cropper</h3><p><a target="_blank" rel="noopener" href="https://pub.dev/packages/image_cropper">image_cropper | Flutter Package</a></p>
+<ul>
+<li>Native 영역에서 편집을 하고 있어 Flutter 소스로 커스터마이징 하기가 어려움</li>
+</ul>
+<h3 id="crop"><a href="#crop" class="headerlink" title="crop"></a>crop</h3><p><a target="_blank" rel="noopener" href="https://pub.dev/packages/crop">crop | Flutter Package</a></p>
+<ul>
+<li>crop할 특정 영역을 직접 정하지 못함</li>
+</ul>
+<p><img src="/images/flutter/study_13th/week6/img.png" alt="img.png"></p>
+<h3 id="crop-your-image"><a href="#crop-your-image" class="headerlink" title="crop_your_image"></a>crop_your_image</h3><p><a target="_blank" rel="noopener" href="https://pub.dev/packages/crop_your_image">crop_your_image | Flutter Package</a></p>
+<ul>
+<li>위의 crop 패키지와 마찬가지로 이미지의 특정 영역을 선택해서 crop 하는 방식이 아닌 뒤에 있는 이미지를 움직여서 crop 영역에 맞추는 느낌</li>
+</ul>
+<p><img src="/images/flutter/study_13th/week6/img_1.png" alt="img_1.png"></p>
+<h3 id="crop-image"><a href="#crop-image" class="headerlink" title="crop_image"></a>crop_image</h3><p><a target="_blank" rel="noopener" href="https://pub.dev/packages/crop_image">crop_image | Flutter Package</a></p>
+<p><img src="/images/flutter/study_13th/week6/img_2.png" alt="img_2.png"></p>
+<ul>
+<li>영역을 지정해서 사각형 crop까지는 가능</li>
+<li>카카오톡에 있는 이미지 자르기랑 비슷</li>
+</ul>
+<p><img src="/images/flutter/study_13th/week6/img_3.png" alt="img_3.png"></p>
+<h3 id="custom-image-crop"><a href="#custom-image-crop" class="headerlink" title="custom_image_crop"></a>custom_image_crop</h3><p><a target="_blank" rel="noopener" href="https://pub.dev/packages/custom_image_crop">custom_image_crop | Flutter Package</a></p>
+<p><img src="/images/flutter/study_13th/week6/img_4.png" alt="img_4.png"></p>
+<h2 id="새로-개발하려는-패키지의-차이점"><a href="#새로-개발하려는-패키지의-차이점" class="headerlink" title="새로 개발하려는 패키지의 차이점"></a>새로 개발하려는 패키지의 차이점</h2><p><img src="/images/flutter/study_13th/week6/img_5.png" alt="img_5.png"></p>
+<p><img src="/images/flutter/study_13th/week6/img_6.png" alt="img_6.png"></p>
+<p><img src="/images/flutter/study_13th/week6/img_7.png" alt="img_7.png"></p>
+<p><img src="/images/flutter/study_13th/week6/img_8.png" alt="img_8.png"></p>
+<ol>
+<li>직접 crop 할 부분을 그려서 그 감싸지는 영역만 꺼내기</li>
+<li>사각형&#x2F;원형 crop 사이즈 조절하면서 원하는 영역만 crop 할 수 있게 하기</li>
+</ol>
+<h2 id="최종-목표"><a href="#최종-목표" class="headerlink" title="최종 목표"></a>최종 목표</h2><ul>
+<li>pub.dev에 배포해보기</li>
+<li>핵심 기능만 압축해서 패키지화하기</li>
+<li>ui test 적용하기 (픽셀 비교)</li>
+</ul>
+<h1 id="주간-회고"><a href="#주간-회고" class="headerlink" title="주간 회고"></a>주간 회고</h1><ul>
+<li>사이드 프로젝트로 개발한 프로젝트 PlayStore 검토 중</li>
+<li>이제 슬슬 이력서 작성할 때</li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2023/05/15/flutter/study_13th/week5/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2023-05-23 21:37:47
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/flutter-study-13th/" title="flutter-study-13th">
+                        <b>#</b> flutter-study-13th
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/flutter/" title="flutter">
+                        <b>#</b> flutter
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%EC%A7%84%ED%96%89%EB%8F%84"><span class="toc-text">진행도</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%86%8C%EA%B0%9C"><span class="toc-text">프로젝트 소개</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%EA%B8%B0%EC%A1%B4-%EC%9D%B4%EB%AF%B8%EC%A7%80-Crop-%EA%B4%80%EB%A0%A8-%ED%8C%A8%ED%82%A4%EC%A7%80-%EC%A1%B0%EC%82%AC"><span class="toc-text">기존 이미지 Crop 관련 패키지 조사</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#image-cropper"><span class="toc-text">image_cropper</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#crop"><span class="toc-text">crop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#crop-your-image"><span class="toc-text">crop_your_image</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#crop-image"><span class="toc-text">crop_image</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#custom-image-crop"><span class="toc-text">custom_image_crop</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%83%88%EB%A1%9C-%EA%B0%9C%EB%B0%9C%ED%95%98%EB%A0%A4%EB%8A%94-%ED%8C%A8%ED%82%A4%EC%A7%80%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90"><span class="toc-text">새로 개발하려는 패키지의 차이점</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%B5%9C%EC%A2%85-%EB%AA%A9%ED%91%9C"><span class="toc-text">최종 목표</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%EC%A3%BC%EA%B0%84-%ED%9A%8C%EA%B3%A0"><span class="toc-text">주간 회고</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/boring-km">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="kmjin@kakao.com">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="linkedin" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/">
+            <i class="iconfont icon-linkedin"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="TIL" target="_blank" rel="noopener" href="https://boring-km.github.io/TIL">
+            <i class="iconfont icon-emoji-friendly"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/boring-km">머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="내용 검색...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Flutter%20%EC%A4%91%EA%B8%89%EB%B0%98%20%EC%8A%A4%ED%84%B0%EB%94%94%2013%EA%B8%B0%206%EC%A3%BC%EC%B0%A8 + '&url=' + http%3A%2F%2Fexample.com%2F2023%2F05%2F23%2Fflutter%2Fstudy_13th%2Fweek6%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2023/05/23/flutter/study_13th/week6/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
