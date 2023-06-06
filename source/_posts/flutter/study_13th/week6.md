@@ -13,9 +13,9 @@ toc: true
 - [x]  3주차: 링크풀 테스트 코드 작성 및 리팩토링
 - [x]  4주차: 링크풀 테스트 코드 작성 및 리팩토링
 - [x]  5주차: 링크풀 테스트 코드 작성 및 리팩토링
-- [x]  6주차: 이미지 Custom Crop Plugin 개발
-- [ ]  7주차: 이미지 Custom Crop Plugin 개발
-- [ ]  8주차: 이미지 Custom Crop Plugin 개발
+- [x]  6주차: 이미지 Custom Crop Package 개발
+- [ ]  7주차: 이미지 Custom Crop Package 개발
+- [ ]  8주차: 이미지 Custom Crop Package 개발
 
 # 프로젝트 소개
 
