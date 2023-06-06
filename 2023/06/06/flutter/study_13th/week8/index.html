@@ -8,10 +8,13 @@
   <meta name="author" content="Kangmin" />
   <meta name="description" content="" />
   
-    <meta name="robots" content="noindex" />
-  
   
   <title>
+    
+      Flutter 중급반 스터디 13기 8주차 
+      
+      
+      |
     
      Kangmin Blog
   </title>
@@ -102,151 +105,199 @@
 
 
       <div class="flex-container">
-        <div class="container index">
-  <div class="post-list">
-    <!-- 遍历渲染文章 -->
-    
-      <div class="post-item" title="Clean Code 12장 - 창발성">
-        <div class="time-m-d">2021-11-19</div>
-        <div class="title">
-          <a href="/2021/11/19/clean_code/chapter12/">
-            
-              
-                <span>Clean Code 12장 - 창발성</span>
-              
-            
-          </a>
-        </div>
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Flutter 중급반 스터디 13기 8주차</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2023-06-06 13:35:42
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/flutter-study-13th/" title="flutter-study-13th">
+                    <b>#</b> flutter-study-13th
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/flutter/" title="flutter">
+                    <b>#</b> flutter
+                  </a>
+                </span>
+                
+              </span>
+          
       </div>
-    
-      <div class="post-item" title="6. Right-BICEP: 무엇을 테스트할 것인가?">
-        <div class="time-m-d">2021-11-09</div>
-        <div class="title">
-          <a href="/2021/11/09/junit/junit_06/">
-            
-              
-                <span>6. Right-BICEP: 무엇을 테스트할 것인가?</span>
-              
-            
-          </a>
-        </div>
+      <div class="markdown-body">
+        <h1 id="진행도"><a href="#진행도" class="headerlink" title="진행도"></a>진행도</h1><ul>
+<li><input checked="" disabled="" type="checkbox"> 1주차: 프로젝트 및 자기 소개</li>
+<li><input checked="" disabled="" type="checkbox"> 2주차: 프로필 소개 화면 Flutter Web으로 만들어보기</li>
+<li><input checked="" disabled="" type="checkbox"> 3주차: 링크풀 테스트 코드 작성 및 리팩토링</li>
+<li><input checked="" disabled="" type="checkbox"> 4주차: 링크풀 테스트 코드 작성 및 리팩토링</li>
+<li><input checked="" disabled="" type="checkbox"> 5주차: 링크풀 테스트 코드 작성 및 리팩토링</li>
+<li><input checked="" disabled="" type="checkbox"> 6주차: 이미지 Custom Crop Package 개발</li>
+<li><input checked="" disabled="" type="checkbox"> 7주차: 이미지 Custom Crop Package 개발</li>
+<li><input checked="" disabled="" type="checkbox"> 8주차: 이미지 Custom Crop Package 개발</li>
+</ul>
+<h1 id="pub-dev-배포"><a href="#pub-dev-배포" class="headerlink" title="pub.dev 배포"></a><a target="_blank" rel="noopener" href="http://pub.dev/">pub.dev</a> 배포</h1><p><a target="_blank" rel="noopener" href="https://pub.dev/packages/dynamic_image_crop">dynamic_image_crop | Flutter Package</a></p>
+<h3 id="외부-패키지-의존성-없이-하기"><a href="#외부-패키지-의존성-없이-하기" class="headerlink" title="외부 패키지 의존성 없이 하기"></a>외부 패키지 의존성 없이 하기</h3><ul>
+<li>이왕 패키지를 직접 만드는 기회이니만큼, 다른 패키지와의 의존성을 없애고 싶었음</li>
+<li>Native Code 의존성 없이 Dart 언어만으로 구현하고 싶었음</li>
+</ul>
+<h3 id="PUB-POINTS"><a href="#PUB-POINTS" class="headerlink" title="PUB POINTS"></a>PUB POINTS</h3><ul>
+<li>처음에 120점 나왔음<ol>
+<li>(-10점) Description 설명이 60자 ~ 120자로 적어야 하는데 너무 짧게 적었음</li>
+<li>(-10점) dartdoc comments를 20% 이상 적어야 점수 줌</li>
+</ol>
+</li>
+<li>해결하니 다시 만점으로 채점해줌</li>
+</ul>
+<h3 id="verified-publisher"><a href="#verified-publisher" class="headerlink" title="verified publisher"></a>verified publisher</h3><p><a target="_blank" rel="noopener" href="https://pub.dev/create-publisher">Authentication required</a></p>
+<p>등록하려면 Domain Name 소유하고 있어야 함.</p>
+<p>→ <a target="_blank" rel="noopener" href="http://boring-km.dev/">boring-km.dev</a> 로 Google Domains에서 도메인 구매</p>
+<h3 id="dart-pub-publish"><a href="#dart-pub-publish" class="headerlink" title="dart pub publish"></a>dart pub publish</h3><ul>
+<li>명령어 하나만으로 배포되는게 정말 편리했음</li>
+<li>publish 하면 <a target="_blank" rel="noopener" href="http://pub.dev/">pub.dev</a> 에서 자체적으로 analysis 한 뒤 평가됨 [PENDING ANALYSIS]</li>
+<li>Github Actions 사용해서 Automated publishing 해볼 예정</li>
+</ul>
+<p><img src="/images/flutter/study_13th/week8/img.png" alt="Untitled"></p>
+<h1 id="dynamic-image-crop-Demo"><a href="#dynamic-image-crop-Demo" class="headerlink" title="dynamic_image_crop Demo"></a>dynamic_image_crop Demo</h1><p><a target="_blank" rel="noopener" href="https://boring-km.dev/dynamic_image_crop/">https://boring-km.dev/dynamic_image_crop</a></p>
+<h1 id="남은-작업들"><a href="#남은-작업들" class="headerlink" title="남은 작업들"></a>남은 작업들</h1><ul>
+<li>테스트 코드 작성 - 실제로 사용자가 지정한 영역을 잘 자르고 있는지 확인</li>
+<li><a target="_blank" rel="noopener" href="http://readme.md/">README.md</a> 에 뱃지 이것저것 달아보기</li>
+<li>Github Actions로 publish 자동화할 브랜치 정하고 workflow 만들기</li>
+<li>CustomPaint 상속 객체 받아서 입력받은 도형대로 crop 할 수 있는 기능 추가</li>
+</ul>
+<h1 id="13기-스터디-회고"><a href="#13기-스터디-회고" class="headerlink" title="13기 스터디 회고"></a>13기 스터디 회고</h1><p>해야지 하고 미뤘던 작업들을 발표를 해야한다는 부담감을 갖고 하니까 목표대로 수행할 수 있었습니다.</p>
+<p>여태 혼자서만 flutter 개발 해오다가 다른 분들 개발하시는 것들도 구경해보고 좋은 기회였습니다. ㅎㅎ</p>
+<h2 id="질문"><a href="#질문" class="headerlink" title="질문?"></a>질문?</h2><ul>
+<li>Flutter 초급반은 어떤 느낌인가요..? 참여해보신 분이 계신지…</li>
+</ul>
+
       </div>
-    
-      <div class="post-item" title="아이템20. 추상 클래스보다는 인터페이스를 우선하라">
-        <div class="time-m-d">2021-10-22</div>
-        <div class="title">
-          <a href="/2021/10/22/effective_java/2021-10-22-item20/">
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
             
-              
-                <span>아이템20. 추상 클래스보다는 인터페이스를 우선하라</span>
-              
+              <a href="/2023/05/30/flutter/study_13th/week7/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
             
-          </a>
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2023-06-06 13:35:42
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/flutter-study-13th/" title="flutter-study-13th">
+                        <b>#</b> flutter-study-13th
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/flutter/" title="flutter">
+                        <b>#</b> flutter
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
         </div>
-      </div>
+      
+    </div>
     
-      <div class="post-item" title="아이템19. 상속을 고려해 설계하고 문서화하라. 그러지 않았다면 상속을 금지하라">
-        <div class="time-m-d">2021-10-18</div>
-        <div class="title">
-          <a href="/2021/10/18/effective_java/2021-10-18-item19/">
-            
-              
-                <span>아이템19. 상속을 고려해 설계하고 문서화하라. 그러지 않았다면 상속을 금지하라</span>
-              
-            
-          </a>
-        </div>
-      </div>
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%EC%A7%84%ED%96%89%EB%8F%84"><span class="toc-text">진행도</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#pub-dev-%EB%B0%B0%ED%8F%AC"><span class="toc-text">pub.dev 배포</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%99%B8%EB%B6%80-%ED%8C%A8%ED%82%A4%EC%A7%80-%EC%9D%98%EC%A1%B4%EC%84%B1-%EC%97%86%EC%9D%B4-%ED%95%98%EA%B8%B0"><span class="toc-text">외부 패키지 의존성 없이 하기</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PUB-POINTS"><span class="toc-text">PUB POINTS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#verified-publisher"><span class="toc-text">verified publisher</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dart-pub-publish"><span class="toc-text">dart pub publish</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dynamic-image-crop-Demo"><span class="toc-text">dynamic_image_crop Demo</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%EB%82%A8%EC%9D%80-%EC%9E%91%EC%97%85%EB%93%A4"><span class="toc-text">남은 작업들</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#13%EA%B8%B0-%EC%8A%A4%ED%84%B0%EB%94%94-%ED%9A%8C%EA%B3%A0"><span class="toc-text">13기 스터디 회고</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%A7%88%EB%AC%B8"><span class="toc-text">질문?</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
     
-      <div class="post-item" title="아이템18. 상속보다는 컴포지션을 사용하라">
-        <div class="time-m-d">2021-10-14</div>
-        <div class="title">
-          <a href="/2021/10/14/effective_java/2021-10-14-item18/">
-            
-              
-                <span>아이템18. 상속보다는 컴포지션을 사용하라</span>
-              
-            
-          </a>
-        </div>
-      </div>
-    
-      <div class="post-item" title="5. 좋은 테스트의 FIRST 속성">
-        <div class="time-m-d">2021-10-05</div>
-        <div class="title">
-          <a href="/2021/10/05/junit/junit_05/">
-            
-              
-                <span>5. 좋은 테스트의 FIRST 속성</span>
-              
-            
-          </a>
-        </div>
-      </div>
-    
-      <div class="post-item" title="4. JUnit 단언 깊게 파기">
-        <div class="time-m-d">2021-09-30</div>
-        <div class="title">
-          <a href="/2021/09/30/junit/junit_04/">
-            
-              
-                <span>4. JUnit 단언 깊게 파기</span>
-              
-            
-          </a>
-        </div>
-      </div>
-    
-      <div class="post-item" title="3. JUnit 단언 깊게 파기">
-        <div class="time-m-d">2021-08-30</div>
-        <div class="title">
-          <a href="/2021/08/30/junit/junit_03/">
-            
-              
-                <span>3. JUnit 단언 깊게 파기</span>
-              
-            
-          </a>
-        </div>
-      </div>
-    
-      <div class="post-item" title="아이템17. 변경 가능성을 최소화하라">
-        <div class="time-m-d">2021-08-22</div>
-        <div class="title">
-          <a href="/2021/08/22/effective_java/2021-08-22-item17/">
-            
-              
-                <span>아이템17. 변경 가능성을 최소화하라</span>
-              
-            
-          </a>
-        </div>
-      </div>
-    
-      <div class="post-item" title="2. JUnit 진짜로 써 보기">
-        <div class="time-m-d">2021-08-21</div>
-        <div class="title">
-          <a href="/2021/08/21/junit/junit_02/">
-            
-              
-                <span>2. JUnit 진짜로 써 보기</span>
-              
-            
-          </a>
-        </div>
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
       </div>
     
   </div>
-  <nav class="post-navigation">
-    
-      <a href="/page/5/"><i class="iconfont icon-angleleft"></i></a>
-    
-    <span class="page-num">6 / 9</span>
-    
-      <a href="/page/7/"><i class="iconfont icon-angleright"></i></a>
-    
-  </nav>
-</div>
+
 
         <div class="footer">
   <div class="social">
@@ -515,6 +566,24 @@
 
 
         
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Flutter%20%EC%A4%91%EA%B8%89%EB%B0%98%20%EC%8A%A4%ED%84%B0%EB%94%94%2013%EA%B8%B0%208%EC%A3%BC%EC%B0%A8 + '&url=' + http%3A%2F%2Fexample.com%2F2023%2F06%2F06%2Fflutter%2Fstudy_13th%2Fweek8%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2023/06/06/flutter/study_13th/week8/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
   
   
 <script src="/js/shares.js"></script>
