@@ -4,11 +4,65 @@
   
     
     <entry>
+      <title>Flutter 중급반 스터디 14기 2주차</title>
+      <link href="/2023/07/03/flutter/study_14th/week2/"/>
+      <url>/2023/07/03/flutter/study_14th/week2/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Flutter-Flame으로-간단한-게임-만들어보기"><a href="#Flutter-Flame으로-간단한-게임-만들어보기" class="headerlink" title="Flutter Flame으로 간단한 게임 만들어보기"></a>Flutter Flame으로 간단한 게임 만들어보기</h2><ul><li>Dodge Game → 총알 피하기 게임..?</li><li>2022년 8월 정도쯤 개발하다가 딴거하느라 바빠서 손 떼었던 프로젝트 살리기</li><li>간단한 상태관리는 Getx로 진행 → 이유는 딱히 없고 빨리 만들어보고 싶어서 선택했던걸로 기억</li><li>Firebase Auth랑 Cloud Firestore 사용해 사용자 정보 저장함.</li></ul><h2 id="자바-초보-시절-만들었던-게임-군대-전역-직후…"><a href="#자바-초보-시절-만들었던-게임-군대-전역-직후…" class="headerlink" title="자바 초보 시절 만들었던 게임 (군대 전역 직후…)"></a>자바 초보 시절 만들었던 게임 (군대 전역 직후…)</h2><ul><li>Swing으로 만들었음</li><li>그림은 전부 파워포인트 + 그림판</li><li>배경음악은 대충 저작권 없는 음원 찾아서 넣음</li><li><a href="https://github.com/boring-km/Java-Dodge-Game">https://github.com/boring-km/Java-Dodge-Game</a></li></ul><h2 id="주요-게임-화면"><a href="#주요-게임-화면" class="headerlink" title="주요 게임 화면"></a>주요 게임 화면</h2><ul><li>카카오 로그인도 넣었다가 귀찮아서 뺌</li><li>나중에 출시하려면 애플로그인도 하나 끼워넣어야 할듯.</li></ul><p><img src="/images/flutter/study_14th/week2/img.png" alt="img.png"></p><p><img src="/images/flutter/study_14th/week2/img_1.png" alt="img_1.png"></p><p><img src="/images/flutter/study_14th/week2/img_2.png" alt="img_2.png"></p><ul><li>스마트폰 기기를 기울여서 움직임 <a href="https://pub.dev/packages/sensors_plus">https://pub.dev/packages/sensors_plus</a> 사용<ul><li>학생 때 재밌게 했던 게임이 이 방식이었는데 아무리 검색해봐도 안나오는데 그리워서 채용</li></ul></li><li>조이스틱으로 하는 방법도 구현은 해봤는데 개성이 별로 없는거 같음 + 조이스틱에 가려져서 보기 흉해짐</li></ul><p><img src="/images/flutter/study_14th/week2/img_3.png" alt="img_3.png"></p><h2 id="개선안"><a href="#개선안" class="headerlink" title="개선안?"></a>개선안?</h2><ul><li><p>스테이지 부여해서 점점 어려워지도록 하기</p></li><li><p>다양한 유형의 총알? 만들기</p><ul><li>멀리서 일직선으로 선 그리면서 오는 Enemy</li><li>n초 동안 느린 속도로 따라오다가 사라지는 Enemy</li><li>etc…</li></ul></li><li><p>광고 넣어보기 → 보통 Flutter 앱에서 광고 넣으면 어떤거 사용하나요?</p><ul><li>GPT의 답변</li></ul><p><img src="/images/flutter/study_14th/week2/img_4.png" alt="img.png"></p></li><li><p>결론: <a href="https://pub.dev/packages/functional_google_mobile_ads">https://pub.dev/packages/functional_google_mobile_ads</a> 사용해보기</p></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> flutter-study-14th </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> dev </tag>
+            
+            <tag> flutter </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Flutter 중급반 스터디 14기 1주차</title>
+      <link href="/2023/06/26/flutter/study_14th/week1/"/>
+      <url>/2023/06/26/flutter/study_14th/week1/</url>
+      
+        <content type="html"><![CDATA[<h2 id="자기-소개"><a href="#자기-소개" class="headerlink" title="자기 소개"></a>자기 소개</h2><p>경기도 남양주시 거주</p><p>회사에서는 주니어 개발자로서 성장하기에 너무 아쉬운 환경이라 따로 공부나 사이드 프로젝트하며 기회를 엿보는 중</p><p>이직 준비 중이었는데 8월 말에 해외선교 가게 되어서 곤란해짐</p><p>일일커밋 중 → 그냥 습관처럼 하면 실력이 늘지 않을까해서 시작함</p><ul><li>Flutter 스터디도 그런 이유로 하는 중</li></ul><p>Flutter는 21년 초부터 해봤음</p><p>회사에서는 신규 프로젝트는 Flutter 위주로 개발하고, 기존 Android 프로젝트 유지보수 겸하고 있음</p><h2 id="스터디-예상-주제"><a href="#스터디-예상-주제" class="headerlink" title="스터디 예상 주제"></a>스터디 예상 주제</h2><ul><li>Flame을 이용한 Dodge 게임 완성해보기</li><li>프로토타입 개발하기 (사이드 프로젝트, 제로 웨이스트 관련)<ul><li>비사이드라는 플랫폼에서 팀 빌딩 → <a href="https://bside.best/potenday">https://bside.best/potenday</a></li></ul></li><li>기존 사이드 프로젝트 유지보수 및 테스트 코드 작성</li><li>저번 기수에 만들었던 <a href="https://pub.dev/packages/dynamic_image_crop">패키지</a> 테스트 코드 작성</li><li>tensorflow_lite + flutter 해보기</li></ul><h2 id="14기-주요-목적"><a href="#14기-주요-목적" class="headerlink" title="14기 주요 목적"></a>14기 주요 목적</h2><ul><li>새로 시작할 사이드 프로젝트와 회사에서 7월부터 개발 시작할 프로젝트에 모두 riverpod 적용할 예정이라 능숙해지는 것이 주 목적</li></ul><h2 id="공유-방식"><a href="#공유-방식" class="headerlink" title="공유 방식"></a>공유 방식</h2><ul><li>노션 이용</li><li>코드 공유가 필요하면 IntelliJ 사용</li><li>내가 새롭게 배운 내용 위주로 진행</li><li>준비하다가 질문할 내용이 있으면 적기</li><li>저번 기수는 계획을 8주 꽉 채워서 했는데, 이번엔 좀 유동적으로</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> flutter-study-14th </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> dev </tag>
+            
+            <tag> flutter </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Flutter 중급반 스터디 13기 8주차</title>
       <link href="/2023/06/06/flutter/study_13th/week8/"/>
       <url>/2023/06/06/flutter/study_13th/week8/</url>
       
-        <content type="html"><![CDATA[<h1 id="진행도"><a href="#진행도" class="headerlink" title="진행도"></a>진행도</h1><ul><li><input checked="" disabled="" type="checkbox"> 1주차: 프로젝트 및 자기 소개</li><li><input checked="" disabled="" type="checkbox"> 2주차: 프로필 소개 화면 Flutter Web으로 만들어보기</li><li><input checked="" disabled="" type="checkbox"> 3주차: 링크풀 테스트 코드 작성 및 리팩토링</li><li><input checked="" disabled="" type="checkbox"> 4주차: 링크풀 테스트 코드 작성 및 리팩토링</li><li><input checked="" disabled="" type="checkbox"> 5주차: 링크풀 테스트 코드 작성 및 리팩토링</li><li><input checked="" disabled="" type="checkbox"> 6주차: 이미지 Custom Crop Package 개발</li><li><input checked="" disabled="" type="checkbox"> 7주차: 이미지 Custom Crop Package 개발</li><li><input checked="" disabled="" type="checkbox"> 8주차: 이미지 Custom Crop Package 개발</li></ul><h1 id="pub-dev-배포"><a href="#pub-dev-배포" class="headerlink" title="pub.dev 배포"></a><a href="http://pub.dev/">pub.dev</a> 배포</h1><p><a href="https://pub.dev/packages/dynamic_image_crop">dynamic_image_crop | Flutter Package</a></p><h3 id="외부-패키지-의존성-없이-하기"><a href="#외부-패키지-의존성-없이-하기" class="headerlink" title="외부 패키지 의존성 없이 하기"></a>외부 패키지 의존성 없이 하기</h3><ul><li>이왕 패키지를 직접 만드는 기회이니만큼, 다른 패키지와의 의존성을 없애고 싶었음</li><li>Native Code 의존성 없이 Dart 언어만으로 구현하고 싶었음</li></ul><h3 id="PUB-POINTS"><a href="#PUB-POINTS" class="headerlink" title="PUB POINTS"></a>PUB POINTS</h3><ul><li>처음에 120점 나왔음<ol><li>(-10점) Description 설명이 60자 ~ 120자로 적어야 하는데 너무 짧게 적었음</li><li>(-10점) dartdoc comments를 20% 이상 적어야 점수 줌</li></ol></li><li>해결하니 다시 만점으로 채점해줌</li></ul><h3 id="verified-publisher"><a href="#verified-publisher" class="headerlink" title="verified publisher"></a>verified publisher</h3><p><a href="https://pub.dev/create-publisher">Authentication required</a></p><p>등록하려면 Domain Name 소유하고 있어야 함.</p><p>→ <a href="http://boring-km.dev/">boring-km.dev</a> 로 Google Domains에서 도메인 구매</p><h3 id="dart-pub-publish"><a href="#dart-pub-publish" class="headerlink" title="dart pub publish"></a>dart pub publish</h3><ul><li>명령어 하나만으로 배포되는게 정말 편리했음</li><li>publish 하면 <a href="http://pub.dev/">pub.dev</a> 에서 자체적으로 analysis 한 뒤 평가됨 [PENDING ANALYSIS]</li><li>Github Actions 사용해서 Automated publishing 해볼 예정</li></ul><p><img src="/images/flutter/study_13th/week8/img.png" alt="Untitled"></p><h1 id="dynamic-image-crop-Demo"><a href="#dynamic-image-crop-Demo" class="headerlink" title="dynamic_image_crop Demo"></a>dynamic_image_crop Demo</h1><p><a href="https://boring-km.dev/dynamic_image_crop/">https://boring-km.dev/dynamic_image_crop</a></p><h1 id="남은-작업들"><a href="#남은-작업들" class="headerlink" title="남은 작업들"></a>남은 작업들</h1><ul><li>테스트 코드 작성 - 실제로 사용자가 지정한 영역을 잘 자르고 있는지 확인</li><li><a href="http://readme.md/">README.md</a> 에 뱃지 이것저것 달아보기</li><li>Github Actions로 publish 자동화할 브랜치 정하고 workflow 만들기</li><li>CustomPaint 상속 객체 받아서 입력받은 도형대로 crop 할 수 있는 기능 추가</li></ul><h1 id="13기-스터디-회고"><a href="#13기-스터디-회고" class="headerlink" title="13기 스터디 회고"></a>13기 스터디 회고</h1><p>해야지 하고 미뤘던 작업들을 발표를 해야한다는 부담감을 갖고 하니까 목표대로 수행할 수 있었습니다.</p><p>여태 혼자서만 flutter 개발 해오다가 다른 분들 개발하시는 것들도 구경해보고 좋은 기회였습니다. ㅎㅎ</p><h2 id="질문"><a href="#질문" class="headerlink" title="질문?"></a>질문?</h2><ul><li>Flutter 초급반은 어떤 느낌인가요..? 참여해보신 분이 계신지…</li></ul>]]></content>
+        <content type="html"><![CDATA[<h1 id="진행도"><a href="#진행도" class="headerlink" title="진행도"></a>진행도</h1><ul><li><input checked="" disabled="" type="checkbox"> 1주차: 프로젝트 및 자기 소개</li><li><input checked="" disabled="" type="checkbox"> 2주차: 프로필 소개 화면 Flutter Web으로 만들어보기</li><li><input checked="" disabled="" type="checkbox"> 3주차: 링크풀 테스트 코드 작성 및 리팩토링</li><li><input checked="" disabled="" type="checkbox"> 4주차: 링크풀 테스트 코드 작성 및 리팩토링</li><li><input checked="" disabled="" type="checkbox"> 5주차: 링크풀 테스트 코드 작성 및 리팩토링</li><li><input checked="" disabled="" type="checkbox"> 6주차: 이미지 Custom Crop Package 개발</li><li><input checked="" disabled="" type="checkbox"> 7주차: 이미지 Custom Crop Package 개발</li><li><input checked="" disabled="" type="checkbox"> 8주차: 이미지 Custom Crop Package 개발</li></ul><h1 id="pub-dev-배포"><a href="#pub-dev-배포" class="headerlink" title="pub.dev 배포"></a><a href="http://pub.dev/">pub.dev</a> 배포</h1><p><a href="https://pub.dev/packages/dynamic_image_crop">dynamic_image_crop | Flutter Package</a></p><h3 id="외부-패키지-의존성-없이-하기"><a href="#외부-패키지-의존성-없이-하기" class="headerlink" title="외부 패키지 의존성 없이 하기"></a>외부 패키지 의존성 없이 하기</h3><ul><li>이왕 패키지를 직접 만드는 기회이니만큼, 다른 패키지와의 의존성을 없애고 싶었음</li><li>Native Code 의존성 없이 Dart 언어만으로 구현하고 싶었음</li></ul><h3 id="PUB-POINTS"><a href="#PUB-POINTS" class="headerlink" title="PUB POINTS"></a>PUB POINTS</h3><ul><li>처음에 120점 나왔음<ol><li>(-10점) Description 설명이 60자 ~ 120자로 적어야 하는데 너무 짧게 적었음</li><li>(-10점) dartdoc comments를 20% 이상 적어야 점수 줌</li></ol></li><li>해결하니 다시 만점으로 채점해줌</li></ul><h3 id="verified-publisher"><a href="#verified-publisher" class="headerlink" title="verified publisher"></a>verified publisher</h3><p><a href="https://pub.dev/create-publisher">Authentication required</a></p><p>등록하려면 Domain Name 소유하고 있어야 함.</p><p>→ <a href="http://boring-km.dev/">boring-km.dev</a> 로 Google Domains에서 도메인 구매</p><h3 id="dart-pub-publish"><a href="#dart-pub-publish" class="headerlink" title="dart pub publish"></a>dart pub publish</h3><ul><li>명령어 하나만으로 배포되는게 정말 편리했음</li><li>publish 하면 <a href="http://pub.dev/">pub.dev</a> 에서 자체적으로 analysis 한 뒤 평가됨 [PENDING ANALYSIS]</li><li>Github Actions 사용해서 Automated publishing 해볼 예정</li></ul><p><img src="/images/flutter/study_13th/week8/img.png" alt="Untitled"></p><h1 id="dynamic-image-crop-Demo"><a href="#dynamic-image-crop-Demo" class="headerlink" title="dynamic_image_crop Demo"></a>dynamic_image_crop Demo</h1><p><a href="https://boring-km.dev/dynamic_image_crop/">https://boring-km.dev/dynamic_image_crop</a></p><h1 id="남은-작업들"><a href="#남은-작업들" class="headerlink" title="남은 작업들"></a>남은 작업들</h1><ul><li>테스트 코드 작성 - 실제로 사용자가 지정한 영역을 잘 자르고 있는지 확인</li><li><a href="http://readme.md/">README.md</a> 에 뱃지 이것저것 달아보기</li><li>Github Actions로 publish 자동화할 브랜치 정하고 workflow 만들기</li><li>CustomPaint 상속 객체 받아서 입력받은 도형대로 crop 할 수 있는 기능 추가</li></ul><h1 id="13기-스터디-회고"><a href="#13기-스터디-회고" class="headerlink" title="13기 스터디 회고"></a>13기 스터디 회고</h1><p>해야지 하고 미뤘던 작업들을 발표를 해야한다는 부담감을 갖고 하니까 목표대로 수행할 수 있었습니다.</p><p>여태 혼자서만 flutter 개발 해오다가 다른 분들 개발하시는 것들도 구경해보고 좋은 기회였습니다. ㅎㅎ</p>]]></content>
       
       
       <categories>
