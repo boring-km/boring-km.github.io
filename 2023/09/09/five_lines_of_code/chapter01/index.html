@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Kangmin" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      Five Lines of Code - Chapter 01 
+      
+      
+      |
+    
+     Kangmin Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+
+  <!-- jquery3.3.1 -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- fancybox -->
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">boring-km</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Five Lines of Code - Chapter 01</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="Update time"></i>
+          2023-09-09 21:12:57
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/five-lines-of-code/" title="five-lines-of-code">
+                    <b>#</b> five-lines-of-code
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="Tags"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/dev/" title="dev">
+                    <b>#</b> dev
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/refactoring/" title="refactoring">
+                    <b>#</b> refactoring
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="1-Refactoring-Refactoring"><a href="#1-Refactoring-Refactoring" class="headerlink" title="1. Refactoring Refactoring"></a>1. Refactoring Refactoring</h1><p><a target="_blank" rel="noopener" href="https://www.notion.so/1-Refactoring-Refactoring-9c026e40f2f6433eafa240fcca8d2396?pvs=4">You can also read in Notion</a></p>
+<h1 id="책-내용-정리"><a href="#책-내용-정리" class="headerlink" title="책 내용 정리"></a>책 내용 정리</h1><ul>
+<li>Skill, Culture, Tool 요소가 모두 필요한 리팩터링</li>
+</ul>
+<h2 id="1-1-리팩터링이란-무엇인가"><a href="#1-1-리팩터링이란-무엇인가" class="headerlink" title="1.1 리팩터링이란 무엇인가?"></a>1.1 리팩터링이란 무엇인가?</h2><h3 id="리팩터링을-해야하는-이유"><a href="#리팩터링을-해야하는-이유" class="headerlink" title="리팩터링을 해야하는 이유"></a>리팩터링을 해야하는 이유</h3><ul>
+<li>코드를 더 빠르게 만들기 위해</li>
+<li>더 작은 코드를 만들기 위해</li>
+<li>코드를 더 일반적이거나 재사용 가능하게 하기 위해</li>
+<li>코드의 가독성을 높이고 유지보수를 용이하게 하기 위해</li>
+</ul>
+<aside>
+💡 좋은 코드: 사람이 읽기 쉽고, 유지보수가 용이하며, 의도한 대로 잘 동작하는 코드
+
+</aside>
+
+<aside>
+💡 Refactoring: 기능을 변경하지 않고 코드의 가독성과 유지보수가 쉽도록 코드를 변경하는 것
+
+</aside>
+
+<h2 id="1-2-Skill-무엇을-리팩터링할-것인가"><a href="#1-2-Skill-무엇을-리팩터링할-것인가" class="headerlink" title="1.2 Skill: 무엇을 리팩터링할 것인가?"></a>1.2 Skill: 무엇을 리팩터링할 것인가?</h2><p><strong>Code Smell: 코드가 나쁘다는 것을 암시</strong></p>
+<p><strong>코드 스멜과 규칙은 완전히 겹칠 수 없다</strong></p>
+<p>이 책에서 제시하는 ‘다섯 줄 제한’ 규칙에 명심해보자</p>
+<h2 id="1-3-Culture-리팩터링은-언제-할까"><a href="#1-3-Culture-리팩터링은-언제-할까" class="headerlink" title="1.3 Culture: 리팩터링은 언제 할까?"></a>1.3 Culture: 리팩터링은 언제 할까?</h2><p>리팩터링은 정기적으로 수행하는 것이 효과적이고 비용이 적게 들기 때문에 가능하면 일상 업무에 통합하는 것이 좋다.</p>
+<p>Green-Red-Refactor의 테스트 주도 개발 방식을 벗어난 6단계 절차</p>
+<ol>
+<li>탐색: 무엇을 만드는지 실험부터 시작해보자</li>
+<li>명세화: 무엇을 만들지 알게 되면 그것을 명세화하자</li>
+<li>구현: 코드 구현</li>
+<li>테스트: 코드가 2단계의 명세를 따르는지 확인하자</li>
+<li>리팩터링: 코드를 전달하기 전에 다음 사람이 쉽게 작업할 수 있는지 확인한다.</li>
+<li>전달: Pull Request나 특정 branch로 Push하는 방법</li>
+</ol>
+<p><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>리팩터링 5단계</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p>
+<ol>
+<li>메서드 선택</li>
+<li>메서드가 규칙을 위반했는가? (Yes → 1. 메서드 선택)</li>
+<li>규칙에 해당하는 리팩터링 패턴 찾기 (No)</li>
+<li>지시에 따르기</li>
+<li>모든 컴파일 오류 수정하기</li>
+</ol>
+<p><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>리팩터링이 필요하지 않는 3가지 경우</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p>
+<ol>
+<li>한 번 실행하고 삭제할 코드</li>
+<li>폐기되기 전 유지보수 모드에 있는 코드</li>
+<li>임베디드 시스템이나 게임의 고급 물리엔진과 같이 엄격한 성능 요구사항이 있는 코드</li>
+</ol>
+<h2 id="1-4-Tool-안전한-리팩터링-방법"><a href="#1-4-Tool-안전한-리팩터링-방법" class="headerlink" title="1.4 Tool: (안전한) 리팩터링 방법"></a>1.4 Tool: (안전한) 리팩터링 방법</h2><p><em><strong>자동화된 테스트를 통해 안전한 브레이크를 확보하자</strong></em></p>
+<p>이 책에서는 새로운 스킬을 배우는 것이기 때문에 천천히 가도 된다. (일단 배제하라는 의미 같음)</p>
+<ul>
+<li>레시피처럼 상세하고 단계별로 구조화된 리팩터링 패턴</li>
+<li>버전 관리(Git)</li>
+<li>컴파일러</li>
+</ul>
+<h2 id="1-5-시작하는-데-필요한-도구-생략"><a href="#1-5-시작하는-데-필요한-도구-생략" class="headerlink" title="1.5 시작하는 데 필요한 도구 (생략)"></a>1.5 시작하는 데 필요한 도구 (생략)</h2><h2 id="1-6-핵심-예제-2D-퍼즐-게임"><a href="#1-6-핵심-예제-2D-퍼즐-게임" class="headerlink" title="1.6 핵심 예제: 2D 퍼즐 게임"></a>1.6 핵심 예제: 2D 퍼즐 게임</h2><p><a target="_blank" rel="noopener" href="https://github.com/wikibook/five-lines.git">https://github.com/wikibook/five-lines.git</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/wikibook/bomb-guy">https://github.com/wikibook/bomb-guy</a></p>
+<h2 id="1-7-실제-환경에서-소프트웨어에-대한-주의-사항"><a href="#1-7-실제-환경에서-소프트웨어에-대한-주의-사항" class="headerlink" title="1.7 실제 환경에서 소프트웨어에 대한 주의 사항"></a>1.7 실제 환경에서 소프트웨어에 대한 주의 사항</h2><ul>
+<li>실무에서 적용하기 위한 리팩터링 규칙을 배우는 책이다.</li>
+<li>코드 스멜에 대한 기본적인 이해를 쌓자</li>
+<li>더 잘 알 때까지 규칙을 따르자</li>
+</ul>
+<h1 id="요약"><a href="#요약" class="headerlink" title="요약"></a>요약</h1><ul>
+<li>리팩터링을 수행하려면 리팩터링 대상을 식별하는 <strong>Skill</strong>과 리팩터링 단계를 명시적으로 가진 <strong>Culture</strong>, 리팩터링을 돕는 <strong>Tool</strong>의 조합이 필요하다.</li>
+<li>일반적으로 Code Smell은 리팩터링 대상을 설명하는 데 사용된다. 이 책에서 학습하는 동안 Code Smell을 대체할 구체적인 규칙을 제공한다.</li>
+<li>3가지 추상화 수준: 매우 구체적인 이름, 예외 형태로 뉘앙스를 더하는 설명, 그것들이 나오게 된 Smell의 의도</li>
+<li>자동화된 테스트와 리팩터링을 별도로 학습하면 진입 장벅을 낮출 수 있다. 여기서는 자동화된 테스트 대신 컴파일러, 버전 관리 및 수동 테스트를 사용한다.</li>
+<li>리팩터링의 작업 절차는 보통 Red-Green-Refactor의 방식이나 이는 자동화된 테스트에 의존했을 때의 얘기이다.<br>여기서는 새로운 코드를 만들 때 사용하는 6단계의 작업 절차로 수행해본다. (탐색 - 명세화 - 구현 - 테스트 - 리팩터링 - 전달)</li>
+</ul>
+<h2 id="내-생각-x2F-느낀점"><a href="#내-생각-x2F-느낀점" class="headerlink" title="내 생각&#x2F;느낀점"></a>내 생각&#x2F;느낀점</h2><ul>
+<li>자동화 테스트의 중요성!</li>
+<li>이 책에서 어떤 리팩터링 기법&#x2F;패턴&#x2F;규칙들을 소개해 줄지 조금 기대가 된다.</li>
+<li>무의식적으로 코드를 정리하다보면 기능까지 조금 개선하면서 리팩토링을 할 때가 있는데, 옳은 방법이었는지 아닌지 확인이 필요할 것 같다. (리팩터링의 정의만 보면 기능은 일체 바꾸지 않는 것처럼 정의하고 있음)</li>
+</ul>
+<blockquote>
+<p><em>”이 책에서는 완전히 새로운 스킬을 배우기 때문”</em> 이라는 문구가 나오는데, 얼마나 대단하길래 새롭다는 말을 하는지 궁금해졌다.</p>
+</blockquote>
+<p>회사 업무에 적용한다면? (신규 프로젝트 or 새로운 기능 추가 상황)</p>
+<ol>
+<li>탐색: 새로 개발할 기능이 구현 가능한 기술인지 검증</li>
+<li>명세화: Jira 개인 업무 리스트에 추가</li>
+<li>구현: 코드 작성</li>
+<li>테스트: 테스트 코드 작성 or 직접 테스트</li>
+<li>리팩터링: 코드 리팩터링 수행</li>
+<li>전달: 대부분 개인 프로젝트라 전달할 일이 없긴 하지만, 여럿이서 하는 프로젝트라면 현재 PR 올릴 수단이 없으니 특정 branch로 Push하고<br>해당 Git Repository 담당자에게 Push한 branch의 리뷰를 요청한다.</li>
+</ol>
+<h1 id="억지로-규칙-적용해보기"><a href="#억지로-규칙-적용해보기" class="headerlink" title="억지로 규칙 적용해보기"></a>억지로 규칙 적용해보기</h1><h2 id="이슈"><a href="#이슈" class="headerlink" title="이슈"></a>이슈</h2><ul>
+<li>전에 만들었던 Flutter 이미지 Crop 패키지를 개선해야 하는 상황이 있었음</li>
+<li>Flutter 3.10.x → 3.13.x 버전으로 올라가면서 이에 대응해야 할 필요도 있었음</li>
+<li>Flutter의 오픈 소스 라이브러리 공개 사이트인 pub.dev에서는 업로드한 공개 라이브러리의 점수를 평가하는 게 있는데, 여기서 점수가 일부 깎여 있어 다시 채우고자 했음<br><br/><a target="_blank" rel="noopener" href="https://github.com/boring-km/dynamic_image_crop/issues/11">https://github.com/boring-km/dynamic_image_crop/issues/11</a></li>
+</ul>
+<h3 id="기존-리팩터링-방식"><a href="#기존-리팩터링-방식" class="headerlink" title="기존 리팩터링 방식"></a>기존 리팩터링 방식</h3><ul>
+<li>Red: <a target="_blank" rel="noopener" href="https://github.com/boring-km/dynamic_image_crop/pull/10">https://github.com/boring-km/dynamic_image_crop/pull/10</a></li>
+<li>Green: <a target="_blank" rel="noopener" href="https://github.com/boring-km/dynamic_image_crop/pull/12">https://github.com/boring-km/dynamic_image_crop/pull/12</a></li>
+<li>Refactoring: <a target="_blank" rel="noopener" href="https://github.com/boring-km/dynamic_image_crop/commit/1fa211f84a7b49b37a47a0442f7dab7c369dafce">https://github.com/boring-km/dynamic_image_crop/commit/1fa211f84a7b49b37a47a0442f7dab7c369dafce</a></li>
+</ul>
+<h3 id="끼워-맞춰-보기"><a href="#끼워-맞춰-보기" class="headerlink" title="끼워 맞춰 보기"></a>끼워 맞춰 보기</h3><ol>
+<li><p>탐색: 이슈 확인</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/boring-km/dynamic_image_crop/actions/runs/6058750212/job/16441185826?pr=12">Update 0.0.9 · boring-km&#x2F;dynamic_image_crop@4955089</a></p>
+</li>
+<li><p>명세화: 무엇을 만들지 알게 되면 그것을 명세화하자</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/boring-km/dynamic_image_crop/issues/13">https://github.com/boring-km/dynamic_image_crop/issues/13</a></p>
+</li>
+<li><p>구현: 코드 구현</p>
+<ul>
+<li>(새로 개발하는 기능이 있다면 여기서…)</li>
+</ul>
+</li>
+<li><p>테스트: 코드가 2단계의 명세를 따르는지 확인하자</p>
+<p>expected behavior: All test passed!</p>
+<p><a target="_blank" rel="noopener" href="https://app.codecov.io/gh/boring-km/dynamic_image_crop">Codecov</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/boring-km/dynamic_image_crop/actions/runs/6058912112/job/16441485532">Update 0.0.9 · boring-km&#x2F;dynamic_image_crop@bf78318</a></p>
+</li>
+<li><p>리팩터링: 코드를 전달하기 전에 다음 사람이 쉽게 작업할 수 있는지 확인한다.</p>
+<ul>
+<li>(새로 개발한 기능에 대해 리팩토링 수행…)</li>
+<li>여기서는 bug fix: <a target="_blank" rel="noopener" href="https://github.com/boring-km/dynamic_image_crop/pull/12/commits/bf78318656d70b36c79426f804a3f498214cf34d">https://github.com/boring-km/dynamic_image_crop/pull/12/commits/bf78318656d70b36c79426f804a3f498214cf34d</a></li>
+</ul>
+</li>
+<li><p>전달: Pull Request나 특정 branch로 Push하는 방법</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/boring-km/dynamic_image_crop/pull/12">https://github.com/boring-km/dynamic_image_crop/pull/12</a></p>
+</li>
+</ol>
+<blockquote>
+<p>결론: <strong>bugfix</strong>와 <strong>refactoring</strong>은 다르다.</p>
+</blockquote>
+<h1 id="최근에-수행했던-다른-리팩터링"><a href="#최근에-수행했던-다른-리팩터링" class="headerlink" title="최근에 수행했던 다른 리팩터링"></a>최근에 수행했던 다른 리팩터링</h1><p><a target="_blank" rel="noopener" href="https://github.com/boring-km/Android_Simple_Counter/commit/71b082e8128b2f06ecd3bc8b6097b16d1dc9edd7">https://github.com/boring-km/Android_Simple_Counter/commit/71b082e8128b2f06ecd3bc8b6097b16d1dc9edd7</a></p>
+<h1 id="예제-분석-및-Re-Engineering-to-Compose-Multiplatform"><a href="#예제-분석-및-Re-Engineering-to-Compose-Multiplatform" class="headerlink" title="예제 분석 및 Re-Engineering to Compose Multiplatform"></a>예제 분석 및 Re-Engineering to Compose Multiplatform</h1><p><a target="_blank" rel="noopener" href="https://github.com/FiveLinesofCodeStudy/2D-Puzzle-Compose">https://github.com/FiveLinesofCodeStudy/2D-Puzzle-Compose</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/FiveLinesofCodeStudy/Bomb-Guy-Compose">https://github.com/FiveLinesofCodeStudy/Bomb-Guy-Compose</a></p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2023/08/07/flutter/study_14th/week7/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="Update time"></i>
+              2023-09-09 21:12:57
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/five-lines-of-code/" title="five-lines-of-code">
+                        <b>#</b> five-lines-of-code
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="Tags"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/dev/" title="dev">
+                        <b>#</b> dev
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/refactoring/" title="refactoring">
+                        <b>#</b> refactoring
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Refactoring-Refactoring"><span class="toc-text">1. Refactoring Refactoring</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%EC%B1%85-%EB%82%B4%EC%9A%A9-%EC%A0%95%EB%A6%AC"><span class="toc-text">책 내용 정리</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%EB%A6%AC%ED%8C%A9%ED%84%B0%EB%A7%81%EC%9D%B4%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80"><span class="toc-text">1.1 리팩터링이란 무엇인가?</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%A6%AC%ED%8C%A9%ED%84%B0%EB%A7%81%EC%9D%84-%ED%95%B4%EC%95%BC%ED%95%98%EB%8A%94-%EC%9D%B4%EC%9C%A0"><span class="toc-text">리팩터링을 해야하는 이유</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-Skill-%EB%AC%B4%EC%97%87%EC%9D%84-%EB%A6%AC%ED%8C%A9%ED%84%B0%EB%A7%81%ED%95%A0-%EA%B2%83%EC%9D%B8%EA%B0%80"><span class="toc-text">1.2 Skill: 무엇을 리팩터링할 것인가?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-Culture-%EB%A6%AC%ED%8C%A9%ED%84%B0%EB%A7%81%EC%9D%80-%EC%96%B8%EC%A0%9C-%ED%95%A0%EA%B9%8C"><span class="toc-text">1.3 Culture: 리팩터링은 언제 할까?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-Tool-%EC%95%88%EC%A0%84%ED%95%9C-%EB%A6%AC%ED%8C%A9%ED%84%B0%EB%A7%81-%EB%B0%A9%EB%B2%95"><span class="toc-text">1.4 Tool: (안전한) 리팩터링 방법</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-%EC%8B%9C%EC%9E%91%ED%95%98%EB%8A%94-%EB%8D%B0-%ED%95%84%EC%9A%94%ED%95%9C-%EB%8F%84%EA%B5%AC-%EC%83%9D%EB%9E%B5"><span class="toc-text">1.5 시작하는 데 필요한 도구 (생략)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-6-%ED%95%B5%EC%8B%AC-%EC%98%88%EC%A0%9C-2D-%ED%8D%BC%EC%A6%90-%EA%B2%8C%EC%9E%84"><span class="toc-text">1.6 핵심 예제: 2D 퍼즐 게임</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-7-%EC%8B%A4%EC%A0%9C-%ED%99%98%EA%B2%BD%EC%97%90%EC%84%9C-%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4%EC%97%90-%EB%8C%80%ED%95%9C-%EC%A3%BC%EC%9D%98-%EC%82%AC%ED%95%AD"><span class="toc-text">1.7 실제 환경에서 소프트웨어에 대한 주의 사항</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%EC%9A%94%EC%95%BD"><span class="toc-text">요약</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%EB%82%B4-%EC%83%9D%EA%B0%81-x2F-%EB%8A%90%EB%82%80%EC%A0%90"><span class="toc-text">내 생각&#x2F;느낀점</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%EC%96%B5%EC%A7%80%EB%A1%9C-%EA%B7%9C%EC%B9%99-%EC%A0%81%EC%9A%A9%ED%95%B4%EB%B3%B4%EA%B8%B0"><span class="toc-text">억지로 규칙 적용해보기</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%9D%B4%EC%8A%88"><span class="toc-text">이슈</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EA%B8%B0%EC%A1%B4-%EB%A6%AC%ED%8C%A9%ED%84%B0%EB%A7%81-%EB%B0%A9%EC%8B%9D"><span class="toc-text">기존 리팩터링 방식</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%81%BC%EC%9B%8C-%EB%A7%9E%EC%B6%B0-%EB%B3%B4%EA%B8%B0"><span class="toc-text">끼워 맞춰 보기</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%EC%B5%9C%EA%B7%BC%EC%97%90-%EC%88%98%ED%96%89%ED%96%88%EB%8D%98-%EB%8B%A4%EB%A5%B8-%EB%A6%AC%ED%8C%A9%ED%84%B0%EB%A7%81"><span class="toc-text">최근에 수행했던 다른 리팩터링</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%EC%98%88%EC%A0%9C-%EB%B6%84%EC%84%9D-%EB%B0%8F-Re-Engineering-to-Compose-Multiplatform"><span class="toc-text">예제 분석 및 Re-Engineering to Compose Multiplatform</span></a></li></ol>
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        <div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/boring-km">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="kmjin@kakao.com">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="linkedin" target="_blank" rel="noopener" href="https://www.linkedin.com/in/kangmin-j-b1276b20b/">
+            <i class="iconfont icon-linkedin"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="TIL" target="_blank" rel="noopener" href="https://boring-km.github.io/TIL">
+            <i class="iconfont icon-emoji-friendly"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/boring-km">머릿속에 빵꾸나서 기억이 안 나오기 전에 기록하는 블로그</a>
+        
+    </div>
+  
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="내용 검색...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Five%20Lines%20of%20Code%20-%20Chapter%2001 + '&url=' + http%3A%2F%2Fexample.com%2F2023%2F09%2F09%2Ffive_lines_of_code%2Fchapter01%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2023/09/09/five_lines_of_code/chapter01/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
