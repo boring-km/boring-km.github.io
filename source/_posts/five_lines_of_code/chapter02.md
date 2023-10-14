@@ -6,6 +6,8 @@ tags: [dev, refactoring]
 toc: true
 ---
 
+# 2. Looking under the hood of Refactoring
+
 [You can also read in Notion](https://www.notion.so/2-Looking-under-the-hood-of-Refactoring-7701be7f88ee4cc58897f5af894fb82f?pvs=4)
 
 ## 느낀점

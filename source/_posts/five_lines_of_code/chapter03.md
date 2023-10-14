@@ -6,6 +6,8 @@ tags: [dev, refactoring]
 toc: true
 ---
 
+# 3. Shatter Long Functions
+
 # 내용 정리
 
 ## 3.1 첫 번째 규칙: 왜 다섯 줄인가?
