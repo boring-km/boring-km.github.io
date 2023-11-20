@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>Flutter 중급반 스터디 16기 1주차</title>
+      <link href="/2023/11/20/flutter/study_16th/week1/"/>
+      <url>/2023/11/20/flutter/study_16th/week1/</url>
+      
+        <content type="html"><![CDATA[<ul><li><p>잠시 Flutter에서 눈을 돌리고…</p><p>Compose에 빠져서 Android만 개발하다가 왔습니다… 하하</p></li></ul><h3 id="간단-소개"><a href="#간단-소개" class="headerlink" title="간단 소개"></a>간단 소개</h3><ol><li>회사에서 앱을 개발하고 있는 <strong>주니어</strong> 개발자입니다.</li><li>남양주에 살고 있습니다.</li><li>업무 외에 이런저런 사이드프로젝트 팀에 속해서 앱을 담당중입니다.</li></ol><h1 id="프로젝트-소개"><a href="#프로젝트-소개" class="headerlink" title="프로젝트 소개"></a>프로젝트 소개</h1><h2 id="1-조-편성-프로그램-만들기-12월-초까지"><a href="#1-조-편성-프로그램-만들기-12월-초까지" class="headerlink" title="1.  조 편성 프로그램 만들기 (12월 초까지)"></a>1.  조 편성 프로그램 만들기 (12월 초까지)</h2><ul><li>교회에서 매달 한번씩 3~4명씩 랜덤으로 조를 만들어서 밥먹는 모임 있음</li><li>현재는 번호표 뽑아서 그 번호들로 조 편성하는 프로그램 사용 중 → 누가 누군지 일일이 일어나서 확인</li></ul><p>→ 현장에 모여있는 사람들만 조 편성 가능하게 해야함</p><ul><li>좀 더 편하고 재밌게 조 편성하는 프로그램을 <code>Flutter Web</code>으로 만들어보는 중</li></ul><h2 id="2-그린라이프-앱-개발"><a href="#2-그린라이프-앱-개발" class="headerlink" title="2. 그린라이프 앱 개발"></a>2. 그린라이프 앱 개발</h2><p><img src="/images/flutter/study_16th/img.png" alt="img.png"></p><p><img src="/images/flutter/study_16th/img_1.png" alt="img_1.png"></p><ul><li>MVP 기능만 우선으로 개발 어느정도 완료하고 곧 출시 예정 <code>Flutter(Android, iOS)</code></li></ul><h2 id="3-10일-사이드-프로젝트-지원"><a href="#3-10일-사이드-프로젝트-지원" class="headerlink" title="3. 10일 사이드 프로젝트 지원"></a>3. 10일 사이드 프로젝트 지원</h2><p><a href="https://bside.best/potenday">https://bside.best/potenday</a></p><ul><li>312 지원했음</li><li>어떤 프로젝트 할지는 12월에 알게 될 듯</li><li>아무튼 Flutter 사용해서 모바일 앱 개발할 듯</li></ul><h3 id="그-외에…"><a href="#그-외에…" class="headerlink" title="그 외에…"></a>그 외에…</h3><ul><li>전에 쓱님이 추천해주신 Five Lines of Code 스터디 중 → ts 말고 Compose Multiplatform으로 구현해보는 중</li><li>초등학교 4학년 코딩 멘토링..? 중입니다.<ul><li>C#으로 간단한 알고리즘 문제풀기</li><li>유니티로 체스 게임 만들기</li></ul></li><li>사이드 프로젝트 링크풀 앱 파트에서 개발 중… <a href="https://apps.apple.com/us/app/%EB%A7%81%ED%81%AC%ED%92%80-%EC%B2%B4%EA%B3%84%EC%A0%81%EC%9D%B8-%EB%A7%81%ED%81%AC-%EA%B4%80%EB%A6%AC%EC%9D%98-%EC%8B%9C%EC%9E%91/id1644108674">iOS</a>, <a href="https://play.google.com/store/apps/details?id=com.mr.ac_project_app">Android</a></li><li>부업으로 텍스트 입력하면 그에 맞게 점자판 올라오는 기기가 있는데, Flutter Windows와 C++ 개발로 연동함</li></ul><p>(<a href="https://www.dotincorp.com/kr/">https://www.dotincorp.com/kr/</a>)</p><p><img src="/images/flutter/study_16th/img_2.png" alt="img_2.png"></p><p><img src="/images/flutter/study_16th/img_3.png" alt="img_3.png"></p><ul><li>DotCell에서 지원해준 라이브러리가 32비트 전용이었는데 flutter 프로젝트 안에 넣으려니까 64비트 밖에 안되어서 MethodChannel로 못하고</li><li>단독 콘솔프로그램을 실행시키고 커맨드 실행하는 방식으로 구현함.</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> flutter-study-16th </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> dev </tag>
+            
+            <tag> flutter </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Five Lines of Code - Chapter 04</title>
       <link href="/2023/10/14/five_lines_of_code/chapter04/"/>
       <url>/2023/10/14/five_lines_of_code/chapter04/</url>
