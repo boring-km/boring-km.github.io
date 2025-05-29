@@ -1,11 +1,25 @@
 {
   "applinks": {
-      "apps": [],
-      "details": [
+    "apps": [],
+    "details": [
       {
-        "appID": "T583WJWNAK.com.mr.acProjectApp",
-        "paths": ["*"]
+        "appIDs": [
+          "T583WJWNAK.com.mr.acProjectApp"
+        ],
+        "paths": [
+          "*"
+        ],
+        "components": [
+          {
+            "/": "/*"
+          }
+        ]
       }
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "T583WJWNAK.com.mr.acProjectApp"
     ]
   }
 }
